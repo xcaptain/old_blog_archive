@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-08-12T23:35:10+08:00</updated>
+  <updated>2014-08-12T23:36:55+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -61,15 +61,6 @@ $data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要
 <p>很神奇吧，当你点击一个网页的时候，这个页面不是立刻向后台请求数据，而是通过js从另一个接口文件里拿数据。</p>
 
 <p>我的经验还是很不丰富啊，以后要多学习，不然遇到一点比较新的技术就搞半天太丢脸了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First Eye on Octopress]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/08/11/test-a-new-post-by-hand/"/>
-    <updated>2014-08-11T23:43:02+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/08/11/test-a-new-post-by-hand</id>
-    <content type="html"><![CDATA[<p>if this post work, I will import all my ghost blog post here</p>
 ]]></content>
   </entry>
   
