@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-08-14T00:52:50+08:00</updated>
+  <updated>2014-08-16T17:48:21+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[一个php分页示例]]></title>
+    <link href="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example/"/>
+    <updated>2014-08-16T17:26:45+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example</id>
+    <content type="html"><![CDATA[<p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
+对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
+一句话就把我们辛辛苦苦写出来的代码给否决了，怎么说都还是很伤心的。不过伤心归伤心，活
+还是的继续干的，谁让我们是给别人打工的呢。</p>
+
+<p>之前的实现方法是用jsonp来做的，我用php写好接口，输出一个回调函数和数据，前端获得这个数据，
+然后就能显示出页面了。不过现在要重写只能我自己来处理数据了。</p>
+
+<p>首先遇到一个多级选择的问题，这个问题一点都不是问题，因为既然是反复请求，那么给每一级选项
+加上一个参数，然后传给后台就能取出相应的数据了。真正让我比较烦恼的是分页的功能如何实现。</p>
+
+<p>分页貌似简单，实则复杂。如果对于很少的页面当然可以把所有的页码罗列出来，但是如果页面很多，
+比如一个分类有100个页面，那么如何显示这100个页面就是个问题了，通常的惯例是显示头几个，当前页
+附近几个，和最后几个页面，剩下的用省略号表示。这时候就涉及到一个比较麻烦的问题了，怎么设计
+当前的分页结构，使得页面均匀分布。</p>
+
+<p>在网上搜了一段代码，稍微改动了一下加到我的页面中去了，不得不说这段代码的逻辑还是很复杂的，
+我甚至都没有仔细去研究为什么要这么做，只是稍微看了一下各种情况对应的代码实现。
+<code>
+&lt;?php</p>
+
+<p>class BaseFunction {
+    /<em>*
+     * lol.7k7k.com列表页分页函数
+     * 返回一段html代码
+     * $page  当前页面号码，如1,2
+     * $totalCount: 总共视频数目，根据这个值获得总页数
+     * $adjacents:  现实与当前也相邻的几个页面
+     * $catname:  分类名，比如zmjs
+     * $tagname:   标签名中文
+     * $sort: 排序  &ldquo;/$tagname-$sort-$page/&rdquo;
+     </em>/
+    public static function listPager($page, $pageSize, $totalCount, $adjacents, $catname, $tagname, $sort) {
+        if($page == 0) $page = 1;                //默认从第一页开始
+        $prev = $page - 1;
+        $next = $page + 1;
+        $lastPage = ceil($totalCount/$pageSize); //最后一页编号
+        $lpm1 = $lastPage - 1;                   //倒数第二页编号</p>
+
+<pre><code>    $pagination = '';
+    if($lastPage &gt; 1) {
+        $pagination .= "&lt;div class=\"pagination\"&gt;";
+        if($page &gt; 1) {
+            $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$prev/\"&gt;上一页&lt;/a&gt;";
+        } else {
+            $pagination .= "&lt;span class=\"disabled\"&gt;上一页&lt;/span&gt;";
+        }
+        if($lastPage &lt; 7 + ($adjacents * 2)) { //不需要隐藏额外的页码
+            for($counter = 1; $counter &lt;= $lastPage; $counter++) {
+                if($counter == $page) {
+                    $pagination .= "&lt;span class=\"curr\"&gt;$counter&lt;/span&gt;"; //高亮当前页
+                } else {
+                    $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$counter/\"&gt;$counter&lt;/a&gt;"; //其余页面做成链接
+                }
+            } 
+        } elseif($lastPage &gt; 5 + ($adjacents * 2)) { //页面很多，要隐藏部分页码
+            if($page &lt; 1 + ($adjacents * 2)) {       //靠近前面，隐藏后面的页面
+                for($counter = 1; $counter &lt; 4 + ($adjacents * 2); $counter++) {
+                    if($counter == $page) {
+                        $pagination .= "&lt;span class=\"curr\"&gt;$counter&lt;/span&gt;";
+                    } else {
+                        $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$counter/\"&gt;$counter&lt;/a&gt;";
+                    }
+                }
+                $pagination .= "...";
+                $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$lpm1/\"&gt;$lpm1&lt;/a&gt;";
+                $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$lastPage/\"&gt;$lastPage&lt;/a&gt;";
+            } elseif($lastPage - ($adjacents * 2) &gt; $page &amp;&amp; $page &gt; ($adjacents * 2)) { //在中间，前后都隐藏部分
+                $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-1/\"&gt;1&lt;/a&gt;";
+                $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-2/\"&gt;2&lt;/a&gt;";
+                $pagination . "...";
+                for($counter = $page - $adjacents; $counter &lt;= $page + $adjacents; $counter++) {
+                    if($counter == $page) {
+                        $pagination .= "&lt;span class=\"curr\"&gt;$counter&lt;/span&gt;";
+                    } else {
+                        $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$counter/\"&gt;$counter&lt;/a&gt;";
+                    }
+                }
+            } else { //靠近尾部，隐藏前面部分
+                $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-1/\"&gt;1&lt;/a&gt;";
+                $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-2/\"&gt;2&lt;/a&gt;";
+                $pagination .= "...";
+                for($counter = $lastPage - (2 + ($adjacents * 2)); $counter &lt;= $lastPage; $counter++) {
+                    if($counter == $page) {
+                        $pagination .= "&lt;span class=\"/$catname/$tagname-$sort-$counter/\"&gt;$counter&lt;/span&gt;";
+                    } else {
+                        $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$counter/\"&gt;$counter&lt;/a&gt;";
+                    }
+                }
+            }
+        } //end elseif 对于很长的页面情况判断结束
+        if($page &lt; $counter - 1) {
+            $pagination .= "&lt;a href=\"/$catname/$tagname-$sort-$next/\"&gt;下一页&lt;/a&gt;";
+        } else {
+            $pagination .= "&lt;span class=\"disabled\"&gt;下一页&lt;/span&gt;";
+        }
+        $pagination .= "&lt;/div&gt;";
+        return $pagination;
+    } else {  //对于只有一页的情况，也做一个分页
+        $pagination .= "&lt;div class=\"pagination\"&gt;";
+        $pagination .= "&lt;span class=\"disabled\"&gt;上一页&lt;/span&gt;";
+        $pagination .= "&lt;span class=\"curr\"&gt;1&lt;/span&gt;";
+        $pagination .= "&lt;span class=\"disabled\"&gt;上一页&lt;/span&gt;";
+        $pagination .= "&lt;/div&gt;";
+        return $pagination;
+    }
+}
+</code></pre>
+
+<p>}
+?>
+</code>
+在我的网站上面试验了一下，基本符合我的要求，不过难怪php和javascript都要做一个分页类，手动实现分页真是太累了。还好有人共享代码，不然自己写有得写了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Jsonp的一点简单看法]]></title>
