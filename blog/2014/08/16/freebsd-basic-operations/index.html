@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Freebsd-basic-operations - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  <meta name="description" content="上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
+很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
+方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joey's Blog</a></h1>
+  
+    <h2>Trying To Be A Hacker.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xcaptain.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Freebsd-basic-operations</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-16T22:04:13+08:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
+很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
+方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman
+和freebsd的pkg，这这些发行版中我对于debian和arch还是比较熟悉的，freebsd也玩过但是
+不是很熟悉它的命令行。</p>
+
+<p>因为被公司的一台freebsd主机给震惊了，持续服务超过900天了，所以我买了vps之后没有
+多想就安装了一个freebsd10的系统，因为这台机器硬件配置还是比较低的，只有768M的
+内存。</p>
+
+<p>首先安装nginx服务器，我还是比较习惯二进制安装，要我在服务器上编译nginx的源码
+我才没有那个闲功夫呢。
+<code>pkg install nginx</code>
+这样就把nginx安装上了，如果要启动nginx得执行
+<code>sudo /usr/local/etc/rc.d/nginx start</code>
+因为我还没有想好在服务器上放什么，所以还没有具体配置nginx和fastcgi应用。</p>
+
+<p>然后安装mariadb,这个没办法了必须得从源码安装，而且还没有办法安装mariadb10,只能
+从源码编译5.5的版本。
+<code>cd /usr/ports/databases/mariadb55-server</code>
+<code>sudo make install clean</code>
+编译的过程要很久，真怕生成一大堆临时文件让我可怜的15G固态硬盘受不了。漫长的等待时间过去
+了，终于编译完了。默认的mariadb没有设置root的密码，为了明确权限肯定得设置密码。
+<code>mysql -u root</code> 连接上数据库服务器之后就开始设置权限了，<code>set password for ‘root’@’localhost’ = password(‘yourpasswd’)</code>
+这样就设置好了root的密码。</p>
+
+<p>然后就是给root设置访问的权限了，<code>grant all privileges on *.* to ‘root’@’localhost’ with grant option</code>
+这条命令是给root用户通过本地访问所有数据库的所有表的权限，如果我想要远程连接数据库稍微修改一下这条命令
+就ok了。<code>grant all privileges on *.* to ‘root’@’%’ with grant option</code>，在mysql中<code>%</code>代表匹配任意字符串，所以
+这条命令表示允许root通过任何ip来连接数据库。</p>
+
+<p>本来还打算配置一下php的环境的，但是就我这几个月php开发的经历来看，这门语言实在是不值得花太多精力去学，
+消耗巨大的内存，语言设计简陋，前后端分隔明显。我打算在服务器上搭建RoR的环境。</p>
+
+<p>然后就是分配用户了，我新建了一个公共帐号public，操作也很简单<code>adduser</code>然后按照提示一步一步安装就好了，到了
+最后还得考虑给这个用户分配权限的问题，我是通过sudo来管理root权限的，但是暂时没打算给这个公共号分配root权限。
+后面还涉及到用户资源限制的问题，比如带宽资源，硬盘资源，cpu时间资源和内存资源，这些都是很专业的系统管理员
+知识了，暂时没那个精力去学习。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-16T22:04:13+08:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/16/a-php-pagination-example/" title="Previous Post: 一个php分页示例">&laquo; 一个php分页示例</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/16/freebsd-basic-operations/">Freebsd-basic-operations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/16/a-php-pagination-example/">一个php分页示例</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/12/jsonp-some-thought/">Jsonp的一点简单看法</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/11/first-eye-on-octopress/">First Eye on Octopress</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - joey -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
