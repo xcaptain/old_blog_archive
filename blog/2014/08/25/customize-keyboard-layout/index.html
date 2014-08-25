@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Customize Keyboard Layout - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  <meta name="description" content="星期天膜拜了一位大牛，真是佩服他啊。 公司的一个统计功能出问题了，一直都没有把它修复，因为是历史遗留问题，找不到根源，所以
+后来公司领导决定把原来这个功能的开发者找回来看看到底是出什么问题了。所以星期天我也来
+公司看了一下大牛如何解决问题。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joey's Blog</a></h1>
+  
+    <h2>Trying To Be A Hacker.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xcaptain.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Customize Keyboard Layout</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-25T23:32:42+08:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>星期天膜拜了一位大牛，真是佩服他啊。</p>
+
+<p>公司的一个统计功能出问题了，一直都没有把它修复，因为是历史遗留问题，找不到根源，所以
+后来公司领导决定把原来这个功能的开发者找回来看看到底是出什么问题了。所以星期天我也来
+公司看了一下大牛如何解决问题。</p>
+
+<p>因为数据是前端通过访问一个php的接口写入redis得到的，所以大牛一直在调试redis。读取redis
+数据的代码是用python写的。用emacs编辑这个python文件，在旁边开着1个终端使劲调。不得不说
+他是我见过的emacs用得最好的一个了，我自己从大二开始接触linux开始就一直在vim和emacs之间
+切换着写代码，对emacs也算不陌生，但是我就不能一只手写代码。而且使用emacs对我来说真是煎熬，
+因为ctrl键太远了，要用小拇指按住这个键真是太吃力了。不过后来发现他时而使用左半部分手掌
+压住ctrl键，时而使用右侧的ctrl键，所以都没有见到他的手大幅度移动但是就按出了很多键。</p>
+
+<p>emacs是用来编辑查看代码的，要监控程序还得通过终端输入命令行来操作。大牛只登陆了一个终端，
+但是确打开了很多个窗口，后来才发现他是用tmux来虚拟化多个窗口的，说道这个又伤心了一下，最初
+刚来公司的时候我不会用xshell，所以用的是putty来远程登陆服务器写代码，那时候就曾经接触过
+一段时间tmux，因为putty实在是不好新建窗口，太麻烦。如果那时候一直用着tmux到现在我说不定也
+很熟练了，不过后来办公彻底有windows转移到linux之后就更没有去接触tmux了，因为在linux终端
+新建一个连接更容易，ctrl+shift+t就行了。不得不说tmux真是个好东西，省去了多次登陆的麻烦，
+虚拟多个窗口，可以按照你想要的方式排列窗口，对于监控某个程序来说真是再合适不过了，下面的
+窗口运行程序，上面的窗口输出运行结果。</p>
+
+<p>还发现一个很好用的工具，watch，这个命令是用来监控某个命令的输出的，如果某个程序持续输出
+了内容，拿它来监控再合适不过了，不然就得反复输命令查看结果了。</p>
+
+<p>被感染了，我也要学习使用emacs，也要学习使用tmux和各种命令行，不能止步于已经掌握的内容，今晚
+折腾了一下emacs，改了一个键盘映射，把恼人的ctrl键和caplock键换了个位置。因为我现在用的系统
+是archlinux+gnome3.12，所以直接调用一个系统设置改的，找到tweak tool然后在typing里面选择
+swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来，现在ctrl靠近键盘中间了以后
+使用emacs写代码应该是更方便了吧。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-25T23:32:42+08:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/21/ssh-login-without-password/" title="Previous Post: ssh-login-without-password">&laquo; ssh-login-without-password</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/25/customize-keyboard-layout/">Customize Keyboard Layout</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/21/ssh-login-without-password/">Ssh-login-without-password</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/16/freebsd-basic-operations/">Freebsd-basic-operations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/16/a-php-pagination-example/">一个php分页示例</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/12/jsonp-some-thought/">Jsonp的一点简单看法</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - joey -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
