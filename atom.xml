@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-08-31T23:22:16+08:00</updated>
+  <updated>2014-08-31T23:23:12+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -24,7 +24,7 @@
 输错命令，自动补全功能比zsh还强大，能够根据man page里的关键字来补全，也能根据~/.ssh/config来
 补全ssh命令，历史记录功能也比bash之类的友好。</p>
 
-<p>fish的项目主页在[这里][<a href="https://github.com/fish-shell/fish-shell">https://github.com/fish-shell/fish-shell</a>]，可以看到这个项目的还是比较
+<p>fish的项目主页在<a href="https://github.com/fish-shell/fish-shell">这里</a>，可以看到这个项目的还是比较
 活跃的。因为我用的是archlinux，所以就没有去从build源代码，而是直接<code>pacman -S fish</code>安装的。</p>
 
 <p>默认的fish已经很强大了:
