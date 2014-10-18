@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-09-29T00:28:45+08:00</updated>
+  <updated>2014-10-18T11:45:02+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -14,10 +14,23 @@
 
   
   <entry>
+    <title type="html"><![CDATA[学习正则表达式第一篇]]></title>
+    <link href="http://xcaptain.github.io/blog/2014/10/03/learn-regular-expression-1/"/>
+    <updated>2014-10-03T22:48:54+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/10/03/learn-regular-expression-1</id>
+    <content type="html"><![CDATA[<p>搞web肯定不能不懂正则，以前我是很厌恶正则的，因为它没有一个固定的标准，不同语言有不同的实现，而且正则的语法很麻烦不好记。但是现在做了几个项目，里面总是要涉及到正则，没办法，不学不行，如果不会用的话就没法过滤用户输入。</p>
+
+<h1>首先得声明一下什么是正则表达式。</h1>
+
+<p><a href="http://zh.wikipedia.org/wiki/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F">wiki</a>里面说正则是表达式使用单个字符串来描述、匹配一系列符合某个句法规则的字符串</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Connect-to-vpn]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn/"/>
-    <updated>2014-09-29T00:02:00+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn</id>
+    <link href="http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn/"/>
+    <updated>2014-09-28T16:02:00+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn</id>
     <content type="html"><![CDATA[<p>今天拿到vpn了，真是兴奋啊，早在实习结束的时候就要求了vpn，结果5个月后才拿到手，真是的。
 拿到了vpn意味着以后可以早点下班，有事情在家里远程办公还是无休止的工作，休息即工作呢？
 希望我不会把工作和生活混乱了。</p>
@@ -45,14 +58,15 @@
 稍微配置一下公司服务器网段就行了，内部测试机是192.168.10.0/24的网段，所以在命令行输入<code>ip route add 192.168.10.0/24 dev ppp0</code>
 然后就可以在本地通过ssh连接这个网段的机器了。</p>
 
-<p>因为还没有怎么配置，所以现在vpn还是很原始，等以后用的多了再把新的使用心得记录下来。</p>
+<p>昨晚遇到一个紧急情况，又用了一下vpn，不知道为什么可以连接，也可以执行一些简单的命令，比如cd，ls，svn之类的，就是不能执行vim, cat这类命令，一查看某个文件
+连接就会卡死，不得不在本地kill掉这个ssh会话，kill掉之后ppp0这个接口也自动关闭了，又得重新开一遍。不知道是什么原因。</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[我的xmonad配置]]></title>
     <link href="http://xcaptain.github.io/blog/2014/09/08/my-xmonad-config/"/>
-    <updated>2014-09-08T12:12:48+08:00</updated>
+    <updated>2014-09-08T04:12:48+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/09/08/my-xmonad-config</id>
     <content type="html"><![CDATA[<p>xmonad是用haskell写的一个窗口管理器。所谓的窗口管理器和桌面环境最大的区别大概就是轻量和重量的区别吧。
 之前用过gnome3, unity, kde4, xfce4等桌面环境，感觉功能和配置都差不多，而且额外安装了太多不必要的东西，
@@ -411,7 +425,7 @@ defaults = defaultConfig {
   <entry>
     <title type="html"><![CDATA[Php-array-splice]]></title>
     <link href="http://xcaptain.github.io/blog/2014/09/02/php-array-splice/"/>
-    <updated>2014-09-02T22:21:55+08:00</updated>
+    <updated>2014-09-02T14:21:55+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/09/02/php-array-splice</id>
     <content type="html"><![CDATA[<p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
 一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
@@ -450,7 +464,7 @@ foreach($arr as $k => $v) {
   <entry>
     <title type="html"><![CDATA[使用fish]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/31/use-fish-shell/"/>
-    <updated>2014-08-31T22:43:17+08:00</updated>
+    <updated>2014-08-31T14:43:17+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/31/use-fish-shell</id>
     <content type="html"><![CDATA[<p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
 从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
@@ -499,7 +513,7 @@ end
   <entry>
     <title type="html"><![CDATA[Customize Keyboard Layout]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout/"/>
-    <updated>2014-08-25T23:32:42+08:00</updated>
+    <updated>2014-08-25T15:32:42+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout</id>
     <content type="html"><![CDATA[<p>星期天膜拜了一位大牛，真是佩服他啊。</p>
 
@@ -537,7 +551,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   <entry>
     <title type="html"><![CDATA[Ssh-login-without-password]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/21/ssh-login-without-password/"/>
-    <updated>2014-08-21T23:50:42+08:00</updated>
+    <updated>2014-08-21T15:50:42+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/21/ssh-login-without-password</id>
     <content type="html"><![CDATA[<p>今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
 线上服务器有5台，有部分root权限。刚开始用xshell登陆服务器还没什么觉得不方便的，但是现在我已经完全使用linux办公了，所以
@@ -575,7 +589,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   <entry>
     <title type="html"><![CDATA[Freebsd-basic-operations]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/"/>
-    <updated>2014-08-16T22:04:13+08:00</updated>
+    <updated>2014-08-16T14:04:13+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations</id>
     <content type="html"><![CDATA[<p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
 很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
@@ -621,7 +635,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   <entry>
     <title type="html"><![CDATA[一个php分页示例]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example/"/>
-    <updated>2014-08-16T17:26:45+08:00</updated>
+    <updated>2014-08-16T09:26:45+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example</id>
     <content type="html"><![CDATA[<p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
 对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
@@ -742,7 +756,7 @@ class BaseFunction {
   <entry>
     <title type="html"><![CDATA[Jsonp的一点简单看法]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/12/jsonp-some-thought/"/>
-    <updated>2014-08-12T22:28:53+08:00</updated>
+    <updated>2014-08-12T14:28:53+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/12/jsonp-some-thought</id>
     <content type="html"><![CDATA[<h3>jsonp是ajax的异域传输技术</h3>
 
@@ -793,7 +807,7 @@ $data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要
   <entry>
     <title type="html"><![CDATA[First Eye on Octopress]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress/"/>
-    <updated>2014-08-11T23:43:02+08:00</updated>
+    <updated>2014-08-11T15:43:02+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress</id>
     <content type="html"><![CDATA[<h3>第一次使用octopress体验</h3>
 

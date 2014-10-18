@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn">
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
@@ -86,7 +86,7 @@
   
 
 
-<time datetime="2014-09-29T00:02:00+08:00" pubdate data-updated="true"></time>
+<time datetime="2014-09-28T16:02:00+00:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -120,7 +120,8 @@
 稍微配置一下公司服务器网段就行了，内部测试机是192.168.10.0/24的网段，所以在命令行输入<code>ip route add 192.168.10.0/24 dev ppp0</code>
 然后就可以在本地通过ssh连接这个网段的机器了。</p>
 
-<p>因为还没有怎么配置，所以现在vpn还是很原始，等以后用的多了再把新的使用心得记录下来。</p>
+<p>昨晚遇到一个紧急情况，又用了一下vpn，不知道为什么可以连接，也可以执行一些简单的命令，比如cd，ls，svn之类的，就是不能执行vim, cat这类命令，一查看某个文件
+连接就会卡死，不得不在本地kill掉这个ssh会话，kill掉之后ppp0这个接口也自动关闭了，又得重新开一遍。不知道是什么原因。</p>
 </div>
 
 
@@ -143,7 +144,7 @@
   
 
 
-<time datetime="2014-09-29T00:02:00+08:00" pubdate data-updated="true"></time>
+<time datetime="2014-09-28T16:02:00+00:00" pubdate data-updated="true"></time>
       
 
 
@@ -151,7 +152,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn/" >Tweet</a>
   
   
   
@@ -162,6 +163,8 @@
       
         <a class="basic-alignment left" href="/blog/2014/09/08/my-xmonad-config/" title="Previous Post: 我的xmonad配置">&laquo; 我的xmonad配置</a>
       
+      
+        <a class="basic-alignment right" href="/blog/2014/10/03/learn-regular-expression-1/" title="Next Post: 学习正则表达式第一篇">学习正则表达式第一篇 &raquo;</a>
       
     </p>
   </footer>
@@ -176,7 +179,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/09/29/connect-to-vpn/">Connect-to-vpn</a>
+        <a href="/blog/2014/10/03/learn-regular-expression-1/">学习正则表达式第一篇</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/28/connect-to-vpn/">Connect-to-vpn</a>
       </li>
     
       <li class="post">
@@ -189,10 +196,6 @@
     
       <li class="post">
         <a href="/blog/2014/08/31/use-fish-shell/">使用fish</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/25/customize-keyboard-layout/">Customize Keyboard Layout</a>
       </li>
     
   </ul>
