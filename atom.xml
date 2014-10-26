@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-10-26T23:34:36+00:00</updated>
+  <updated>2014-10-26T23:42:05+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -182,7 +182,8 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "roxterm"
+myTerminal      = "urxvt"
+--myTerminal      = "gnome-terminal"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -212,7 +213,7 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces = ["1:term","2:web","3:code","4:vm","5:media"] ++ map show [6..9]
+myWorkspaces = ["1:term","2:code","3:web","4:media"] ++ map show [5..9]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -228,19 +229,35 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm               ,xK_p     ), spawn "dmenu-with-yeganesh")
+    --, ((modm               ,xK_p     ), spawn "dmenu-with-yeganesh")
+    , ((modm                ,xK_p     ), spawn "dmenu_run -nb black")
 
     -- launch firefox
-    , ((modm               ,xK_w     ), spawn "firefox")
+    , ((modm                ,xK_f     ), spawn "firefox")
+
+    -- launch chromium
+    , ((modm                ,xK_h     ), spawn "chromium")
+
+    -- launch thunderbird
+    , ((modm                ,xK_t     ), spawn "thunderbird")
 
     -- lock screen
     , ((modm .|. controlMask, xK_l), spawn "xscreensaver-command -lock")
 
     -- screenshoot
-    , ((modm .|. shiftMask, xK_p), spawn "select-screenshoot")
+    , ((modm, xK_s), spawn "select-screenshoot")
 
     -- grab the whole screen
-    , ((modm .|. controlMask .|. shiftMask, xK_p), spawn "screenshoot")
+    , ((modm .|. controlMask, xK_p), spawn "screenshoot")
+
+    -- Mute volume
+    , ((modm .|. controlMask, xK_m), spawn "amixer -q set Master toggle")
+
+    -- Decrease volume
+    , ((modm .|. controlMask, xK_j), spawn "amixer -q set Master 10%-")
+
+    -- Increase volume
+    , ((modm .|. controlMask, xK_k), spawn "amixer -q set Master 10%+")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -386,22 +403,23 @@ myLayout = tiled ||| Mirror tiled ||| Full
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "Chromium"       --> doShift "2:web"
-    , className =? "Google-chrome"  --> doShift "2:web"
-    , className =? "Firefox"        --> doShift "2:web"
-    , className =? "Emacs"          --> doShift "3:code"
-    , className =? "Gvim"           --> doShift "3:code"
-    , className =? "Weechat"        --> doShift "5:media"
-    , className =? "Pidgin"         --> doShift "5:media"
-    , className =? "ThunderBird"    --> doShift "5:media"
+    [ className =? "Urxvt"          --> doShift "1:term"
+    , className =? "Chromium"       --> doShift "3:web"
+    , className =? "Google-chrome"  --> doShift "3:web"
+    , className =? "Firefox"        --> doShift "3:web"
+    , className =? "Emacs"          --> doShift "2:code"
+    , className =? "Gvim"           --> doShift "2:code"
+    , className =? "Vlc"            --> doShift "4:media"
+    , className =? "Weechat"        --> doShift "4:media"
+    , className =? "Pidgin"         --> doShift "4:media"
+    , className =? "ThunderBird"    --> doShift "4:media"
     , resource  =? "desktop_window" --> doIgnore
     , className =? "Galculator"     --> doFloat
     , className =? "Steam"          --> doFloat
     , className =? "Gimp"           --> doFloat
     , resource  =? "gpicview"       --> doFloat
     , className =? "MPlayer"        --> doFloat
-    , className =? "VirtualBox"     --> doShift "4:vm"
-    , className =? "Xchat"          --> doShift "5:media"
+    , className =? "Xchat"          --> doShift "4:media"
     , className =? "stalonetray"    --> doIgnore]
 
 
@@ -442,6 +460,7 @@ myStartupHook = return ()
 --
 main = do
      xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
+     xmproc <- spawnPipe "feh --bg-fill ~/.xmonad/colorNana.png"
      xmonad $ defaults
 
 -- A structure containing your configuration settings, overriding
@@ -475,11 +494,9 @@ defaults = defaultConfig {
 </pre>
 
 
-<p>这个配置是我结合<code>/usr/share/x86_64-linux-ghc-7.8.3/xmonad-0.11/man/xmonad.hs</code>并且稍微自定义了一些键绑定。
-还有一些缺陷，不知道为什么有些功能能够spawn成功，而有些功能则spawn失败。这个问题留待后续解决，因为还得
-稍微学点haskell的东西。</p>
+<p>今天(2014年10月26日)，修改了一下xmonad的配置，加入了快捷键控制音量，自定义了几个快捷键来截图，加入了背景图，加入了xmonar的配置。以前一直没设置背景图导致每次开机之后都是一片黑的背景，现在漂亮多了。xmobar是从arckwiki上面找来的配置，很不错的一个状态栏，包含了cpu使用率，内存使用率，网络使用率等。</p>
 
-<p>过几天还得去公司试验一下多物理显示器下工作情况，如果对于多显示器支持也好的话就可以日常用了。</p>
+<p>不过还是有点缺陷的，不能给每个桌面分配一个背景图真是遗憾，不然这样就漂亮了，用图片来标识各个桌面的作用。haskell还在学习中，将来还有得改的。</p>
 ]]></content>
   </entry>
   
