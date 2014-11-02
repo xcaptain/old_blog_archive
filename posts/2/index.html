@@ -9,10 +9,8 @@
   <meta name="author" content="joey">
 
   
-  <meta name="description" content="上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
-对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
-一句话就把我们辛辛苦苦写出来的代码给否决了，怎么说都还是很伤心的。不过伤心归伤心，活
-还是的继续干的， &hellip;">
+  <meta name="description" content="今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
+线上服务器有5台，有部分root权限。刚开始用xshell登陆服务器还没什么觉得不方便的，但是现在我已经完全使用linux办公了，所以 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +66,144 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/21/ssh-login-without-password/">Ssh-login-without-password</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-21T15:50:42+00:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
+线上服务器有5台，有部分root权限。刚开始用xshell登陆服务器还没什么觉得不方便的，但是现在我已经完全使用linux办公了，所以
+只能用terminal来ssh连接服务器。手动输入密码太麻烦了，而且还是经常性的输密码。</p>
+
+<p>今天又花了点时间看了一下公钥加密的过程这块，了解了一个ssh连接的基本流程。ssh登陆有2种方法：</p>
+
+<ol>
+<li>基于密码的验证。</li>
+<li>基于公钥私钥的验证。</li>
+</ol>
+
+
+<p>基于密码的验证很好理解，当连接服务器的时候会提示你输入密码，等验证通过之后就能连接远程服务器了。这种方法很好理解，但是其实
+局限性是很大的，首先麻烦，每次登陆都得输密码，而一个安全的密码又不是那么好记。其次密码被暴露的次数越多就越不安全，万一哪一次
+在输入密码的时候被中间人给截获了这个密码，那么就没有丝毫秘密可言了。</p>
+
+<p>而基于公钥私钥的验证相比起来就安全多了，在服务器中保存一份你自己的公钥，服务器就会知道你是授权了的用户，客户端连接服务器的时候
+会检查这个用户的公钥是否在授权了的公钥列表中，如果在的话就放行，允许登陆。登陆之后加密的方法就很简单了，服务器用客户端的公钥加密信息
+后传给客户端，客户端收到这个加密的信息之后用自己的私钥解密。然后客户端给服务器发送信息，用服务器的公钥加密，服务器收到之后拿自己的
+私钥解密。</p>
+
+<p>所以总的来说ssh连接就是2步，一步是验证身份，剩下的就是交换公钥的加密数据传输。</p>
+
+<p>因为我现在都是使用运维给我分配的帐号密码来登陆服务器，每次连接都得输入密码很不方便，所以我还是改为通过公钥来验证身份好了。</p>
+
+<p>首先给自己生成一个公钥私钥对，使用<code>ssh-keygen</code>生成公钥和私钥对，一般的命名规则是id_rsa和id_rsa.pub， 默认使用的加密方法是rsa，
+默认使用2048字节的私钥。然后就是把自己的公钥添加到服务器上，保存在<code>~/.ssh/authorized_keys</code>里面。具体实现方法有很多，可以直接复制粘贴进去，
+可以把公钥文件传到服务器上，也可以用一个简单的命令<code>ssh-copy-id</code>,这样就可以绕过手动输入密码了。</p>
+
+<p>真是搞不懂，运维们有这么好的方法不用为什么要给一个账户创建密码呢，直接向我要一个公钥，然后加到服务器就行了嘛。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/16/freebsd-basic-operations/">Freebsd-basic-operations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-16T14:04:13+00:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
+很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
+方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman
+和freebsd的pkg，这这些发行版中我对于debian和arch还是比较熟悉的，freebsd也玩过但是
+不是很熟悉它的命令行。</p>
+
+<p>因为被公司的一台freebsd主机给震惊了，持续服务超过900天了，所以我买了vps之后没有
+多想就安装了一个freebsd10的系统，因为这台机器硬件配置还是比较低的，只有768M的
+内存。</p>
+
+<p>首先安装nginx服务器，我还是比较习惯二进制安装，要我在服务器上编译nginx的源码
+我才没有那个闲功夫呢。
+<code>pkg install nginx</code>
+这样就把nginx安装上了，如果要启动nginx得执行
+<code>sudo /usr/local/etc/rc.d/nginx start</code>
+因为我还没有想好在服务器上放什么，所以还没有具体配置nginx和fastcgi应用。</p>
+
+<p>然后安装mariadb,这个没办法了必须得从源码安装，而且还没有办法安装mariadb10,只能
+从源码编译5.5的版本。
+<code>cd /usr/ports/databases/mariadb55-server</code>
+<code>sudo make install clean</code>
+编译的过程要很久，真怕生成一大堆临时文件让我可怜的15G固态硬盘受不了。漫长的等待时间过去
+了，终于编译完了。默认的mariadb没有设置root的密码，为了明确权限肯定得设置密码。
+<code>mysql -u root</code> 连接上数据库服务器之后就开始设置权限了，<code>set password for ‘root’@’localhost’ = password(‘yourpasswd’)</code>
+这样就设置好了root的密码。</p>
+
+<p>然后就是给root设置访问的权限了，<code>grant all privileges on *.* to ‘root’@’localhost’ with grant option</code>
+这条命令是给root用户通过本地访问所有数据库的所有表的权限，如果我想要远程连接数据库稍微修改一下这条命令
+就ok了。<code>grant all privileges on *.* to ‘root’@’%’ with grant option</code>，在mysql中<code>%</code>代表匹配任意字符串，所以
+这条命令表示允许root通过任何ip来连接数据库。</p>
+
+<p>本来还打算配置一下php的环境的，但是就我这几个月php开发的经历来看，这门语言实在是不值得花太多精力去学，
+消耗巨大的内存，语言设计简陋，前后端分隔明显。我打算在服务器上搭建RoR的环境。</p>
+
+<p>然后就是分配用户了，我新建了一个公共帐号public，操作也很简单<code>adduser</code>然后按照提示一步一步安装就好了，到了
+最后还得考虑给这个用户分配权限的问题，我是通过sudo来管理root权限的，但是暂时没打算给这个公共号分配root权限。
+后面还涉及到用户资源限制的问题，比如带宽资源，硬盘资源，cpu时间资源和内存资源，这些都是很专业的系统管理员
+知识了，暂时没那个精力去学习。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -358,6 +494,14 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/27/learn-haskell-3/">Learn-haskell-(3)</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
       </li>
     
@@ -367,14 +511,6 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     
       <li class="post">
         <a href="/blog/2014/10/18/emergency-case-1/">再来记录一次紧急情况</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/28/connect-to-vpn/">Connect-to-vpn</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/08/my-xmonad-config/">我的xmonad配置</a>
       </li>
     
   </ul>

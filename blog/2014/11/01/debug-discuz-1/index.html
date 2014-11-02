@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>调试discuz（一） - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  <meta name="description" content="现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。 我以前从没有接触过discuz， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/11/01/debug-discuz-1">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joey's Blog</a></h1>
+  
+    <h2>Trying To Be A Hacker.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xcaptain.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">调试discuz（一）</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-01T23:40:57+00:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。</p>
+
+<p>我以前从没有接触过discuz，第一次碰到感觉压力很大，什么数据字典，缓存结构，插件机制，模板机制我都不懂，最初他们只叫我做了一点简单的部署问题，比如改个nginx的rewrite规则，改个简单的模板样式，不过渐渐的麻烦的任务也来了。</p>
+
+<p>首先是说他们买了一个模板（真够丢人的），但是这个模板是被加密了的，现在要稍微二次开发一下，比如说改一些url的规则，使得url更加seo友好。其实模板上的url还是很好改的，模板改了之后再加点rewrite到nginx就好了。但是在分页上的url就不好改了，需要去看插件是如何获得数据，输出数据的，结果可恨的是这个插件的开发者把取数据，传数据的过程都给加密了，让人非常郁闷。到最后甚至一度想要把这些加密的方法破解了，不过到底不可能花太多时间去破解，干活才是最重要的。</p>
+
+<p>调了一晚上，终于发现了插件在实现分页的时候调用到了一个discuz的分页函数，在<code>source/function/</code>里面执行<code>grep 'multi' -R *</code>在<code>function_core.php</code>这个文件里找到了multi这个函数，然后发现这个函数调用了<code>helper_page::multi</code>这个函数，继续找这个函数。首先找<code>helper_page</code>这个类，那就去<code>source/class/</code>里面找，<code>grep 'multi' -R *</code>在<code>helper/helper_page.php</code>里面找到了multi这个静态方法。接下来就是改造这个方法了。大致看了一下，这个函数接受一个url，一个当前页码，以及一些不太重要的东西作为参数，最后输出一段分页代码。在生成html的时候调用到了一个叫做<code>mpurl</code>的方法，这个函数会决定使用什么形式的分隔符来输出url。到这里形势大概就很明朗了，我不必要去改分页函数的逻辑，我只要改<code>mpurl</code>这个函数就好了，如果是这个插件的url，我就让这个函数特殊照顾一下这个插件。</p>
+
+<p>那么现在问题来了，我是该怎么去改造这个函数呢？在它里面加判断？外面加判断？重写一个自定义的函数？我的想法是加入一个自定义的分页函数，<code>multi</code>在调用<code>mpurl</code>的时候会判断一下是调用它还是调用我写的自定义的函数。我想要通过函数名复制来实现，但是我不知道在php里怎么做，所以我就去<a href="http://stackoverflow.com/questions/26657161/can-i-assign-a-function-in-php">stackoverflow</a>上问了一下，有个家伙说可以通过变量来保存函数名，比如说<code>$func = 'add';</code>，那么<code>$func(1,2);</code>就等同于<code>add(1,2);</code>了。这个方法有点函数式编程的意思了，不过还是不够，本质上不属于函数名赋值，而且对于调用类里的方法不起作用，我尝试着<code>$func = 'self::add'</code>，然后发现总是会报错。后来采用了另一个家伙的方法，写一个帮助函数，在这个帮助函数里面会判断到底是使用dz原生的<code>mpurl</code>还是使用我的<code>my_mpurl</code>，这个方法挺好，我照着做了，终于把分页搞定了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-01T23:40:57+00:00" pubdate data-updated="true"></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/11/01/debug-discuz-1/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/11/01/debug-discuz-1/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/10/27/learn-haskell-3/" title="Previous Post: learn-haskell-(3)">&laquo; learn-haskell-(3)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/27/learn-haskell-3/">Learn-haskell-(3)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/25/learn-haskell-1/">学习haskell（一）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/18/emergency-case-1/">再来记录一次紧急情况</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - joey -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
