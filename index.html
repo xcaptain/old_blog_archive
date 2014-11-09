@@ -9,7 +9,7 @@
   <meta name="author" content="joey">
 
   
-  <meta name="description" content="现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。 我以前从没有接触过discuz， &hellip;">
+  <meta name="description" content="考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。 在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。 *对于程序员来说HHKB当然是首选，但是高昂的价格让人望而生畏 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,113 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-09T17:25:52+00:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。</p>
+
+<h1>在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。</h1>
+
+<p>*对于程序员来说HHKB当然是首选，但是高昂的价格让人望而生畏。</p>
+
+<p>*然后就是传说中的<a href="http://codekeyboards.com/">codekeyboard</a>，不过，这款键盘国内没得卖，而且在国外估计也是小众，还是以后再考虑吧。</p>
+
+<p>*还有一个很牛的键盘叫做<a href="http://www.daskeyboard.com/">daskeyboard</a>，这款键盘的创造者也是一个程序员大牛，具体的来源可以参考一下<a href="http://en.wikipedia.org/wiki/Das_Keyboard">wikipedia</a>，不过我不喜欢104键的键盘，而且价格也不便宜。</p>
+
+<p>*接下来就是一些很普通的键盘了，网上说机械键盘最重要的就是轴(switch)，最好的轴当然是德国樱桃(cherry)的原厂轴了。现在主要的樱桃轴是按照颜色来分的，有红轴(red switch)，黑轴(black switch)，青轴(blue switch)，茶轴(brown switch)，以及一些不太起眼的轴。在这四大主力轴中，黑轴公认的玩游戏最爽，红轴声音小，直上直下，青轴最吵，不过打字最爽。茶轴介于青轴和红轴之间，是新出的一款轴。</p>
+
+<p>我的这款poker 2是kbc产的，一个国产品牌，但是不得不说做工很不错，小巧紧凑，该有的功能都有了，以后估计可以纯键盘办公了。87和104一个很大的区别就是没有小键盘，所以要按方向键，翻页键都得通过FN组合来实现。对我来说有点不方便，因为我的urxvt的设定是<code>shift+downarrow</code>来实现新建标签的，已经习惯这种快捷键了。现在得按<code>shift+fn+s</code>才能打开一个新的urxvt标签，在考虑是改改urxvt的设置还是改改键盘映射。</p>
+
+<p>底下的win键倒是很符合我的需要。现在用的是xmonad的窗口管理器，我之前设置的快捷键是<code>mod1mask+[1..9]</code>来切换窗口的，现在不需要怎么改就能直接用win键。</p>
+
+<p>打开火狐浏览器的时候突然发现没有上下方向键不好滚动页面了，而且没有了左方向键回到前一页也不方便了。不过发现了一个解决办法。要滚动页面可以考虑<code>fn+[s,w]</code>，或者是<code>[fn+space]然后[w,s]</code>。因为[fn+space]会把asdw变成方向键。要回到前一个页面就不太方便了，我想了一下可以把<code>[backspace]</code>设置为回到前一页的快捷键。不过这个得改firefox的快捷键设置。在地址栏输入<code>about:config</code>，然后找到<code>browser.backspace_action</code>，我这里默认的是2,也就是说shift加左箭头可以回到前一页，不过我想把这个值设置为0,这样就是<code>backspace</code>来回到前一页了。</p>
+
+<p>几个大按键不太好，声音和普通按键不同，有点滞胀感。问了卖家，他说这是正常情况，因为大的shift用了一个平衡杆来感应按键，虽然很不爽，但是还是忍忍吧，以后有钱了买个好的键盘，现在这个就先拿来练练手。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/11/02/redis-crash/">Redis崩溃</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-02T00:36:37+00:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
+
+<p>telnet上redis服务器去查看了一下，也就10万+的key，按理来说不应该这么慢。后来事故达到高峰期了，好几个站出现502了，这时候运维报告redis服务器网卡io达到峰值，太恐怖了，服务器使用的是1000Mbps的网卡，每秒钟redis读写超过1G了，怎么会这样？这时候看来就好理解之前netstat的结果了，既然网卡达到上限了，肯定服务器就不能即使返回请求。</p>
+
+<p>redis读写过高我们分析可能原因是写入了很巨大的key，在redis里面monitor了一下最近的读写状况，发现大部分都是get一些很小的key，一般都是一些比较小的数组，既没有缓存文件，也没有缓存大段的页面，那么为什么会出现流量过高呢？我觉得很大的原因是redis真的出现性能问题了，如果性能下降了的话，而请求数又没变，也是会导致time_wait的。其实我早就发现我们现在编码很不规范，redis有5种数据结构，但是在大部分业务中都只用到了1种数据结构，也就是字符串。不得不说这是一个很傻的设计。在10几万的key中get一个key得有多慢，如果设计一些hash表，把不同的key存到hash里面，那么可以大大的提高redis的性能，毕竟redis的key大大的减少了，而在hash表里面查询某个key的值还是比较快的。肯定比在redis库里查询快。不过知道问题所在不意味着我们会去改，现在开发人员本来就少，但是新的项目一个接一个。目前简单测试了一下没问题就上线了，根本没有考虑过代码的性能问题，没有人审核代码，没有人压力测试代码，在开发的时候怎么省事怎么来，之前别人写的方法copy过来直接用，也不管之前的代码和现在的代码处理的问题有多不同，只要能用那就可以。</p>
+
+<p>这也是没办法的办法，可以做的不多，后来他们把一些代码的缓存时间缩短了，这样就不会有太多的key留在内存中，减少key的数量之后大概能加快一点查询效率。而且他们还审查了一部分代码，我看了他们找的一个文件，有个程序会一次性请求7个接口获得一大堆数据，但是真正有用的只是其中一部分，后来他们优化了一下，在取数据之前加了一些判断来觉得到底去取哪个数据。看起来效果挺明显的，至少这个文件的请求就少了7倍。</p>
+
+<p>顺便再来总结一下netstat(network statistics)的用法吧，用它来监控网络状况挺好的。
+1. 直接执行<code>netstat</code>，会输出当前所有的连接。
+2. <code>netstat -a</code>，输出所有的连接，和<code>netstat</code>的结果一样。
+3. <code>netstat -t</code>，列出所有的tcp连接。
+4. <code>netstat -i</code>，列出当前所有的网络接口，比如说我的笔记本有3个接口，一块以太网卡，一块无线网卡，一个回环接口。
+5. <code>netstat -s</code>，列出当前所有协议的统计状态，包括tcp, ip, udp, icmp等。
+6. <code>netstat -p</code>，列出进程名以及对应的pid。
+7. <code>netstat -r</code>，列出当前的路由表。</p>
+
+<p>主要得分析一下<code>netstat -a</code>的输出，这个连接状态太多了，得好好研究一下。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -874,136 +981,6 @@ end
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/25/customize-keyboard-layout/">Customize Keyboard Layout</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-25T15:32:42+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>星期天膜拜了一位大牛，真是佩服他啊。</p>
-
-<p>公司的一个统计功能出问题了，一直都没有把它修复，因为是历史遗留问题，找不到根源，所以
-后来公司领导决定把原来这个功能的开发者找回来看看到底是出什么问题了。所以星期天我也来
-公司看了一下大牛如何解决问题。</p>
-
-<p>因为数据是前端通过访问一个php的接口写入redis得到的，所以大牛一直在调试redis。读取redis
-数据的代码是用python写的。用emacs编辑这个python文件，在旁边开着1个终端使劲调。不得不说
-他是我见过的emacs用得最好的一个了，我自己从大二开始接触linux开始就一直在vim和emacs之间
-切换着写代码，对emacs也算不陌生，但是我就不能一只手写代码。而且使用emacs对我来说真是煎熬，
-因为ctrl键太远了，要用小拇指按住这个键真是太吃力了。不过后来发现他时而使用左半部分手掌
-压住ctrl键，时而使用右侧的ctrl键，所以都没有见到他的手大幅度移动但是就按出了很多键。</p>
-
-<p>emacs是用来编辑查看代码的，要监控程序还得通过终端输入命令行来操作。大牛只登陆了一个终端，
-但是确打开了很多个窗口，后来才发现他是用tmux来虚拟化多个窗口的，说道这个又伤心了一下，最初
-刚来公司的时候我不会用xshell，所以用的是putty来远程登陆服务器写代码，那时候就曾经接触过
-一段时间tmux，因为putty实在是不好新建窗口，太麻烦。如果那时候一直用着tmux到现在我说不定也
-很熟练了，不过后来办公彻底有windows转移到linux之后就更没有去接触tmux了，因为在linux终端
-新建一个连接更容易，ctrl+shift+t就行了。不得不说tmux真是个好东西，省去了多次登陆的麻烦，
-虚拟多个窗口，可以按照你想要的方式排列窗口，对于监控某个程序来说真是再合适不过了，下面的
-窗口运行程序，上面的窗口输出运行结果。</p>
-
-<p>还发现一个很好用的工具，watch，这个命令是用来监控某个命令的输出的，如果某个程序持续输出
-了内容，拿它来监控再合适不过了，不然就得反复输命令查看结果了。</p>
-
-<p>被感染了，我也要学习使用emacs，也要学习使用tmux和各种命令行，不能止步于已经掌握的内容，今晚
-折腾了一下emacs，改了一个键盘映射，把恼人的ctrl键和caplock键换了个位置。因为我现在用的系统
-是archlinux+gnome3.12，所以直接调用一个系统设置改的，找到tweak tool然后在typing里面选择
-swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来，现在ctrl靠近键盘中间了以后
-使用emacs写代码应该是更方便了吧。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/21/ssh-login-without-password/">Ssh-login-without-password</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-21T15:50:42+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
-线上服务器有5台，有部分root权限。刚开始用xshell登陆服务器还没什么觉得不方便的，但是现在我已经完全使用linux办公了，所以
-只能用terminal来ssh连接服务器。手动输入密码太麻烦了，而且还是经常性的输密码。</p>
-
-<p>今天又花了点时间看了一下公钥加密的过程这块，了解了一个ssh连接的基本流程。ssh登陆有2种方法：</p>
-
-<ol>
-<li>基于密码的验证。</li>
-<li>基于公钥私钥的验证。</li>
-</ol>
-
-
-<p>基于密码的验证很好理解，当连接服务器的时候会提示你输入密码，等验证通过之后就能连接远程服务器了。这种方法很好理解，但是其实
-局限性是很大的，首先麻烦，每次登陆都得输密码，而一个安全的密码又不是那么好记。其次密码被暴露的次数越多就越不安全，万一哪一次
-在输入密码的时候被中间人给截获了这个密码，那么就没有丝毫秘密可言了。</p>
-
-<p>而基于公钥私钥的验证相比起来就安全多了，在服务器中保存一份你自己的公钥，服务器就会知道你是授权了的用户，客户端连接服务器的时候
-会检查这个用户的公钥是否在授权了的公钥列表中，如果在的话就放行，允许登陆。登陆之后加密的方法就很简单了，服务器用客户端的公钥加密信息
-后传给客户端，客户端收到这个加密的信息之后用自己的私钥解密。然后客户端给服务器发送信息，用服务器的公钥加密，服务器收到之后拿自己的
-私钥解密。</p>
-
-<p>所以总的来说ssh连接就是2步，一步是验证身份，剩下的就是交换公钥的加密数据传输。</p>
-
-<p>因为我现在都是使用运维给我分配的帐号密码来登陆服务器，每次连接都得输入密码很不方便，所以我还是改为通过公钥来验证身份好了。</p>
-
-<p>首先给自己生成一个公钥私钥对，使用<code>ssh-keygen</code>生成公钥和私钥对，一般的命名规则是id_rsa和id_rsa.pub， 默认使用的加密方法是rsa，
-默认使用2048字节的私钥。然后就是把自己的公钥添加到服务器上，保存在<code>~/.ssh/authorized_keys</code>里面。具体实现方法有很多，可以直接复制粘贴进去，
-可以把公钥文件传到服务器上，也可以用一个简单的命令<code>ssh-copy-id</code>,这样就可以绕过手动输入密码了。</p>
-
-<p>真是搞不懂，运维们有这么好的方法不用为什么要给一个账户创建密码呢，直接向我要一个公钥，然后加到服务器就行了嘛。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1019,6 +996,14 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/02/redis-crash/">Redis崩溃</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
       </li>
     
@@ -1028,14 +1013,6 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
     
       <li class="post">
         <a href="/blog/2014/10/25/learn-haskell-1/">学习haskell（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/18/emergency-case-1/">再来记录一次紧急情况</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/28/connect-to-vpn/">Connect-to-vpn</a>
       </li>
     
   </ul>
