@@ -1,88 +1,92 @@
 
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<title>freebsd-basic-operations - Joey's Blog</title>
-    <meta name="author" content="joey">
-    
-	<meta name="description" content="上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
+  <meta charset="utf-8">
+  <title>Freebsd-basic-operations - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  <meta name="description" content="上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
 很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
 方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
 
-	<link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.ico" rel="shortcut icon">
-    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
-    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
-
-    <!-- remove or comment it to disable ajaxification -->   
-    <script src="/javascripts/ajaxify.js"></script>
-   
-    
-    
+  
 
 </head>
 
-
-<body>
-    <div id="wrapper">
-    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
-<h1 class="animated bounceInDown">
-    <div id="headerbg">
-        joey
-    </div>
-</h1>
-<br>
-
-<ul id="social-links" style="text-align:center">
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joey's Blog</a></h1>
   
+    <h2>Trying To Be A Hacker.</h2>
   
-  
-  
-  
-  
-  
-  
-</ul>
-
-
-<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
-<ul id="nav">
-	<li id="ajax"><a href="/index.html">Home</a></li>
-	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
-    <li><a href="/atom.xml">RSS</a></li>
-    
-    <li>
-    <div id="dark">
-        <form method="get" action="/search.html" id="search">
-            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
-        </form>
-    </div>
-    </li>
-        
-</ul>
-
-
-
+</hgroup>
 
 </header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:xcaptain.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
 
-<div id="toload">
-<!-- begin toload --> 
-    <div id="content" class="inner">
-        <article class="post">
-	<h2 class="title">Freebsd-basic-operations</h2>
-	<div class="entry-content"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Freebsd-basic-operations</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-16T14:04:13+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
 很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
 方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman
 和freebsd的pkg，这这些发行版中我对于debian和arch还是比较熟悉的，freebsd也玩过但是
@@ -122,58 +126,114 @@
 知识了，暂时没那个精力去学习。</p>
 </div>
 
-<div class="meta">
-	
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-08-16T14:04:13+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:04 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/" >Tweet</a>
+  
+  
+  
 </div>
+
+    
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/16/a-php-pagination-example/" title="Previous Post: 一个php分页示例">&laquo; 一个php分页示例</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/21/ssh-login-without-password/" title="Next Post: ssh-login-without-password">ssh-login-without-password &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
-	<div class="share">
-	<div class="addthis_toolbox addthis_default_style ">
-	
-	
-	<a class="addthis_button_tweet"></a>
-	
-	
-	<a class="addthis_counter addthis_pill_style"></a>
-	</div>
-  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
 </div>
 
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/02/redis-crash/">Redis崩溃</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/10/25/learn-haskell-1/">学习haskell（一）</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
 
 
     </div>
-    <footer id="footer">
-    <div style="display:inline">
-    Copyright &copy; 2014
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - joey -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
 
-    joey
-. Powered by <a href="http://octopress.org">Octopress</a> | 
-    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
-</div>
-
-
-    </footer>
-    <script src="/javascripts/fabric.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
+</footer>
+  
 
 
 
 
 
 
-<!-- end toload --> 
-</div>
-</div>
-<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
-<script type="text/javascript">
-/*<![CDATA[*/
-;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
-/*]]>*/
-</script><!-- remove it to remove the scroll to top button -->
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
 </body>
 </html>

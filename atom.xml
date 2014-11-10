@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-11-10T21:54:07+00:00</updated>
+  <updated>2014-11-10T22:02:58+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -41,7 +41,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[redis崩溃]]></title>
+    <title type="html"><![CDATA[Redis崩溃]]></title>
     <link href="http://xcaptain.github.io/blog/2014/11/02/redis-crash/"/>
     <updated>2014-11-02T00:36:37+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/11/02/redis-crash</id>
@@ -158,7 +158,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[connect-to-vpn]]></title>
+    <title type="html"><![CDATA[Connect-to-vpn]]></title>
     <link href="http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn/"/>
     <updated>2014-09-28T16:02:00+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/09/28/connect-to-vpn</id>
@@ -571,7 +571,7 @@ defaults = defaultConfig {
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[php-array-splice]]></title>
+    <title type="html"><![CDATA[Php-array-splice]]></title>
     <link href="http://xcaptain.github.io/blog/2014/09/02/php-array-splice/"/>
     <updated>2014-09-02T14:21:55+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/09/02/php-array-splice</id>
@@ -659,7 +659,7 @@ end
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[customize keyboard layout]]></title>
+    <title type="html"><![CDATA[Customize Keyboard Layout]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout/"/>
     <updated>2014-08-25T15:32:42+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/25/customize-keyboard-layout</id>
@@ -697,7 +697,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[ssh-login-without-password]]></title>
+    <title type="html"><![CDATA[Ssh-login-without-password]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/21/ssh-login-without-password/"/>
     <updated>2014-08-21T15:50:42+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/21/ssh-login-without-password</id>
@@ -735,7 +735,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[freebsd-basic-operations]]></title>
+    <title type="html"><![CDATA[Freebsd-basic-operations]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/"/>
     <updated>2014-08-16T14:04:13+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations</id>
@@ -902,7 +902,7 @@ class BaseFunction {
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[jsonp的一点简单看法]]></title>
+    <title type="html"><![CDATA[Jsonp的一点简单看法]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/12/jsonp-some-thought/"/>
     <updated>2014-08-12T14:28:53+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/12/jsonp-some-thought</id>
@@ -953,7 +953,7 @@ $data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[first eye on octopress]]></title>
+    <title type="html"><![CDATA[First Eye on Octopress]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress/"/>
     <updated>2014-08-11T15:43:02+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress</id>
