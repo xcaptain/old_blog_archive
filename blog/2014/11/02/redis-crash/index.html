@@ -1,97 +1,86 @@
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!DOCTYPE HTML>
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>Redis崩溃 - Joey's Blog</title>
-  <meta name="author" content="joey">
+	<meta charset="utf-8">
+	<title>redis崩溃 - Joey's Blog</title>
+    <meta name="author" content="joey">
+    
+	<meta name="description" content="星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上netstat -nt | grep -i 'time_wait'的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高， &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
-  <meta name="description" content="星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上netstat -nt | grep -i 'time_wait'的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高， &hellip;">
-  
+	<link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-  
-  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/11/02/redis-crash">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<!--<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
-<!--<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">-->
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
 
-  
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
 
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Joey's Blog</a></h1>
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        joey
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
   
-    <h2>Trying To Be A Hacker.</h2>
   
-</hgroup>
+  
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
 
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:xcaptain.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">Redis崩溃</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-02T00:36:37+00:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Redis崩溃</h2>
+	<div class="entry-content"><p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
 
 <p>telnet上redis服务器去查看了一下，也就10万+的key，按理来说不应该这么慢。后来事故达到高峰期了，好几个站出现502了，这时候运维报告redis服务器网卡io达到峰值，太恐怖了，服务器使用的是1000Mbps的网卡，每秒钟redis读写超过1G了，怎么会这样？这时候看来就好理解之前netstat的结果了，既然网卡达到上限了，肯定服务器就不能即使返回请求。</p>
 
@@ -111,120 +100,58 @@
 <p>主要得分析一下<code>netstat -a</code>的输出，这个连接状态太多了，得好好研究一下。</p>
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-02T00:36:37+00:00" pubdate data-updated="true"></time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/11/02/redis-crash/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/11/02/redis-crash/" >Tweet</a>
-  
-  
-  
+<div class="meta">
+	
 </div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2014/11/01/debug-discuz-1/" title="Previous Post: 调试discuz（一）">&laquo; 调试discuz（一）</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2014/11/09/my-first-machanical-keyboard/" title="Next Post: 我的第一块机械键盘">我的第一块机械键盘 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
 </div>
 
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/02/redis-crash/">Redis崩溃</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/25/learn-haskell-1/">学习haskell（一）</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-
-
-
-  
-</aside>
 
 
     </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - joey -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2014
 
-</footer>
-  
-
-
+    joey
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
 
 
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
 
 
 
 
 
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
 </body>
 </html>
