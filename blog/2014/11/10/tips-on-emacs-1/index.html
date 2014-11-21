@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>First Eye on Octopress - Joey's Blog</title>
+  <title>Emacs使用心得（一） - Joey's Blog</title>
   <meta name="author" content="joey">
 
   
-  <meta name="description" content="第一次使用octopress体验 这几天突然发现php功能很弱，而python又总是拿来写脚本，没有真正用来开发过什么大型的项目。
-为了早日实现全栈工程师的梦想，打算开始学习ruby。 在网上搜了一下ruby开始学习的方法，下载了几本电子书看，然后又发现了octopress这个开源项目， &hellip;">
+  <meta name="description" content="emacs的快捷键太多了，得多积累多总结才能灵活运用，用了这么久的emacs了但是好多快捷键都忘得差不多了，太尴尬了。 用emacs看pdf文件 emacs支持DocView模式，在这个模式下可以很方便的查看pdf文件，现在这个模式还有很多待改进的地方，不过凑合着也能用。
+1. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress">
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/11/10/tips-on-emacs-1">
   <link href="/favicon.ico" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
@@ -61,7 +61,7 @@
   
   <header>
     
-      <h1 class="entry-title">First Eye on Octopress</h1>
+      <h1 class="entry-title">Emacs使用心得（一）</h1>
     
     
       <p class="meta">
@@ -70,26 +70,27 @@
 
 
 
-<time class='entry-date' datetime='2014-08-11T15:43:02+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:43 pm</span></time>
+<time class='entry-date' datetime='2014-11-10T23:16:33+00:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:16 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>第一次使用octopress体验</h3>
+<div class="entry-content"><p>emacs的快捷键太多了，得多积累多总结才能灵活运用，用了这么久的emacs了但是好多快捷键都忘得差不多了，太尴尬了。</p>
 
-<p>这几天突然发现php功能很弱，而python又总是拿来写脚本，没有真正用来开发过什么大型的项目。
-为了早日实现全栈工程师的梦想，打算开始学习ruby。</p>
+<h4>用emacs看pdf文件</h4>
 
-<p>在网上搜了一下ruby开始学习的方法，下载了几本电子书看，然后又发现了octopress这个开源项目，
-我一直坚信学习不能单纯看书，所以很不错，看到了这个博客平台，以前在ghost blog上面用过一点
-markdown，但是后来vps到期之后就没有继续写markdown了，现在很不熟练。</p>
+<p>emacs支持DocView模式，在这个模式下可以很方便的查看pdf文件，现在这个模式还有很多待改进的地方，不过凑合着也能用。
+1. DocView模式把一本pdf文件分成了很多页，我们的操作就是在每一页中进行的。
+2. 在每一页中前后滚动：按n切换下一页，按p回到上一页。不过还是按空格切换下一页方便，这样是连续的页面，按n则是切到下一页对应的位置。
+3. 当前页的操作：在当前页滚动，C-n向下，C-p向上，+ 放大buffer，-缩小buffer。
+4. 切到指定的页面：m-g g然后输入页码，就可以到某一页了。
+5. m-&lt; 回到第一页，m->到最后一页。</p>
 
-<p>当初用ghost blog的时候是不太懂前端的东西，但是现在已经和html，js，css打了一个多月交道，
-还算熟悉，以后肯定得自己动手改改theme，加点widget等。</p>
+<p>目前就用到了这几个快捷键，相对于GUI的pdf阅读器来说还是有很大差距的，不过也已经很难得了，毕竟emacs只是一个editor。现在这个DocView模式还缺少添加书签的功能，无法记录当前阅读进度，每次打开一个文件都是回到第一页，即使是不小心隐藏了这个buffer，再重新打开的时候又回到第一页了。</p>
 
-<p><a href="http://ruby-doc.org/docs/">ruby programming</a></p>
+<p>希望将来的版本能改进这些问题。</p>
 </div>
 
 
@@ -105,7 +106,7 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
 
 
 
-<time class='entry-date' datetime='2014-08-11T15:43:02+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:43 pm</span></time>
+<time class='entry-date' datetime='2014-11-10T23:16:33+00:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:16 pm</span></time>
       
 
 
@@ -113,7 +114,7 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/08/11/first-eye-on-octopress/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/11/10/tips-on-emacs-1/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/11/10/tips-on-emacs-1/" >Tweet</a>
   
   
   
@@ -123,8 +124,8 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     <br />
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2014/11/09/my-first-machanical-keyboard/" title="Previous Post: 我的第一块机械键盘">&laquo; 我的第一块机械键盘</a>
       
-        <a class="basic-alignment right" href="/blog/2014/08/12/jsonp-some-thought/" title="Next Post: jsonp的一点简单看法">jsonp的一点简单看法 &raquo;</a>
       
     </p>
   </footer>

@@ -9,7 +9,8 @@
   <meta name="author" content="joey">
 
   
-  <meta name="description" content="考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。 在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。 对于程序员来说HHKB当然是首选，但是高昂的价格让人望而生畏 &hellip;">
+  <meta name="description" content="emacs的快捷键太多了，得多积累多总结才能灵活运用，用了这么久的emacs了但是好多快捷键都忘得差不多了，太尴尬了。 用emacs看pdf文件 emacs支持DocView模式，在这个模式下可以很方便的查看pdf文件，现在这个模式还有很多待改进的地方，不过凑合着也能用。
+1. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -47,14 +48,6 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:xcaptain.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -65,6 +58,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/11/10/tips-on-emacs-1/">Emacs使用心得（一）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-11-10T23:16:33+00:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:16 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>emacs的快捷键太多了，得多积累多总结才能灵活运用，用了这么久的emacs了但是好多快捷键都忘得差不多了，太尴尬了。</p>
+
+<h4>用emacs看pdf文件</h4>
+
+<p>emacs支持DocView模式，在这个模式下可以很方便的查看pdf文件，现在这个模式还有很多待改进的地方，不过凑合着也能用。
+1. DocView模式把一本pdf文件分成了很多页，我们的操作就是在每一页中进行的。
+2. 在每一页中前后滚动：按n切换下一页，按p回到上一页。不过还是按空格切换下一页方便，这样是连续的页面，按n则是切到下一页对应的位置。
+3. 当前页的操作：在当前页滚动，C-n向下，C-p向上，+ 放大buffer，-缩小buffer。
+4. 切到指定的页面：m-g g然后输入页码，就可以到某一页了。
+5. m-&lt; 回到第一页，m->到最后一页。</p>
+
+<p>目前就用到了这几个快捷键，相对于GUI的pdf阅读器来说还是有很大差距的，不过也已经很难得了，毕竟emacs只是一个editor。现在这个DocView模式还缺少添加书签的功能，无法记录当前阅读进度，每次打开一个文件都是回到第一页，即使是不小心隐藏了这个buffer，再重新打开的时候又回到第一页了。</p>
+
+<p>希望将来的版本能改进这些问题。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -842,75 +877,6 @@ foreach($arr as $k => $v) {
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/31/use-fish-shell/">使用fish</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-31T14:43:17+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>2:43 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
-从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
-这不是鱼，全名叫做(friendly interactive shell)，用户友好的shell，语法高亮功能使得不容易
-输错命令，自动补全功能比zsh还强大，能够根据man page里的关键字来补全，也能根据~/.ssh/config来
-补全ssh命令，历史记录功能也比bash之类的友好。</p>
-
-<p>fish的项目主页在<a href="https://github.com/fish-shell/fish-shell">这里</a>，可以看到这个项目的还是比较
-活跃的。因为我用的是archlinux，所以就没有去从build源代码，而是直接<code>pacman -S fish</code>安装的。</p>
-
-<p>默认的fish已经很强大了:
-    1. 内建了命令行语法高亮功能。输入不同的命令会用不同的颜色来显示。
-    2. 要查找一个命令的历史记录不要用ctrl-R来找，直接输入这个命令的开头几个字母fish会自动用阴影
-    显示上一次执行的这条命令，然后按下ctrl-E或者是右方向键就能全部补齐了，这个功能对于很长的命令
-    来说真是太赞了，而且感觉比bash的ctrl-R强大多了。
-    3. 自动补全功能非常强大。我在编辑这篇博客的时候不是输入<code>vim 20140-08-31-use-fish-shell.markdown</code>来
-    编辑的，而是直接<code>vim fish&lt;Tab&gt;</code>来找到这个文件的，真是强大的功能，这是我目前发现的唯一支持任意
-    位置补齐的shell，就算是也很不错的zsh也只支持从头补齐。
-    4. 自动命令行纠错。比如说你要执行<code>cd ~/Documents</code>但是输成了<code>cd ~/documents</code>也没有关系，直接就自动
-    纠错了。有了它真是方便。</p>
-
-<p>虽然默认的fish很不错，但是我还是从github上clone了<a href="https://github.com/bpinto/oh-my-fish">oh-my-fish</a>这个项目,
-这个项目和<a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a>的结构很像，里面的配置都很有用，而且有多种
-主题，当对目前这个主题审美疲劳了，换一个主题还是很不错的。使用oh-my-fish来作为fish的配置也很简单，按照github
-上面的操作一步一步做就是了。</p>
-
-<p>接下来就是根据自己的喜好自定义fish的theme了，要加载哪个theme只要改<code>~/.config/fish/config.fish</code>就ok，找到
-<code>set fish_theme</code>这一行，填入你要的theme就行了，我用的是<code>set fish_theme zish</code>，这个主题挺漂亮的。</p>
-
-<p>然后就是自定义一些别名了，fish没有alias这个命令，但是可以用函数来实现自定义别名。既然使用了oh-my-fish的配置
-就得按照它的结构来修改。在<code>~/.oh-my-fish/functions/</code>里面放的都是自定义的函数。我先给vi起了个别名vim，因为
-有了vim谁还用vi啊。在这个目录下建一个文件vi.fish。
-<code>
-function vi &ndash;description ‘alias of vim’
-    vim
-end
-</code>
-保存退出，然后在命令行输入vi，这时候打开的就是vim了，连重新打开一个shell都不用就生效了，真是好快啊。</p>
-
-<p>接下来就是一些关于fish的shell编程方面的问题了。不过这块没有怎么认真去看。工作中用的都是bash，谁会为了执行
-一个脚本而额外安装fish。不过我还是很喜欢fish的语法的，感觉和python和ruby很像，相比之下bash的语法就有点
-另类和老古董了。等以后要用到fish script的时候再去认真研究一下fish syntax。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -926,6 +892,10 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/10/tips-on-emacs-1/">Emacs使用心得（一）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a>
       </li>
     
@@ -939,10 +909,6 @@ end
     
       <li class="post">
         <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/25/learn-haskell-1/">学习haskell（一）</a>
       </li>
     
   </ul>
