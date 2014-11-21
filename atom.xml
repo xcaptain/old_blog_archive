@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-11-21T22:50:32+00:00</updated>
+  <updated>2014-11-21T22:55:01+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,28 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Emacs使用心得（一）]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/11/10/tips-on-emacs-1/"/>
-    <updated>2014-11-10T23:16:33+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/11/10/tips-on-emacs-1</id>
-    <content type="html"><![CDATA[<p>emacs的快捷键太多了，得多积累多总结才能灵活运用，用了这么久的emacs了但是好多快捷键都忘得差不多了，太尴尬了。</p>
-
-<h4>用emacs看pdf文件</h4>
-
-<p>emacs支持DocView模式，在这个模式下可以很方便的查看pdf文件，现在这个模式还有很多待改进的地方，不过凑合着也能用。
-1. DocView模式把一本pdf文件分成了很多页，我们的操作就是在每一页中进行的。
-2. 在每一页中前后滚动：按n切换下一页，按p回到上一页。不过还是按空格切换下一页方便，这样是连续的页面，按n则是切到下一页对应的位置。
-3. 当前页的操作：在当前页滚动，C-n向下，C-p向上，+ 放大buffer，-缩小buffer。
-4. 切到指定的页面：m-g g然后输入页码，就可以到某一页了。
-5. m-&lt; 回到第一页，m->到最后一页。</p>
-
-<p>目前就用到了这几个快捷键，相对于GUI的pdf阅读器来说还是有很大差距的，不过也已经很难得了，毕竟emacs只是一个editor。现在这个DocView模式还缺少添加书签的功能，无法记录当前阅读进度，每次打开一个文件都是回到第一页，即使是不小心隐藏了这个buffer，再重新打开的时候又回到第一页了。</p>
-
-<p>希望将来的版本能改进这些问题。</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[我的第一块机械键盘]]></title>
