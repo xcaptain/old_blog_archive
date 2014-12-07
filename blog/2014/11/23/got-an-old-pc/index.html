@@ -94,15 +94,19 @@
 
 <p>我把svn里面的代码复制到内网测试机之后，<code>git init</code>了这个目录，然后执行初始化提交，然后在本地执行<code>git clone user@host:/project/ ./project</code>把代码拷到了本地，打算在本地改了之后up到服务器上。但是后来我发现我想多了，git不是svn，用svn的这种思路是行不通的，线上的代码和本地的代码是毫无关系的2个分支，本地改了之后提交执行<code>git push</code>是会报错的。</p>
 
-<p>那么什么才是正确的git方式呢？查看了一下git的文档，发现上面说git有一个版本库，克隆这个版本库就能获得最新的版本。
-1. 先把代码复制到本地，<code>scp -r online_code local_code</code>
-2. 把本地代码初始化成一个git仓库，<code>git init</code>
-3. 把本地代码都加入到git版本中，<code>git add .</code>
-4. 第一次提交代码，<code>git commit -m 'init commit'</code>
-5. 把本地仓库推送到远程服务器上，<code>git remote add gituser@gitserver:/local_code.git</code>，在执行这步的时候必须确保git服务器上面已经存在local_code.git这个目录，如果不存在的话就得<code>mkdir local_code.git</code>
-6. 把本地仓库保存的版本都推送到服务器上，<code>git push origin master</code>
-7. ssh上git服务器看看，找到local_code.git这个目录，发现里面的文件竟然和本地代码里面<code>local_code/.git/</code>下的内容一模一样
-8. 把仓库里的代码克隆到对外访问的环境，因为我是在本地做的测试，所以代码仓库和web服务器是在同一台机器上的，直接执行<code>git clone local_code.git /srv/http/online_code</code>就把版本库里面记录的代码复制出来放到服务器目录了。</p>
+<p>那么什么才是正确的git方式呢？查看了一下git的文档，发现上面说git有一个版本库，克隆这个版本库就能获得最新的版本。</p>
+
+<ol>
+<li>先把代码复制到本地，<code>scp -r online_code local_code</code></li>
+<li>把本地代码初始化成一个git仓库，<code>git init</code></li>
+<li>把本地代码都加入到git版本中，<code>git add .</code></li>
+<li>第一次提交代码，<code>git commit -m 'init commit'</code></li>
+<li>把本地仓库推送到远程服务器上，<code>git remote add gituser@gitserver:/local_code.git</code>，在执行这步的时候必须确保git服务器上面已经存在local_code.git这个目录，如果不存在的话就得<code>mkdir local_code.git</code></li>
+<li>把本地仓库保存的版本都推送到服务器上，<code>git push origin master</code></li>
+<li>ssh上git服务器看看，找到local_code.git这个目录，发现里面的文件竟然和本地代码里面<code>local_code/.git/</code>下的内容一模一样</li>
+<li>把仓库里的代码克隆到对外访问的环境，因为我是在本地做的测试，所以代码仓库和web服务器是在同一台机器上的，直接执行<code>git clone local_code.git /srv/http/online_code</code>就把版本库里面记录的代码复制出来放到服务器目录了。</li>
+</ol>
+
 
 <p>之前我直接在服务器上写代码，提交代码的时候真是落后，得通过命令行来提交代码，magit没法判断远程服务器上的代码的版本。现在这样就好了，我可以用magit随时commit,随时push，然后只要到<code>/srv/http/online_code/</code>下面<code>git pull</code>就行了。</p>
 </div>
@@ -141,6 +145,8 @@
         <a class="basic-alignment left" href="/blog/2014/11/09/my-first-machanical-keyboard/" title="Previous Post: 我的第一块机械键盘">&laquo; 我的第一块机械键盘</a>
       
       
+        <a class="basic-alignment right" href="/blog/2014/12/07/learn-beautifulsoup/" title="Next Post: learn-beautifulsoup">learn-beautifulsoup &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -152,6 +158,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/07/learn-beautifulsoup/">Learn-beautifulsoup</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
@@ -167,10 +177,6 @@
     
       <li class="post">
         <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
       </li>
     
   </ul>

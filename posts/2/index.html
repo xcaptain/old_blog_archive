@@ -9,9 +9,8 @@
   <meta name="author" content="joey">
 
   
-  <meta name="description" content="从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
-从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
-这不是鱼，全名叫做(friendly interactive &hellip;">
+  <meta name="description" content="昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
+一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。 我的思路是把要过滤的数据都放到一个叫做$filterGames的数组里面，所有的数据存放在$arr这个数组里。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -59,6 +58,65 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/02/php-array-splice/">Php-array-splice</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-02T14:21:55+00:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>2:21 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
+一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
+
+<p>我的思路是把要过滤的数据都放到一个叫做<code>$filterGames</code>的数组里面，所有的数据存放在<code>$arr</code>这个数组里。
+因为要用php实现，没有现成的方法，随便写了一个线性复杂度的算法，挨个检测<code>in_array</code>，然后用<code>array_splice</code>这个
+函数来删除元素。本来思路是很简单的，但是就是得不到我要的结果。具体代码如下：
+<code>
+foreach($arr as $k => $v) {
+    if(in_array($v, $filterGames)) {
+        array_splice($arr, $k, 1)
+    }
+}
+return $arr;
+</code>
+结果总是过滤了部分数据但是还有部分不能过滤。</p>
+
+<p>今天发现问题之后我改了一下，用的是<code>unset</code>这个方法。
+<code>
+foreach($arr as $k => $v) {
+    if(in_array($v, $filterGames)) {
+        unset($arr[$k]);
+    }
+}
+</code>
+本来我应该用array_splice来删除数组元素的，因为这个方法不会在数组中留下一个洞，而unset把元素删了之后会留下一个洞，导致
+没法通过数组的key来遍历。至于为什么array_splice只能过滤部分数据而unset可以全部过滤掉也是因为当使用array_splice的时候
+删了一个元素后面的元素会往前面挤，导致错过了被删的机会。而unset则是删了一个元素之后就留出了一个洞，整个数组的结构不变。
+我觉得php的数组应该是用链表来实现的，在每个节点中有一个字段记录了当前节点相对于首节点的位置，如果用array_splice来删除
+节点，会重写每个节点的这个相对位置，而用unset来删除则不会。</p>
+
+<p>不过作为上层应用开发者对于语言的具体实现不必要去研究，只要形象的知道这2种方法的不同就够了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -579,6 +637,10 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/07/learn-beautifulsoup/">Learn-beautifulsoup</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
       </li>
     
@@ -592,10 +654,6 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     
       <li class="post">
         <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/10/26/learn-haskell-2/">学习haskell（二）</a>
       </li>
     
   </ul>

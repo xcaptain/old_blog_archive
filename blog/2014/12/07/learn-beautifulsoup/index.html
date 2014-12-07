@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Learn-beautifulsoup - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  <meta name="description" content="前几天看到有个同事在采集这个站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。 之前采集过多玩和178的一些文章，需求还比较复杂， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/12/07/learn-beautifulsoup">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joey's Blog</a></h1>
+  
+    <h2>Trying To Be A Hacker.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Learn-beautifulsoup</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-12-07T22:25:45+00:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:25 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>前几天看到有个同事在采集<a href="https://yande.re">这个</a>站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。</p>
+
+<p>之前采集过多玩和178的一些文章，需求还比较复杂，需要把ajax的接口也给搞定掉，还得把所有图片都本地化，那时候用的是urllib2+beautifulsoup这个东西采集的。</p>
+
+<p>今天闲着没事，打算再来搞个采集玩玩，<a href="https://yande.re">yande</a>上面的图片质量还是比较高的。还是使用老一套，不过这回我不打算使用urllib2了，这东西太弱了，编码问题总是会出现，搞得我莫名其妙的，实在是打算放弃urllib2了，上网搜一下，找到了一个叫做<code>requests</code>的网络库，这个东西目前开发还是蛮活跃的，而且口气比较大，直接在官网说urllib2的api很混乱，那就是它了。页面分析的库还是用回beautifulsoup，这么久了仍然是很不喜欢写正则，所以拿这个库来解析html还是比较顺手。至于信息入库，我用的是<code>MySQLdb</code>这个库来驱动mysql，似乎这个库也比较弱，反正我是遇到很多很简单的sql语句都报错的情况了，在网上搜了一下，发现别的第三方的mysql库也很多，但是还没有下定决心换。</p>
+
+<p>代码的思路很简单，和以前写的采集脚本差不多，都是先采集列表页，获得文章页的url，然后在文章页中采集想要的信息。信息采集完了就是入库，到这里采集过程就结束了。</p>
+
+<p>代码很简单，已经提交到<a href="https://github.com/xcaptain/yande">github</a>了，和之前写的脚本比起来，多增加了一些东西：
+1. 模糊匹配，比如说<code>soup.find(href=re.compile('user\/show'))</code>这样的东西。
+2. 断点续踩，程序在跑的时候如果按下<code>Ctrl-C</code>来终止它的话，会把当前采集到的页码写入到一个叫做<code>config.py</code>的文件。
+3. 异常处理，以前写的几个采集使用了很多if语句，很多嵌套的判断，就是为了人为规避异常，尽量让程序跑的时候都不遇到异常，这种写法真是太折磨人了，看到三四层嵌套判断我的头都要大了。这回尝试了一下直接在<code>try</code>里面执行代码段，如果遇到可能会有的异常就直接<code>except</code>上处理了它，真是省了很多心呀。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-12-07T22:25:45+00:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:25 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/12/07/learn-beautifulsoup/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/12/07/learn-beautifulsoup/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/23/got-an-old-pc/" title="Previous Post: 入手一台二手PC">&laquo; 入手一台二手PC</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/07/learn-beautifulsoup/">Learn-beautifulsoup</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/02/redis-crash/">Redis崩溃</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/01/debug-discuz-1/">调试discuz（一）</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - joey -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
