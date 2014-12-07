@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-12-07T22:44:30+00:00</updated>
+  <updated>2014-12-07T22:53:46+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Learn-beautifulsoup]]></title>
+    <title type="html"><![CDATA[又是一个采集]]></title>
     <link href="http://xcaptain.github.io/blog/2014/12/07/learn-beautifulsoup/"/>
     <updated>2014-12-07T22:25:45+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/12/07/learn-beautifulsoup</id>
