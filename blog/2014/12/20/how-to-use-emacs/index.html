@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How-to-use-emacs - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  <meta name="description" content="今天闲着没事，又上我们的ncuopen上面看了一下，发现小组现在活动极其不频繁，首页和wiki都没有怎么更新，然后上irc上看了一下，发现也没有人在线。 一个开源社区最大的悲哀就是没有活跃的用户，没有一个持续贡献的志愿者团队。 加入小组这么久了都没有做什么贡献真是惭愧， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Joey's Blog</a></h1>
+  
+    <h2>Trying To Be A Hacker.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How-to-use-emacs</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-12-20T11:44:35+00:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:44 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>今天闲着没事，又上我们的<a href="https://github.com/ncuopen">ncuopen</a>上面看了一下，发现小组现在活动极其不频繁，首页和wiki都没有怎么更新，然后上irc上看了一下，发现也没有人在线。</p>
+
+<blockquote><p>一个开源社区最大的悲哀就是没有活跃的用户，没有一个持续贡献的志愿者团队。</p></blockquote>
+
+<p>加入小组这么久了都没有做什么贡献真是惭愧，今天想了一下我可以整理一下我对于emacs使用的一点小小的心得。以下将会简单的说说我平时使用emacs来干什么。</p>
+
+<ol>
+<li>写代码，这是最基本的功能。</li>
+<li>上网，在emacs24之前的版本必须使用一个叫做<code>emacs-w3m</code>的第三方扩展才能在emacs里面上网，但是现在emacs自己做了一个基于elisp写的文本浏览器<code>eww</code>，使用方式也很简单，直接<code>M-x eww</code>然后输入要搜索的内容或者是要打开的url就行，现在<code>eww</code>默认的搜索引擎是<code>duckduckgo</code>。</li>
+<li>聊天，今天上<code>#ncuopen</code>上看了一下，发现聊天室里面没人在，突然比较一下那些比较火的聊天室，如<code>ubuntu</code>, <code>debian</code>每天上去都会有一大堆人在线，随便说一句话就会被别人刷屏，差距真的很大。如果要在emacs里面使用irc聊天，可以使用<code>erc</code>来连接服务器。</li>
+<li>看pdf，emacs内建是可以打开pdf文件的，如果习惯了emacs的快捷键，而且不喜欢在<code>evince</code>，<code>okular</code>下面必须使用鼠标的操作，那么可以试试用emacs看pdf。</li>
+<li>写博客，我自己也在github上面搭了一个octopress的博客，在本地就是用emacs编辑的博客，因为emacs支持<code>markdown</code>语法，编辑的时候可以直接看到语法高亮，保存后可以在本地预览。</li>
+<li>执行shell命令，要么是使用<code>M-x shell</code>来打开一个shell或者是<code>M-x eshell</code>来使用emacs自带的终端模拟器，我喜欢用后者，然后就可以运行任何的shell命令了。不过我用eshell用得少，平时都是在<code>urxvt</code>里面执行命令的。</li>
+<li>执行解释器，很动语言都内建了一个elpa的解释器，如ruby, python, php, haskell，sml等，如果想尝试一下某个表达式或者是某个代码段又不想写一个测试文件，那么在解释器里运行是最方便的了，执行<code>M-x run-python</code>, <code>M-x run-haskell</code>，会打开对应语言的解释器，就像在终端执行一样。如果想获得更多语言的支持，可以去<a href="http://elpa.gnu.org/packages/">elpa</a>或者是<a href="http://melpa.org/">melpa</a>上面找找。</li>
+<li>使用git，emacs有个扩展叫做<code>magit</code>，用它来提交代码，查看差异，查看版本比在终端使用git命令方便。</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">joey</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-12-20T11:44:35+00:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:44 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <br />
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/12/07/learn-beautifulsoup/" title="Previous Post: 又是一个采集">&laquo; 又是一个采集</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/20/how-to-use-emacs/">How-to-use-emacs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/09/my-first-machanical-keyboard/">我的第一块机械键盘</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/02/redis-crash/">Redis崩溃</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - joey -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
