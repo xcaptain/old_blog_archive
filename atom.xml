@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-12-25T23:46:23+00:00</updated>
+  <updated>2014-12-25T23:53:55+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -50,6 +50,8 @@ dd: writing `/EMPTY': No space left on device
 </code></pre>
 
 <p>一下dd我83G的硬盘，这可是我整个宿主机所有的空间了，不会影响到我吧，后来<code>df -h</code>了一下才发现虚拟机没有使用多少硬盘空间，而且宿主机也没有消耗掉很多硬盘空间。这样就有了一台虚拟机了，这可比直接用virtualbox方便多了，没有预先问我分配多少颗CPU，没有问我分配多少RAM，没有问我分配多少硬盘就把系统装好了，我喜欢。</p>
+
+<p>vagrant有一个共享目录就是宿主机的<code>Vagrantfile</code>所在的那个目录，也是虚拟机的<code>/vagrant</code>目录，这个目录双方都可以读写，想想真是有点小激动，要是以后我虚拟一个windows出来在上面跑一个qq，然后今天志军通过qq传给我的《刺杀金正恩》就不用在windows上跑着vlc服务器给我的arch笔记本供源了，不知道有没有人为vagrant做windows的box。</p>
 
 <p>不过vagrant毕竟是建立在virtualbox之上的，虽然说虚拟机占用宿主机的资源少了，但是还可以做得更好，要让机器资源更加充分的利用就得学习docker了，加油。</p>
 
