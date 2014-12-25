@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-12-25T23:37:53+00:00</updated>
+  <updated>2014-12-25T23:46:23+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -24,10 +24,14 @@
 
 <p>搜索了一下发现现在比较流行的服务器环境配置，服务器管理都是通过container也就是容器来进行的，最老土的服务器管理方式是通过ssh连接上服务器，然后手动编译或者包管理的形式安装软件。但是这种方式有很大的局限性，不易把所有的机器都统一配置，因为所有配置文件都要由手动编辑，然后手动更新，必然有的机器版本早，有的机器版本晚，对于管理一个服务器集群来说这是很不方便的。而且服务器多了软件更新就是一个麻烦事，不可能一台机器一台机器的去更新。</p>
 
-<p>目前找到了3个比较有名的虚拟化技术：
-1. docker， 更类似于chroot
-2. vagrant，用来管理virtualbox虚拟机
-3. rocket，暂时没什么太多了解</p>
+<p>目前找到了3个比较有名的虚拟化技术：</p>
+
+<ol>
+<li>docker， 更类似于chroot</li>
+<li>vagrant，用来管理virtualbox虚拟机</li>
+<li>rocket，暂时没什么太多了解</li>
+</ol>
+
 
 <p>早上出门的时候在youtube上看了一个通过docker来安装coreos的视频，但是感觉要学习yaml语法配置，比较繁琐，那就先来看看vagrant吧。</p>
 
