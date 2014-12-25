@@ -81,7 +81,7 @@
 
   <div class="entry-content"><p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
 
-<p>按照原来部署<a href="http://f.joxy.org%E7%9A%84%E6%A8%A1%E5%BC%8F%E6%89%93%E7%AE%97%E7%8E%B0%E5%9C%A8%E6%9C%AC%E5%9C%B0a%E9%83%A8%E7%BD%B2%E5%A5%BD%E7%8E%AF%E5%A2%83%EF%BC%8C%E7%84%B6%E5%90%8E%E6%8F%90%E4%BA%A4%E5%88%B0git">http://f.joxy.org%E7%9A%84%E6%A8%A1%E5%BC%8F%E6%89%93%E7%AE%97%E7%8E%B0%E5%9C%A8%E6%9C%AC%E5%9C%B0a%E9%83%A8%E7%BD%B2%E5%A5%BD%E7%8E%AF%E5%A2%83%EF%BC%8C%E7%84%B6%E5%90%8E%E6%8F%90%E4%BA%A4%E5%88%B0git</a> server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
+<p>按照原来部署<a href="http://f.joxy.org">http://f.joxy.org</a>的模式打算现在本地a部署好环境，然后提交到git server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
 
 <p>搜索了一下发现现在比较流行的服务器环境配置，服务器管理都是通过container也就是容器来进行的，最老土的服务器管理方式是通过ssh连接上服务器，然后手动编译或者包管理的形式安装软件。但是这种方式有很大的局限性，不易把所有的机器都统一配置，因为所有配置文件都要由手动编辑，然后手动更新，必然有的机器版本早，有的机器版本晚，对于管理一个服务器集群来说这是很不方便的。而且服务器多了软件更新就是一个麻烦事，不可能一台机器一台机器的去更新。</p>
 
