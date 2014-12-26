@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Emacs | Joey's Blog]]></title>
+  <link href="http://xcaptain.github.io/blog/categories/emacs/atom.xml" rel="self"/>
+  <link href="http://xcaptain.github.io/"/>
+  <updated>2014-12-26T23:54:20+00:00</updated>
+  <id>http://xcaptain.github.io/</id>
+  <author>
+    <name><![CDATA[joey]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何使用emacs]]></title>
+    <link href="http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs/"/>
+    <updated>2014-12-20T11:44:35+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs</id>
+    <content type="html"><![CDATA[<p>今天闲着没事，又上我们的<a href="https://github.com/ncuopen">ncuopen</a>上面看了一下，发现小组现在活动极其不频繁，首页和wiki都没有怎么更新，然后上irc上看了一下，发现也没有人在线。</p>
+
+<blockquote><p>一个开源社区最大的悲哀就是没有活跃的用户，没有一个持续贡献的志愿者团队。</p></blockquote>
+
+<p>加入小组这么久了都没有做什么贡献真是惭愧，今天想了一下我可以整理一下我对于emacs使用的一点小小的心得。以下将会简单的说说我平时使用emacs来干什么。</p>
+
+<ol>
+<li>写代码，这是最基本的功能。</li>
+<li>上网，在emacs24之前的版本必须使用一个叫做<code>emacs-w3m</code>的第三方扩展才能在emacs里面上网，但是现在emacs自己做了一个基于elisp写的文本浏览器<code>eww</code>，使用方式也很简单，直接<code>M-x eww</code>然后输入要搜索的内容或者是要打开的url就行，现在<code>eww</code>默认的搜索引擎是<code>duckduckgo</code>。</li>
+<li>聊天，今天上<code>#ncuopen</code>上看了一下，发现聊天室里面没人在，突然比较一下那些比较火的聊天室，如<code>ubuntu</code>, <code>debian</code>每天上去都会有一大堆人在线，随便说一句话就会被别人刷屏，差距真的很大。如果要在emacs里面使用irc聊天，可以使用<code>erc</code>来连接服务器。</li>
+<li>看pdf，emacs内建是可以打开pdf文件的，如果习惯了emacs的快捷键，而且不喜欢在<code>evince</code>，<code>okular</code>下面必须使用鼠标的操作，那么可以试试用emacs看pdf。</li>
+<li>写博客，我自己也在github上面搭了一个octopress的博客，在本地就是用emacs编辑的博客，因为emacs支持<code>markdown</code>语法，编辑的时候可以直接看到语法高亮，保存后可以在本地预览。</li>
+<li>执行shell命令，要么是使用<code>M-x shell</code>来打开一个shell或者是<code>M-x eshell</code>来使用emacs自带的终端模拟器，我喜欢用后者，然后就可以运行任何的shell命令了。不过我用eshell用得少，平时都是在<code>urxvt</code>里面执行命令的。</li>
+<li>执行解释器，很动语言都内建了一个elpa的解释器，如ruby, python, php, haskell，sml等，如果想尝试一下某个表达式或者是某个代码段又不想写一个测试文件，那么在解释器里运行是最方便的了，执行<code>M-x run-python</code>, <code>M-x run-haskell</code>，会打开对应语言的解释器，就像在终端执行一样。如果想获得更多语言的支持，可以去<a href="http://elpa.gnu.org/packages/">elpa</a>或者是<a href="http://melpa.org/">melpa</a>上面找找。</li>
+<li>使用git，emacs有个扩展叫做<code>magit</code>，用它来提交代码，查看差异，查看版本比在终端使用git命令方便。</li>
+<li>看图，这个功能估计很少人会用，<code>display</code>和<code>feh</code>已经做得很棒了。</li>
+</ol>
+
+
+<p>如果要使用上面的功能，最好使用<a href="https://github.com/bbatsov/prelude">prelude-emacs</a>上面的配置，省去很多配置的麻烦。</p>
+
+<p>另外我发现现在小组没有一个好的交流的地方，在github上面提issue总是不太方便，找到了一个开源项目<a href="https://github.com/esotalk/esoTalk">esotalk</a>可以很方便的用来搭建论坛，不知道有没有小伙伴愿意贡献一下。</p>
+]]></content>
+  </entry>
+  
+</feed>

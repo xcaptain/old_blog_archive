@@ -178,7 +178,7 @@ class BaseFunction {
                     } else {
                         $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>"; //其余页面做成链接
                     }
-                } 
+                }
             } elseif($lastPage > 5 + ($adjacents * 2)) { //页面很多，要隐藏部分页码
                 if($page < 1 + ($adjacents * 2)) {       //靠近前面，隐藏后面的页面
                     for($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
@@ -263,6 +263,13 @@ class BaseFunction {
 
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T09:26:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
           
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/php/'>php</a>
+  
+</span>
 
 
         </p>
