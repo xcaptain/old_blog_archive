@@ -1,16 +1,11 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
   <title>Joey's Blog</title>
   <meta name="author" content="joey">
 
   
-  <meta name="description" content="昨晚12点多的时候突然被从被窝里拉出来了，虽然不再睡觉，但是这种感觉也是很不爽的，就因为我负责的一个网站首页出现500错误，提示数据库不能连接了。
-妈呀，这么大的事，怎么还能安心玩手机，赶紧起来查找原因。 目前我这个站是搭建在2台服务器上的，用这2台机器来做负载均衡，跑了3个多月了，一点事都没有 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,67 +15,118 @@
 
   
   <link rel="canonical" href="http://xcaptain.github.io/posts/2">
-  <link href="/favicon.ico" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://xcaptain.github.io/posts/2">
+  <meta property="og:title" content="Joey's Blog">
+  <meta property="og:description" content="不甘平凡">
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 
   
 
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Joey's Blog</a></h1>
-  
-    <h2>Trying To Be A Hacker.</h2>
-  
-</hgroup>
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Joey's Blog</a>
+        </div>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a rel="index" href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <form class="search navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+                            <input type="hidden" name="q" value="site:xcaptain.github.io">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="q" placeholder="Search">
+                            </div>
+                        </form>
+                    </li>
+                
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
 </nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
+
+
+      </header>
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9">
+    <div class="blog-index" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://xcaptain.github.io" />
       
-  <header>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/10/18/emergency-case-1/">再来记录一次紧急情况</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-10-18T11:48:41+00:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:48 am</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-18T11:48:41+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/10/18/emergency-case-1/" itemprop="url">再来记录一次紧急情况</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>昨晚12点多的时候突然被从被窝里拉出来了，虽然不再睡觉，但是这种感觉也是很不爽的，就因为我负责的一个网站首页出现500错误，提示数据库不能连接了。
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨晚12点多的时候突然被从被窝里拉出来了，虽然不再睡觉，但是这种感觉也是很不爽的，就因为我负责的一个网站首页出现500错误，提示数据库不能连接了。
 妈呀，这么大的事，怎么还能安心玩手机，赶紧起来查找原因。</p>
 
 <p>目前我这个站是搭建在2台服务器上的，用这2台机器来做负载均衡，跑了3个多月了，一点事都没有， 怎么会突然连不上数据库呢。查看了一下配置，这个站连接着
@@ -101,30 +147,38 @@
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/09/28/connect-to-vpn/">Connect-to-vpn</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-09-28T16:02:00+00:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:02 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-28T16:02:00+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/28/connect-to-vpn/" itemprop="url">Connect-to-vpn</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>今天拿到vpn了，真是兴奋啊，早在实习结束的时候就要求了vpn，结果5个月后才拿到手，真是的。
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天拿到vpn了，真是兴奋啊，早在实习结束的时候就要求了vpn，结果5个月后才拿到手，真是的。
 拿到了vpn意味着以后可以早点下班，有事情在家里远程办公还是无休止的工作，休息即工作呢？
 希望我不会把工作和生活混乱了。</p>
 
@@ -158,30 +212,38 @@
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/09/08/my-xmonad-config/">我的xmonad配置</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-09-08T04:12:48+00:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:12 am</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-08T04:12:48+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/08/my-xmonad-config/" itemprop="url">我的xmonad配置</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>xmonad是用haskell写的一个窗口管理器。所谓的窗口管理器和桌面环境最大的区别大概就是轻量和重量的区别吧。
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>xmonad是用haskell写的一个窗口管理器。所谓的窗口管理器和桌面环境最大的区别大概就是轻量和重量的区别吧。
 之前用过gnome3, unity, kde4, xfce4等桌面环境，感觉功能和配置都差不多，而且额外安装了太多不必要的东西，
 而且还很耗费系统资源。上个月在tumblr看到了某个人的xmonad桌面截图，感觉特别cool，所以开始折腾xmonad，不过
 刚开始接触这种窗口管理器还是比较费劲的。</p>
@@ -554,30 +616,38 @@ defaults = defaultConfig {
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/09/02/php-array-splice/">Php-array-splice</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-09-02T14:21:55+00:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>2:21 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-02T14:21:55+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/02/php-array-splice/" itemprop="url">Php-array-splice</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
 一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
 
 <p>我的思路是把要过滤的数据都放到一个叫做<code>$filterGames</code>的数组里面，所有的数据存放在<code>$arr</code>这个数组里。
@@ -613,30 +683,38 @@ foreach($arr as $k => $v) {
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/08/31/use-fish-shell/">使用fish</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-08-31T14:43:17+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>2:43 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-31T14:43:17+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/31/use-fish-shell/" itemprop="url">使用fish</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
 从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
 这不是鱼，全名叫做(friendly interactive shell)，用户友好的shell，语法高亮功能使得不容易
 输错命令，自动补全功能比zsh还强大，能够根据man page里的关键字来补全，也能根据~/.ssh/config来
@@ -682,30 +760,38 @@ end
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/08/25/customize-keyboard-layout/">Customize Keyboard Layout</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-08-25T15:32:42+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:32 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-25T15:32:42+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/25/customize-keyboard-layout/" itemprop="url">Customize Keyboard Layout</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>星期天膜拜了一位大牛，真是佩服他啊。</p>
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>星期天膜拜了一位大牛，真是佩服他啊。</p>
 
 <p>公司的一个统计功能出问题了，一直都没有把它修复，因为是历史遗留问题，找不到根源，所以
 后来公司领导决定把原来这个功能的开发者找回来看看到底是出什么问题了。所以星期天我也来
@@ -740,30 +826,38 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/08/21/ssh-login-without-password/">Ssh-login-without-password</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-08-21T15:50:42+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>3:50 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-21T15:50:42+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/21/ssh-login-without-password/" itemprop="url">Ssh-login-without-password</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
 线上服务器有5台，有部分root权限。刚开始用xshell登陆服务器还没什么觉得不方便的，但是现在我已经完全使用linux办公了，所以
 只能用terminal来ssh连接服务器。手动输入密码太麻烦了，而且还是经常性的输密码。</p>
 
@@ -798,30 +892,38 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/08/16/freebsd-basic-operations/">Freebsd-basic-operations</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-08-16T14:04:13+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:04 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T14:04:13+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/16/freebsd-basic-operations/" itemprop="url">Freebsd-basic-operations</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
 很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
 方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman
 和freebsd的pkg，这这些发行版中我对于debian和arch还是比较熟悉的，freebsd也玩过但是
@@ -864,30 +966,38 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/08/16/a-php-pagination-example/">一个php分页示例</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-08-16T09:26:45+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:26 am</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T09:26:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/16/a-php-pagination-example/" itemprop="url">一个php分页示例</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
 对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
 一句话就把我们辛辛苦苦写出来的代码给否决了，怎么说都还是很伤心的。不过伤心归伤心，活
 还是的继续干的，谁让我们是给别人打工的呢。</p>
@@ -1005,30 +1115,38 @@ class BaseFunction {
   
 
 
-    </article>
-  
-  
-    <article>
+        </article>
       
-  <header>
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
     
-      <h1 class="entry-title"><a href="/blog/2014/08/12/jsonp-some-thought/">Jsonp的一点简单看法</a></h1>
-    
-    
-      <p class="meta">
+      <p class="meta text-muted text-uppercase">
         
 
 
 
 
-<time class='entry-date' datetime='2014-08-12T14:28:53+00:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:28 pm</span></time>
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-12T14:28:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">ordinal</time>
         
       </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/12/jsonp-some-thought/" itemprop="url">Jsonp的一点简单看法</a></h2>
     
   </header>
 
 
-  <div class="entry-content"><h3>jsonp是ajax的异域传输技术</h3>
+  <div class="entry-content clearfix" itemprop="articleBody description"><h3>jsonp是ajax的异域传输技术</h3>
 
 <p>因为我不懂javascript，更不用说jquery了，所以现在在做的一个需要后台请求的页面只能让前端去做。
 昨晚在公司加班和前端对接口，但是到了9点也没有解决掉bug，太失望了，不过今天来了之后和一个大牛
@@ -1076,63 +1194,69 @@ $data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要
   
 
 
-    </article>
+        </article>
+      
+    </div>
+
+    <ul class="pager">
+      
+        <li class="previous"><a href="/posts/3">&larr;&nbsp;Older</a></li>
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+        <li class="next"><a href="/index.html">Newer&nbsp;&rarr;</a></li>
+      
+    </ul>
+  </div>
+
   
-  <div class="pagination">
+    <aside class="sidebar col-md-3">
+      
+        <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
     
-      <a class="prev" href="/posts/3">&larr; Older</a>
+    <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
     
-    <a href="/blog/archives">Blog Archives</a>
+    <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
     
-    <a class="next" href="/index.html">Newer &rarr;</a>
+    <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
+    
+    <a class="list-group-item " href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
+    
+    <a class="list-group-item " href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
     
   </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
-      </li>
-    
-  </ul>
 </section>
 
 
 
 
 
-  
-</aside>
 
+      
+    </aside>
+  
+</div>
+
+        </div>
+      </div>
     </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - joey -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2014 - joey<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
 </p>
 
+</div>
 </footer>
-  
+    
 
 
 
@@ -1151,8 +1275,9 @@ $data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要
   </script>
 
 
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
 
 
-
-</body>
+  </body>
 </html>
