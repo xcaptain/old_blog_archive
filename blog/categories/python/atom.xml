@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2014-12-31T00:24:18+00:00</updated>
+  <updated>2014-12-31T00:26:23+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Web-crawl-again]]></title>
+    <title type="html"><![CDATA[采集一个论坛的帖子来进行数据分析]]></title>
     <link href="http://xcaptain.github.io/blog/2014/12/30/web-crawl-again/"/>
     <updated>2014-12-30T23:49:40+00:00</updated>
     <id>http://xcaptain.github.io/blog/2014/12/30/web-crawl-again</id>
