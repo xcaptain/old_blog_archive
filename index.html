@@ -119,6 +119,74 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-30T23:49:40+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-30</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/30/web-crawl-again/" itemprop="url">Web-crawl-again</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天接到一个小小的需求，又是和采集相关的，我都要烦死了，采集这东西写得都要腻了。</p>
+
+<p>不过和以前的那些采集有点区别，不再是采集文章了，而是开始采集论坛的帖子。说实话我觉得采集论坛比较简单，因为论坛都是php的页面，页面组织布局一般不会怎么变，而新闻站基本都是cms系统生成的html静态页，静态的页面就有太多可能性了，而且不排除有的编辑太敬业把每个页面都做得不一样。</p>
+
+<p>采集源站是<a href="http://qq.100bt.com">http://qq.100bt.com</a>，和我最近做的<a href="http://www.zeze.com">zeze</a>是同一类型的东西，而且突然发现zeze竟然借鉴了很多这个网站的元素。废话不多说，这次采集主要是为了了解哪些资讯比较受欢迎，然后我们就可以有针对性的来推广我们的内容，看起来像是在收集竞争对手的信息而实现知己知彼百战不殆，这样的活我喜欢。这个叫作百田圈圈的网站似乎运营得不错，里面积累了差不多百万的帖子，用户似乎也很活跃。</p>
+
+<p>其实要获得的信息不多，在我设计的数据库结构中包含以下字段：
+<code>
+tid: 帖子的id，用来作为表的主键
+url: 帖子的url，便于访问
+subject: 帖子标题
+author_name: 楼主名，有这个东西可以用来分析哪些用户比较活跃
+replies: 帖子的回复数，这个字段是用来衡量一个帖子的受欢迎程度的最重要指标
+view: 帖子被查看的次数
+pubdate: 发帖时间
+maxpage: 帖子页数，因为有的帖子是回复楼层的，所以如果一个帖子分了很多页说明这个帖子内容丰富
+category: 帖子所属分类，用来来分析哪些大类的话题比较火
+</code></p>
+
+<p>没有数据库直接操作真是麻烦，上面这些数据都得分析网页去获取，而且不是在同一个页面，需求挺麻烦的但是不难。</p>
+
+<p>代码传到github上面了，以前写的那些采集都是用脚本的形式来实现的，这回尝试了一下自己构造一个采集类，这时候才发现对于python的面向对象特性用的太少了，在设计类的结构，接口上面都很不熟练，现在的代码设计在python大牛严重肯定是很小儿科的，以后要多学习OOP的编程思想，不能总是一个函数一个函数这样顺序的执行下来。</p>
+
+<p>写这么一个简单的任务竟然还花了我一天的时间，看来编码能力还是有待加强，经过总结之后发现问题主要存在三方面：
+1. 对mysql的查询语句不熟悉，因为我把tid设置为了主键，所以不能重复插入，我想要实现<code>insert into on duplicate key continue</code>的功能，找了半天只看到了<code>insert into on duplicate key update</code>的语法，但是后者不是我想要的，因为使用的是python的<code>MySQLdb</code>来驱动mysql的，这东西对于原生的sql语句支持不是很好，不过幸好最后我找到了<code>insert ignore into</code>这种语句，一下解决了问题，虽然<code>MySQLdb</code>在<code>execute</code>的时候会有警告，但是毕竟实现了功能。</p>
+
+<ol>
+<li><code>MySQLdb</code>这个库的使用不熟悉，在用它来执行sql语句的时候出现了很多问题，看来有时间得专门总结一下python驱动mysql的方法。</li>
+</ol>
+
+
+<p>今晚下班回的路上突然发现代码少写了很多异常检测，比如说没有判断网络链接失败，页面匹配为空等，真希望程序能够按照我设想的执行，等明天早上到了公司6张表都给我装得满满的，明天到了公司 再去修改代码了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-26T21:54:57+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-26</time>
         
       </p>
@@ -712,65 +780,6 @@ dd: writing `/EMPTY': No space left on device
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-25T22:15:29+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-25</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/10/25/learn-haskell-1/" itemprop="url">学习haskell（一）</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>上周去国图还书的时候无意中看到了一本讲haskell的书，就顺手借回来了。想想第一次听说haskell这个名字还是从王垠的博客里看到的，那时候听他在博客里讲惰性求值，列表解析，lambda函数啊，什么的，根本听不懂。不过到现在为止，深入学习了python，对于列表解析，lambda函数还算是有一个浅浅的了解。而且已经学习过scheme和sml了，虽然都没有花太多时间去学习它们，但是至少对函数式编程了解了一个大概。</p>
-
-<p>以我目前对于函数式编程的理解来说，主要就是一切都是函数，数据是函数，函数也是函数。一个变量只有一个值，不能通过赋值来改变一个变量的值，只能让它重新绑定到另外一个值，所以变量的状态不会改变，不会出现副作用。这些都是一些很粗浅的理解，毕竟没有正儿八经的研究过函数式编程。主要有一个原因就是现在用函数式语言来开发的项目不多，我们学习编程主要还是用来解决实际问题，如果这门语言现实中没什么人用，或者是没法用到，那么学习它的激情就不会太高，虽然说学习过之后可能会提升编程思维。目前我了解的比较有名的函数式语言开发的项目有emacs，这个是用elisp语言来开发的一个编辑器，很强大。texmacs，一个所见即所得的tex编辑器，用的是scheme开发的。guile，gnu世界中的一个lisp编译器，能把lisp代码编译为c语言代码。chicken scheme，又一个scheme的编译器，按照官网说的它编译机器码的效率也是很高的，而且好像第三方库也比较多。lisp族就这些了，而sml族就没有听说过什么大的项目，不得不说很令人沮丧。相比现在流行的c/c++,java,perl/python/php等语言，函数式语言处于一个很小众的地位。为什么这种语言这么强大但是却没什么发展呢？真是搞不懂。</p>
-
-<p>后面开始去搜索haskell的相关信息，发现在80年代的时候一伙科学家发现函数式语言类别太多了，各种lisp变种太多，都有自己的优点，于是这伙人就想要一统函数式语言的天下，他们组建了一个小团体来研究未来的函数式语言。不得不说，开发这事就是得有很多人参与，没什么人参与的项目肯定不会发展的太好，linux的发展是这样，python是这样，都是有一个很大的志愿者团体来维护的，而像freebsd和scheme这样的东西则是在各个很牛逼的大学小范围流传。</p>
-
-<p>haskell算是一个严格类型的语言，也就是说每个变量都有一个类型，数字和字符串之间不能直接操作。目前python和php代码写多了导致我不是很喜欢这个特性，每个变量都有一个类型，多麻烦，数字和字符串之间不能强制转换，不能比较，不能拼接，诸多不便。即使是scheme也不是强类型的，把一个数字添加到一个列表后面在scheme里面是很正常的。sml在这点和haskell差不多，不过sml比haskell更加严格，在定义函数的时候得写明函数接收哪些类型的参数。</p>
-
-<p>不过强类型语言也有一个优点就是执行效率高，在编译过程中执行类型检测，发现问题直接报告异常然后退出，而不是在运行时报告异常。而且强类型语言生成的代码跑起来的时候需要更少的内存。</p>
-
-<p>haskell有自己的编译器，似乎种类有好几种，我在archlinux上用的是ghc，这个编辑器自带了一个解释器叫做ghci，安装好之后在终端输入ghci就能进入解释器，一行一行的执行输入的表达式了。python，php，ruby，scheme，sml都有自己的解释器，能够对每一个表达式求值，真方便。我最讨厌要编译机器码的语言了。</p>
-
-<p>haskell有多种内置的类型，我现在接触了数字，字符串，列表，元组这4个类型。要定义一个变量也很简单，直接<code>let a = 1</code>这样就定义了一个变量a，它绑定了一个数字1,当然我们也可以理解为这行代码定义了一个函数，当执行这个函数的时候会返回一个数字1,在这里函数也变成普通变量了。</p>
-
-<p>字符串是用双引号引起来的，<code>let s = "hello"</code> 就生成了一个字符串变量s，是把它当作函数还是当作普通变量就看个人喜好了。如果要获得某个字符串中间的一个字符，可以使用<code>!!</code>操作符，比如说<code>"hello" !! 2</code> 会返回一个&#8217;l&#8217;，看惯了c数组风格的字符串索引再来看haskell的形式，真是不习惯。</p>
-
-<p>列表是函数式语言的最重要的数据结构，从50年代麦卡锡发明的表处理语言开始，在各个函数式语言里都可以看到列表的各种表现形式。scheme的car和cdr，sml的hd和tl，而在haskell里面则是head和tail。定义一个列表<code>let l = [1,2,3,4]</code>，<code>head l</code>返回列表第一个元素，<code>tail l</code>返回列表除了第一个元素外剩下的元素，<code>init l</code>返回列表除了最后一个元素外的所有元素，<code>last l</code>返回最后一个元素。剩下的还有maximum, minimum, reverse, length, null, take, drop, sum, product, elem等方法，看得眼花缭乱啊，至于为一个这么基本的数据结构写这么多方法吗？ 对于列表还有一个很重要的特性就是可以生成一个列表范围，如果一个集合的元素是可以用很清晰的语言枚举出来的话那么这个集合可以用列表表示出来，比如说如果要生成1到100的所有整数，那么只要<code>[1 .. 100]</code>就可以了，如果要确定步长的话只要枚举前2个元素就好了<code>[1, 3 .. 100]</code>这样就生成了1到100的所有奇数。那么能不能生成[1,2,4,8 &hellip;]这样的变步长的列表呢？很遗憾，haskell没有把这种列表写入最基本的列表方法里面，也很好理解，对于变步长的列表给出了前几个元素不是很好推测下一个元素，如果不清楚它那么就不能实现它，写程序的至理名言。</p>
-
-<p>接下来就涉及到列表解析了，它对应数学里面一个很重要的概念&ndash;集合，<code>{x | x &lt; 10，x是正整数}</code>这是一个很简单的集合，在haskell里面就是<code>[1 .. 9]</code>。如果集合是<code>{x | x &lt; 10，x是偶数}</code>，在haskell里面就是<code>[x | x &lt;- [1 .. 9], x `mod` 2 == 0]</code>，这就是很简单的列表解析了。</p>
-
-<p>元组和列表差不多，不过限制比较松散，列表要求所有的元素都是同一个类型的，而元组没有这个限制<code>(1, 2, "hello")</code>这样就建立了一个三个元素的元组，</p>
-
-<p>haskell是一门很有前景的语言，得好好学学，希望能够坚持每天学点haskell，每天积累一点新知识。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -794,6 +803,8 @@ dd: writing `/EMPTY': No space left on device
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">Web-crawl-again</a>
+    
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
     
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
@@ -801,8 +812,6 @@ dd: writing `/EMPTY': No space left on device
     <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
     
     <a class="list-group-item " href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
-    
-    <a class="list-group-item " href="/blog/2014/11/23/got-an-old-pc/">入手一台二手PC</a>
     
   </div>
 </section>
@@ -862,7 +871,7 @@ dd: writing `/EMPTY': No space left on device
     
     
     <a class="list-group-item " href="/blog/categories/python/index.html">
-      <span class="badge">1</span>
+      <span class="badge">2</span>
       python
     </a>
     

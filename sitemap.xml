@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://xcaptain.github.io/blog/2014/12/30/web-crawl-again/</loc>
+    <lastmod>2014-12-30T23:49:40+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://xcaptain.github.io/blog/2014/12/26/install-coreos-with-vagrant/</loc>
     <lastmod>2014-12-26T21:54:57+00:00</lastmod>
     <priority>0.8</priority>
@@ -131,21 +137,21 @@
   
   <url>
     <loc>http://xcaptain.github.io/blog/archives/</loc>
-    <lastmod>2014-12-27T13:08:21+00:00</lastmod>
+    <lastmod>2014-12-31T00:17:35+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://xcaptain.github.io/</loc>
-    <lastmod>2014-12-27T13:08:21+00:00</lastmod>
+    <lastmod>2014-12-31T00:17:35+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <url>
     <loc>http://xcaptain.github.io/search.html</loc>
-    <lastmod>2014-12-27T13:08:21+00:00</lastmod>
+    <lastmod>2014-12-31T00:17:35+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

@@ -2,10 +2,10 @@
 <html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Category: Octopress - Joey's Blog</title>
+  <title>Web-crawl-again - Joey's Blog</title>
   <meta name="author" content="joey">
 
-  <meta name="description" content="Category: octopress">
+  
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -14,16 +14,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xcaptain.github.io/blog/categories/octopress">
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/12/30/web-crawl-again">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
 
   <!-- http://opengraphprotocol.org/ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="http://xcaptain.github.io/blog/categories/octopress">
-  <meta property="og:title" content="Category: Octopress - Joey's Blog">
-  <meta property="og:description" content="Category: octopress">
+  <meta property="og:url" content="http://xcaptain.github.io/blog/2014/12/30/web-crawl-again">
+  <meta property="og:title" content="Web-crawl-again - Joey's Blog">
+  
 
   <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
 
@@ -55,10 +55,10 @@
 
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li >
+                <li class="active">
                     <a rel="index" href="/">Blog</a>
                 </li>
-                <li class="active">
+                <li >
                     <a href="/blog/archives">Archives</a>
                 </li>
                 <li >
@@ -93,81 +93,144 @@
       <div id="main" role="main" class="container">
         <div id="content">
           <div class="row">
-  <div class="page-content col-md-9">
-    <article role="article">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://xcaptain.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
       
-        <header class="page-header">
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-30T23:49:40+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-30</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Web-crawl-again
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>今天接到一个小小的需求，又是和采集相关的，我都要烦死了，采集这东西写得都要腻了。</p>
+
+<p>不过和以前的那些采集有点区别，不再是采集文章了，而是开始采集论坛的帖子。说实话我觉得采集论坛比较简单，因为论坛都是php的页面，页面组织布局一般不会怎么变，而新闻站基本都是cms系统生成的html静态页，静态的页面就有太多可能性了，而且不排除有的编辑太敬业把每个页面都做得不一样。</p>
+
+<p>采集源站是<a href="http://qq.100bt.com">http://qq.100bt.com</a>，和我最近做的<a href="http://www.zeze.com">zeze</a>是同一类型的东西，而且突然发现zeze竟然借鉴了很多这个网站的元素。废话不多说，这次采集主要是为了了解哪些资讯比较受欢迎，然后我们就可以有针对性的来推广我们的内容，看起来像是在收集竞争对手的信息而实现知己知彼百战不殆，这样的活我喜欢。这个叫作百田圈圈的网站似乎运营得不错，里面积累了差不多百万的帖子，用户似乎也很活跃。</p>
+
+<p>其实要获得的信息不多，在我设计的数据库结构中包含以下字段：
+<code>
+tid: 帖子的id，用来作为表的主键
+url: 帖子的url，便于访问
+subject: 帖子标题
+author_name: 楼主名，有这个东西可以用来分析哪些用户比较活跃
+replies: 帖子的回复数，这个字段是用来衡量一个帖子的受欢迎程度的最重要指标
+view: 帖子被查看的次数
+pubdate: 发帖时间
+maxpage: 帖子页数，因为有的帖子是回复楼层的，所以如果一个帖子分了很多页说明这个帖子内容丰富
+category: 帖子所属分类，用来来分析哪些大类的话题比较火
+</code></p>
+
+<p>没有数据库直接操作真是麻烦，上面这些数据都得分析网页去获取，而且不是在同一个页面，需求挺麻烦的但是不难。</p>
+
+<p>代码传到github上面了，以前写的那些采集都是用脚本的形式来实现的，这回尝试了一下自己构造一个采集类，这时候才发现对于python的面向对象特性用的太少了，在设计类的结构，接口上面都很不熟练，现在的代码设计在python大牛严重肯定是很小儿科的，以后要多学习OOP的编程思想，不能总是一个函数一个函数这样顺序的执行下来。</p>
+
+<p>写这么一个简单的任务竟然还花了我一天的时间，看来编码能力还是有待加强，经过总结之后发现问题主要存在三方面：
+1. 对mysql的查询语句不熟悉，因为我把tid设置为了主键，所以不能重复插入，我想要实现<code>insert into on duplicate key continue</code>的功能，找了半天只看到了<code>insert into on duplicate key update</code>的语法，但是后者不是我想要的，因为使用的是python的<code>MySQLdb</code>来驱动mysql的，这东西对于原生的sql语句支持不是很好，不过幸好最后我找到了<code>insert ignore into</code>这种语句，一下解决了问题，虽然<code>MySQLdb</code>在<code>execute</code>的时候会有警告，但是毕竟实现了功能。</p>
+
+<ol>
+<li><code>MySQLdb</code>这个库的使用不熟悉，在用它来执行sql语句的时候出现了很多问题，看来有时间得专门总结一下python驱动mysql的方法。</li>
+</ol>
+
+
+<p>今晚下班回的路上突然发现代码少写了很多异常检测，比如说没有判断网络链接失败，页面匹配为空等，真希望程序能够按照我设想的执行，等明天早上到了公司6张表都给我装得满满的，明天到了公司 再去修改代码了。</p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
           
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
           
-            <h1 class="entry-title">
-              Category: Octopress
-              
-            </h1>
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-30T23:49:40+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-30</time>
           
-        </header>
-      
-      <div class="entry-content">
-        <div id="blog-archives" class="category" itemscope itemtype="http://schema.org/Blog">
-<meta itemprop="name" content="Joey's Blog" />
-<meta itemprop="description" content="不甘平凡" />
-<meta itemprop="url" content="http://xcaptain.github.io" />
-
-
-
-  
-  <h2 class="year">2014</h2>
-
-<article class="page-header" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-  
-<h2 class="post-title" itemprop="name headline"><a href="/blog/2014/08/11/first-eye-on-octopress/" itemprop="url">First Eye on Octopress</a></h2>
-<p class="meta text-muted">
-  
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-11T15:43:02+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-11</time>
-  
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+    <a class='category' href='/blog/categories/python/'>python</a>
   
 </span>
 
 
-</p>
-
-</article>
-
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/12/30/web-crawl-again/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/12/30/web-crawl-again/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
 </div>
 
-      </div>
-      
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2014/12/26/install-coreos-with-vagrant/" title="Previous Post: 通过vagrant安装coreos">&laquo; 通过vagrant安装coreos</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section class="panel panel-default">
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Recent Posts</h3>
   </div>
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">Web-crawl-again</a>
+    <a class="list-group-item active" href="/blog/2014/12/30/web-crawl-again/">Web-crawl-again</a>
     
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
     
@@ -191,7 +254,7 @@
   <div class="list-group">
     
     
-    <a class="list-group-item active" href="/blog/categories/octopress/index.html">
+    <a class="list-group-item " href="/blog/categories/octopress/index.html">
       <span class="badge">1</span>
       octopress
     </a>
@@ -259,8 +322,8 @@
   </div>
 </section>
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 
