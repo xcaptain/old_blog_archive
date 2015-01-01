@@ -119,6 +119,79 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-01T11:35:23+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-01</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/01/arch-pacman-broken/" itemprop="url">解决pacman依赖关系破裂问题</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
+
+<pre>
+packagekit: requires pacman<4.2.0
+package-query: requires pacman<4.2.0
+</pre>
+
+
+<p>但是我查看了一下pacman的版本,<code>pacman --version</code>发现是4.1的满足需求啊，为什么会有这样的提示呢？我想用<code>sudo pacman -S pacman</code>重装pacman也不行，真是费解，这么重要的软件可千万不能出错啊。后来上网搜了一下，发现有人也遇到这种情况，都是直接<code>sudo pacman -R packagekit python-packagekit yaourt package-query</code>，然后再<code>sudo pacman-db-upgrade</code>升级一下数据库，然后再<code>sudo pacman -Syu</code>，ok问题解决。</p>
+
+<p>还有一点是关于virtualbox的，今天我又用了一下vagrant，发现每次<code>vagrant up</code>都会提示：</p>
+
+<pre>
+VirtualBox is complaining that the kernel module is not loaded. Please
+run `VBoxManage --version` or open the VirtualBox GUI to see the error
+message which should contain instructions on how to fix this error.
+</pre>
+
+
+<p>用最简单的方法<code>sudo modprobe vboxdrv</code>然后<code>lsmod | grep vbox</code>发现加载进了</p>
+
+<pre>
+vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci`
+</pre>
+
+
+<p>但是这时候还是会报错说找不到网卡驱动，后来我执行<code>sudo vboxreload</code>显示：</p>
+
+<pre>
+vboxpci                23139  0
+vboxnetflt             27412  0
+vboxnetadp             25443  0
+vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
+</pre>
+
+
+<p>这时候才算是真正的把所有的驱动都加进来了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-31T16:10:28+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-31</time>
         
       </p>
@@ -244,13 +317,16 @@ category: 帖子所属分类，用来来分析哪些大类的话题比较火
 
   <div class="entry-content clearfix" itemprop="articleBody description"><p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
 
-<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。
-1. <code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。
-2. 更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
+<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
 
-<pre><code>CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "user-data")
-CONFIG = File.join(File.dirname(__FILE__), "config.rb")
-</code></pre>
+<ol>
+<li><code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。</li>
+<li><p>更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
+
+<p> CLOUD_CONFIG_PATH = File.join(File.dirname(<strong>FILE</strong>), &ldquo;user-data&rdquo;)
+ CONFIG = File.join(File.dirname(<strong>FILE</strong>), &ldquo;config.rb&rdquo;)</p></li>
+</ol>
+
 
 <p>一个是当前目录下的<code>user-data</code>文件，一个是当前目录下的<code>config.rb</code>文件</p>
 
@@ -733,51 +809,6 @@ dd: writing `/EMPTY': No space left on device
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-01T23:40:57+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-01</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/11/01/debug-discuz-1/" itemprop="url">调试discuz（一）</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。</p>
-
-<p>我以前从没有接触过discuz，第一次碰到感觉压力很大，什么数据字典，缓存结构，插件机制，模板机制我都不懂，最初他们只叫我做了一点简单的部署问题，比如改个nginx的rewrite规则，改个简单的模板样式，不过渐渐的麻烦的任务也来了。</p>
-
-<p>首先是说他们买了一个模板（真够丢人的），但是这个模板是被加密了的，现在要稍微二次开发一下，比如说改一些url的规则，使得url更加seo友好。其实模板上的url还是很好改的，模板改了之后再加点rewrite到nginx就好了。但是在分页上的url就不好改了，需要去看插件是如何获得数据，输出数据的，结果可恨的是这个插件的开发者把取数据，传数据的过程都给加密了，让人非常郁闷。到最后甚至一度想要把这些加密的方法破解了，不过到底不可能花太多时间去破解，干活才是最重要的。</p>
-
-<p>调了一晚上，终于发现了插件在实现分页的时候调用到了一个discuz的分页函数，在<code>source/function/</code>里面执行<code>grep 'multi' -R *</code>在<code>function_core.php</code>这个文件里找到了multi这个函数，然后发现这个函数调用了<code>helper_page::multi</code>这个函数，继续找这个函数。首先找<code>helper_page</code>这个类，那就去<code>source/class/</code>里面找，<code>grep 'multi' -R *</code>在<code>helper/helper_page.php</code>里面找到了multi这个静态方法。接下来就是改造这个方法了。大致看了一下，这个函数接受一个url，一个当前页码，以及一些不太重要的东西作为参数，最后输出一段分页代码。在生成html的时候调用到了一个叫做<code>mpurl</code>的方法，这个函数会决定使用什么形式的分隔符来输出url。到这里形势大概就很明朗了，我不必要去改分页函数的逻辑，我只要改<code>mpurl</code>这个函数就好了，如果是这个插件的url，我就让这个函数特殊照顾一下这个插件。</p>
-
-<p>那么现在问题来了，我是该怎么去改造这个函数呢？在它里面加判断？外面加判断？重写一个自定义的函数？我的想法是加入一个自定义的分页函数，<code>multi</code>在调用<code>mpurl</code>的时候会判断一下是调用它还是调用我写的自定义的函数。我想要通过函数名复制来实现，但是我不知道在php里怎么做，所以我就去<a href="http://stackoverflow.com/questions/26657161/can-i-assign-a-function-in-php">stackoverflow</a>上问了一下，有个家伙说可以通过变量来保存函数名，比如说<code>$func = 'add';</code>，那么<code>$func(1,2);</code>就等同于<code>add(1,2);</code>了。这个方法有点函数式编程的意思了，不过还是不够，本质上不属于函数名赋值，而且对于调用类里的方法不起作用，我尝试着<code>$func = 'self::add'</code>，然后发现总是会报错。后来采用了另一个家伙的方法，写一个帮助函数，在这个帮助函数里面会判断到底是使用dz原生的<code>mpurl</code>还是使用我的<code>my_mpurl</code>，这个方法挺好，我照着做了，终于把分页搞定了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -801,6 +832,8 @@ dd: writing `/EMPTY': No space left on device
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
+    
     <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
     
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
@@ -808,8 +841,6 @@ dd: writing `/EMPTY': No space left on device
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
     
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
     
   </div>
 </section>
@@ -845,7 +876,7 @@ dd: writing `/EMPTY': No space left on device
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">5</span>
+      <span class="badge">6</span>
       linux
     </a>
     

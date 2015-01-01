@@ -119,6 +119,51 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-01T23:40:57+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-01</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/11/01/debug-discuz-1/" itemprop="url">调试discuz（一）</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。</p>
+
+<p>我以前从没有接触过discuz，第一次碰到感觉压力很大，什么数据字典，缓存结构，插件机制，模板机制我都不懂，最初他们只叫我做了一点简单的部署问题，比如改个nginx的rewrite规则，改个简单的模板样式，不过渐渐的麻烦的任务也来了。</p>
+
+<p>首先是说他们买了一个模板（真够丢人的），但是这个模板是被加密了的，现在要稍微二次开发一下，比如说改一些url的规则，使得url更加seo友好。其实模板上的url还是很好改的，模板改了之后再加点rewrite到nginx就好了。但是在分页上的url就不好改了，需要去看插件是如何获得数据，输出数据的，结果可恨的是这个插件的开发者把取数据，传数据的过程都给加密了，让人非常郁闷。到最后甚至一度想要把这些加密的方法破解了，不过到底不可能花太多时间去破解，干活才是最重要的。</p>
+
+<p>调了一晚上，终于发现了插件在实现分页的时候调用到了一个discuz的分页函数，在<code>source/function/</code>里面执行<code>grep 'multi' -R *</code>在<code>function_core.php</code>这个文件里找到了multi这个函数，然后发现这个函数调用了<code>helper_page::multi</code>这个函数，继续找这个函数。首先找<code>helper_page</code>这个类，那就去<code>source/class/</code>里面找，<code>grep 'multi' -R *</code>在<code>helper/helper_page.php</code>里面找到了multi这个静态方法。接下来就是改造这个方法了。大致看了一下，这个函数接受一个url，一个当前页码，以及一些不太重要的东西作为参数，最后输出一段分页代码。在生成html的时候调用到了一个叫做<code>mpurl</code>的方法，这个函数会决定使用什么形式的分隔符来输出url。到这里形势大概就很明朗了，我不必要去改分页函数的逻辑，我只要改<code>mpurl</code>这个函数就好了，如果是这个插件的url，我就让这个函数特殊照顾一下这个插件。</p>
+
+<p>那么现在问题来了，我是该怎么去改造这个函数呢？在它里面加判断？外面加判断？重写一个自定义的函数？我的想法是加入一个自定义的分页函数，<code>multi</code>在调用<code>mpurl</code>的时候会判断一下是调用它还是调用我写的自定义的函数。我想要通过函数名复制来实现，但是我不知道在php里怎么做，所以我就去<a href="http://stackoverflow.com/questions/26657161/can-i-assign-a-function-in-php">stackoverflow</a>上问了一下，有个家伙说可以通过变量来保存函数名，比如说<code>$func = 'add';</code>，那么<code>$func(1,2);</code>就等同于<code>add(1,2);</code>了。这个方法有点函数式编程的意思了，不过还是不够，本质上不属于函数名赋值，而且对于调用类里的方法不起作用，我尝试着<code>$func = 'self::add'</code>，然后发现总是会报错。后来采用了另一个家伙的方法，写一个帮助函数，在这个帮助函数里面会判断到底是使用dz原生的<code>mpurl</code>还是使用我的<code>my_mpurl</code>，这个方法挺好，我照着做了，终于把分页搞定了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-26T17:13:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-26</time>
         
       </p>
@@ -1005,80 +1050,6 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T14:04:13+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/16/freebsd-basic-operations/" itemprop="url">Freebsd-basic-operations</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
-很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
-方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman
-和freebsd的pkg，这这些发行版中我对于debian和arch还是比较熟悉的，freebsd也玩过但是
-不是很熟悉它的命令行。</p>
-
-<p>因为被公司的一台freebsd主机给震惊了，持续服务超过900天了，所以我买了vps之后没有
-多想就安装了一个freebsd10的系统，因为这台机器硬件配置还是比较低的，只有768M的
-内存。</p>
-
-<p>首先安装nginx服务器，我还是比较习惯二进制安装，要我在服务器上编译nginx的源码
-我才没有那个闲功夫呢。
-<code>pkg install nginx</code>
-这样就把nginx安装上了，如果要启动nginx得执行
-<code>sudo /usr/local/etc/rc.d/nginx start</code>
-因为我还没有想好在服务器上放什么，所以还没有具体配置nginx和fastcgi应用。</p>
-
-<p>然后安装mariadb,这个没办法了必须得从源码安装，而且还没有办法安装mariadb10,只能
-从源码编译5.5的版本。
-<code>cd /usr/ports/databases/mariadb55-server</code>
-<code>sudo make install clean</code>
-编译的过程要很久，真怕生成一大堆临时文件让我可怜的15G固态硬盘受不了。漫长的等待时间过去
-了，终于编译完了。默认的mariadb没有设置root的密码，为了明确权限肯定得设置密码。
-<code>mysql -u root</code> 连接上数据库服务器之后就开始设置权限了，<code>set password for ‘root’@’localhost’ = password(‘yourpasswd’)</code>
-这样就设置好了root的密码。</p>
-
-<p>然后就是给root设置访问的权限了，<code>grant all privileges on *.* to ‘root’@’localhost’ with grant option</code>
-这条命令是给root用户通过本地访问所有数据库的所有表的权限，如果我想要远程连接数据库稍微修改一下这条命令
-就ok了。<code>grant all privileges on *.* to ‘root’@’%’ with grant option</code>，在mysql中<code>%</code>代表匹配任意字符串，所以
-这条命令表示允许root通过任何ip来连接数据库。</p>
-
-<p>本来还打算配置一下php的环境的，但是就我这几个月php开发的经历来看，这门语言实在是不值得花太多精力去学，
-消耗巨大的内存，语言设计简陋，前后端分隔明显。我打算在服务器上搭建RoR的环境。</p>
-
-<p>然后就是分配用户了，我新建了一个公共帐号public，操作也很简单<code>adduser</code>然后按照提示一步一步安装就好了，到了
-最后还得考虑给这个用户分配权限的问题，我是通过sudo来管理root权限的，但是暂时没打算给这个公共号分配root权限。
-后面还涉及到用户资源限制的问题，比如带宽资源，硬盘资源，cpu时间资源和内存资源，这些都是很专业的系统管理员
-知识了，暂时没那个精力去学习。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1102,6 +1073,8 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
+    
     <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
     
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
@@ -1109,8 +1082,6 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
     
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
     
   </div>
 </section>
@@ -1146,7 +1117,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">5</span>
+      <span class="badge">6</span>
       linux
     </a>
     

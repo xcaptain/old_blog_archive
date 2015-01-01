@@ -130,13 +130,16 @@
 
 <div class="entry-content clearfix" itemprop="articleBody description"><p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
 
-<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。
-1. <code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。
-2. 更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
+<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
 
-<pre><code>CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "user-data")
-CONFIG = File.join(File.dirname(__FILE__), "config.rb")
-</code></pre>
+<ol>
+<li><code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。</li>
+<li><p>更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
+
+<p> CLOUD_CONFIG_PATH = File.join(File.dirname(<strong>FILE</strong>), &ldquo;user-data&rdquo;)
+ CONFIG = File.join(File.dirname(<strong>FILE</strong>), &ldquo;config.rb&rdquo;)</p></li>
+</ol>
+
 
 <p>一个是当前目录下的<code>user-data</code>文件，一个是当前目录下的<code>config.rb</code>文件</p>
 
@@ -326,6 +329,8 @@ coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
+    
     <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
     
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
@@ -333,8 +338,6 @@ coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
     <a class="list-group-item active" href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
     
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
     
   </div>
 </section>
@@ -375,7 +378,7 @@ coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">5</span>
+      <span class="badge">6</span>
       linux
     </a>
     

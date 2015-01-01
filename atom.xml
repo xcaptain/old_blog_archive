@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-01T00:55:42+00:00</updated>
+  <updated>2015-01-01T11:53:58+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/01/arch-pacman-broken/"/>
+    <updated>2015-01-01T11:35:23+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/01/arch-pacman-broken</id>
+    <content type="html"><![CDATA[<p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
+
+<pre>
+packagekit: requires pacman<4.2.0
+package-query: requires pacman<4.2.0
+</pre>
+
+
+<p>但是我查看了一下pacman的版本,<code>pacman --version</code>发现是4.1的满足需求啊，为什么会有这样的提示呢？我想用<code>sudo pacman -S pacman</code>重装pacman也不行，真是费解，这么重要的软件可千万不能出错啊。后来上网搜了一下，发现有人也遇到这种情况，都是直接<code>sudo pacman -R packagekit python-packagekit yaourt package-query</code>，然后再<code>sudo pacman-db-upgrade</code>升级一下数据库，然后再<code>sudo pacman -Syu</code>，ok问题解决。</p>
+
+<p>还有一点是关于virtualbox的，今天我又用了一下vagrant，发现每次<code>vagrant up</code>都会提示：</p>
+
+<pre>
+VirtualBox is complaining that the kernel module is not loaded. Please
+run `VBoxManage --version` or open the VirtualBox GUI to see the error
+message which should contain instructions on how to fix this error.
+</pre>
+
+
+<p>用最简单的方法<code>sudo modprobe vboxdrv</code>然后<code>lsmod | grep vbox</code>发现加载进了</p>
+
+<pre>
+vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci`
+</pre>
+
+
+<p>但是这时候还是会报错说找不到网卡驱动，后来我执行<code>sudo vboxreload</code>显示：</p>
+
+<pre>
+vboxpci                23139  0
+vboxnetflt             27412  0
+vboxnetadp             25443  0
+vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
+</pre>
+
+
+<p>这时候才算是真正的把所有的驱动都加进来了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[尝试hhvm]]></title>
@@ -77,13 +122,16 @@ category: 帖子所属分类，用来来分析哪些大类的话题比较火
     <id>http://xcaptain.github.io/blog/2014/12/26/install-coreos-with-vagrant</id>
     <content type="html"><![CDATA[<p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
 
-<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。
-1. <code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。
-2. 更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
+<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
 
-<pre><code>CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "user-data")
-CONFIG = File.join(File.dirname(__FILE__), "config.rb")
-</code></pre>
+<ol>
+<li><code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。</li>
+<li><p>更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
+
+<p> CLOUD_CONFIG_PATH = File.join(File.dirname(<strong>FILE</strong>), &ldquo;user-data&rdquo;)
+ CONFIG = File.join(File.dirname(<strong>FILE</strong>), &ldquo;config.rb&rdquo;)</p></li>
+</ol>
+
 
 <p>一个是当前目录下的<code>user-data</code>文件，一个是当前目录下的<code>config.rb</code>文件</p>
 
@@ -1061,52 +1109,6 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 <p>真是搞不懂，运维们有这么好的方法不用为什么要给一个账户创建密码呢，直接向我要一个公钥，然后加到服务器就行了嘛。</p>
 
 <p>今天发现一个很好用的手机ssh客户端叫作juice ssh，拿它可以用手机来连接ssh服务器。不过这个app应该是记住密码的形式来完成连接的，因为没有在服务器上的<code>.ssh/authorized_keys</code>里面找到我的手机的公钥。而且连接公司服务器需要vpn，还得在手机上设置vpn连接，只能在wifi环境下才能连接vpn，如果开数据连接的话就连不上了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Freebsd-basic-operations]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/"/>
-    <updated>2014-08-16T14:04:13+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations</id>
-    <content type="html"><![CDATA[<p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
-很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
-方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman
-和freebsd的pkg，这这些发行版中我对于debian和arch还是比较熟悉的，freebsd也玩过但是
-不是很熟悉它的命令行。</p>
-
-<p>因为被公司的一台freebsd主机给震惊了，持续服务超过900天了，所以我买了vps之后没有
-多想就安装了一个freebsd10的系统，因为这台机器硬件配置还是比较低的，只有768M的
-内存。</p>
-
-<p>首先安装nginx服务器，我还是比较习惯二进制安装，要我在服务器上编译nginx的源码
-我才没有那个闲功夫呢。
-<code>pkg install nginx</code>
-这样就把nginx安装上了，如果要启动nginx得执行
-<code>sudo /usr/local/etc/rc.d/nginx start</code>
-因为我还没有想好在服务器上放什么，所以还没有具体配置nginx和fastcgi应用。</p>
-
-<p>然后安装mariadb,这个没办法了必须得从源码安装，而且还没有办法安装mariadb10,只能
-从源码编译5.5的版本。
-<code>cd /usr/ports/databases/mariadb55-server</code>
-<code>sudo make install clean</code>
-编译的过程要很久，真怕生成一大堆临时文件让我可怜的15G固态硬盘受不了。漫长的等待时间过去
-了，终于编译完了。默认的mariadb没有设置root的密码，为了明确权限肯定得设置密码。
-<code>mysql -u root</code> 连接上数据库服务器之后就开始设置权限了，<code>set password for ‘root’@’localhost’ = password(‘yourpasswd’)</code>
-这样就设置好了root的密码。</p>
-
-<p>然后就是给root设置访问的权限了，<code>grant all privileges on *.* to ‘root’@’localhost’ with grant option</code>
-这条命令是给root用户通过本地访问所有数据库的所有表的权限，如果我想要远程连接数据库稍微修改一下这条命令
-就ok了。<code>grant all privileges on *.* to ‘root’@’%’ with grant option</code>，在mysql中<code>%</code>代表匹配任意字符串，所以
-这条命令表示允许root通过任何ip来连接数据库。</p>
-
-<p>本来还打算配置一下php的环境的，但是就我这几个月php开发的经历来看，这门语言实在是不值得花太多精力去学，
-消耗巨大的内存，语言设计简陋，前后端分隔明显。我打算在服务器上搭建RoR的环境。</p>
-
-<p>然后就是分配用户了，我新建了一个公共帐号public，操作也很简单<code>adduser</code>然后按照提示一步一步安装就好了，到了
-最后还得考虑给这个用户分配权限的问题，我是通过sudo来管理root权限的，但是暂时没打算给这个公共号分配root权限。
-后面还涉及到用户资源限制的问题，比如带宽资源，硬盘资源，cpu时间资源和内存资源，这些都是很专业的系统管理员
-知识了，暂时没那个精力去学习。</p>
 ]]></content>
   </entry>
   
