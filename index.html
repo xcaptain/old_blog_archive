@@ -119,6 +119,49 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-31T16:10:28+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-31</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/31/try-hhvm/" itemprop="url">尝试hhvm</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
+
+<p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
+
+<p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
+
+<p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-30T23:49:40+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-30</time>
         
       </p>
@@ -735,53 +778,6 @@ dd: writing `/EMPTY': No space left on device
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-26T17:13:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-26</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/10/26/learn-haskell-2/" itemprop="url">学习haskell（二）</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天发现一件很有趣的事，我在ghci下输入<code>:i zip</code>来查看zip这个函数的用法的时候得到的结果是<code>zip :: [a] -&gt; [b] -&gt; [(a, b)]   -- Defined in ‘GHC.List’</code>，zip明明是接收2个列表作为参数，然后一个元组的列表，但是根据这个输出，感觉zip是先处理列表[a]，然后再处理列表[b]，最后得到一个得到一个列表[(a, b)]。</p>
-
-<p>为了验证我的猜想，先试<code>zip [1,2,3] [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>。这是意料之中的，zip的作用就是这个。</p>
-
-<p>然后再试验：<code>(zip [1,2,3]) [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>，在这个函数调用中，我用括号把前一部分括起来了，也就是说先处理一个列表，然后返回一个函数再处理另一个列表。很奇怪，在实际函数调用中使用的是什么顺序来求值的呢？</p>
-
-<p>在<a href="http://stackoverflow.com/questions/26571897/haskell-function-invoke-order">stackoverflow</a>上面问了一下这个问题，原来这种现象有一个专业术语叫作<a href="http://en.wikipedia.org/wiki/Currying">currying</a>，也就是说函数如何处理多个参数。没有看到后面就问问题还是比较尴尬的，在haskell里面大名鼎鼎的术语都不知道，太丢人了。</p>
-
-<p>后来我在搜索curry的时候还发现了<a href="http://www-history.mcs.st-andrews.ac.uk/Biographies/Curry.html">Haskell Brooks Curry</a>这个人，haskell就是以他的名字命名的，真是牛得不行的一个家伙，16岁上哈佛，先是学医，后来又转学数学，后来有修了一个物理学的硕士，博士又开始搞数学，开始是打算写偏微分方面的论文的，到最后发现兴趣在逻辑学上，就转而研究逻辑去了。在40岁的时候成为了世界上最有名的逻辑学家。haskell的爱好者看起来都有很强的数理逻辑的背景啊，对于写过程式的代码也许真会越写越傻，因为思维到最后都变成机器的思维了。</p>
-
-<p>还有一件很有意思的事就是惰性求值，在别的语言里可真是不多见。所谓的惰性求值就是如果这个变量没有被用到那就不会去求值。比如说<code>let a = 1</code>，在这里定义了一个变量a，但是其实这时候a还没有求值，只有在我们调用a的时候才会打印它的值。再比如说<code>let a = cycle [1,2,3]</code>，这会一直循环[1,2,3]这个列表，但是如果我们不去调用a就没关系，反正不调用就没有值。或者我们<code>take 10 a</code>，就会得到返回列表的前10个值，在这里调用了a，但是在求值的时候只用到了前10个，所以a没有一直循环下去。别的语言有这种定义无限个元素的列表的能力吗？别的语言有惰性求值的能力吗？</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -805,6 +801,8 @@ dd: writing `/EMPTY': No space left on device
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
+    
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
     
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
@@ -812,8 +810,6 @@ dd: writing `/EMPTY': No space left on device
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
     
     <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
     
   </div>
 </section>
@@ -831,7 +827,7 @@ dd: writing `/EMPTY': No space left on device
     
     
     <a class="list-group-item " href="/blog/categories/web/index.html">
-      <span class="badge">2</span>
+      <span class="badge">3</span>
       web
     </a>
     
@@ -889,6 +885,12 @@ dd: writing `/EMPTY': No space left on device
       virtualization
     </a>
     
+    
+    <a class="list-group-item " href="/blog/categories/linux,/index.html">
+      <span class="badge">1</span>
+      linux,
+    </a>
+    
   </div>
 </section>
 
@@ -902,7 +904,7 @@ dd: writing `/EMPTY': No space left on device
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2014 - joey<br>
+  Copyright &copy; 2015 - joey<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.

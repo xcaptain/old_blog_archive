@@ -119,6 +119,53 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-26T17:13:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-26</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/10/26/learn-haskell-2/" itemprop="url">学习haskell（二）</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天发现一件很有趣的事，我在ghci下输入<code>:i zip</code>来查看zip这个函数的用法的时候得到的结果是<code>zip :: [a] -&gt; [b] -&gt; [(a, b)]   -- Defined in ‘GHC.List’</code>，zip明明是接收2个列表作为参数，然后一个元组的列表，但是根据这个输出，感觉zip是先处理列表[a]，然后再处理列表[b]，最后得到一个得到一个列表[(a, b)]。</p>
+
+<p>为了验证我的猜想，先试<code>zip [1,2,3] [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>。这是意料之中的，zip的作用就是这个。</p>
+
+<p>然后再试验：<code>(zip [1,2,3]) [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>，在这个函数调用中，我用括号把前一部分括起来了，也就是说先处理一个列表，然后返回一个函数再处理另一个列表。很奇怪，在实际函数调用中使用的是什么顺序来求值的呢？</p>
+
+<p>在<a href="http://stackoverflow.com/questions/26571897/haskell-function-invoke-order">stackoverflow</a>上面问了一下这个问题，原来这种现象有一个专业术语叫作<a href="http://en.wikipedia.org/wiki/Currying">currying</a>，也就是说函数如何处理多个参数。没有看到后面就问问题还是比较尴尬的，在haskell里面大名鼎鼎的术语都不知道，太丢人了。</p>
+
+<p>后来我在搜索curry的时候还发现了<a href="http://www-history.mcs.st-andrews.ac.uk/Biographies/Curry.html">Haskell Brooks Curry</a>这个人，haskell就是以他的名字命名的，真是牛得不行的一个家伙，16岁上哈佛，先是学医，后来又转学数学，后来有修了一个物理学的硕士，博士又开始搞数学，开始是打算写偏微分方面的论文的，到最后发现兴趣在逻辑学上，就转而研究逻辑去了。在40岁的时候成为了世界上最有名的逻辑学家。haskell的爱好者看起来都有很强的数理逻辑的背景啊，对于写过程式的代码也许真会越写越傻，因为思维到最后都变成机器的思维了。</p>
+
+<p>还有一件很有意思的事就是惰性求值，在别的语言里可真是不多见。所谓的惰性求值就是如果这个变量没有被用到那就不会去求值。比如说<code>let a = 1</code>，在这里定义了一个变量a，但是其实这时候a还没有求值，只有在我们调用a的时候才会打印它的值。再比如说<code>let a = cycle [1,2,3]</code>，这会一直循环[1,2,3]这个列表，但是如果我们不去调用a就没关系，反正不调用就没有值。或者我们<code>take 10 a</code>，就会得到返回列表的前10个值，在这里调用了a，但是在求值的时候只用到了前10个，所以a没有一直循环下去。别的语言有这种定义无限个元素的列表的能力吗？别的语言有惰性求值的能力吗？</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-25T22:15:29+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-25</time>
         
       </p>
@@ -949,6 +996,8 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 可以把公钥文件传到服务器上，也可以用一个简单的命令<code>ssh-copy-id</code>,这样就可以绕过手动输入密码了。</p>
 
 <p>真是搞不懂，运维们有这么好的方法不用为什么要给一个账户创建密码呢，直接向我要一个公钥，然后加到服务器就行了嘛。</p>
+
+<p>今天发现一个很好用的手机ssh客户端叫作juice ssh，拿它可以用手机来连接ssh服务器。不过这个app应该是记住密码的形式来完成连接的，因为没有在服务器上的<code>.ssh/authorized_keys</code>里面找到我的手机的公钥。而且连接公司服务器需要vpn，还得在手机上设置vpn连接，只能在wifi环境下才能连接vpn，如果开数据连接的话就连不上了。</p>
 </div>
   
   
@@ -1030,155 +1079,6 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T09:26:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/16/a-php-pagination-example/" itemprop="url">一个php分页示例</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
-对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
-一句话就把我们辛辛苦苦写出来的代码给否决了，怎么说都还是很伤心的。不过伤心归伤心，活
-还是的继续干的，谁让我们是给别人打工的呢。</p>
-
-<p>之前的实现方法是用jsonp来做的，我用php写好接口，输出一个回调函数和数据，前端获得这个数据，
-然后就能显示出页面了。不过现在要重写只能我自己来处理数据了。</p>
-
-<p>首先遇到一个多级选择的问题，这个问题一点都不是问题，因为既然是反复请求，那么给每一级选项
-加上一个参数，然后传给后台就能取出相应的数据了。真正让我比较烦恼的是分页的功能如何实现。</p>
-
-<p>分页貌似简单，实则复杂。如果对于很少的页面当然可以把所有的页码罗列出来，但是如果页面很多，
-比如一个分类有100个页面，那么如何显示这100个页面就是个问题了，通常的惯例是显示头几个，当前页
-附近几个，和最后几个页面，剩下的用省略号表示。这时候就涉及到一个比较麻烦的问题了，怎么设计
-当前的分页结构，使得页面均匀分布。</p>
-
-<p>在网上搜了一段代码，稍微改动了一下加到我的页面中去了，不得不说这段代码的逻辑还是很复杂的，
-我甚至都没有仔细去研究为什么要这么做，只是稍微看了一下各种情况对应的代码实现。</p>
-
-<pre>
-class BaseFunction {
-    /**
-     * lol.7k7k.com列表页分页函数
-     * 返回一段html代码
-     * $page  当前页面号码，如1,2
-     * $totalCount: 总共视频数目，根据这个值获得总页数
-     * $adjacents:  现实与当前也相邻的几个页面
-     * $catname:  分类名，比如zmjs
-     * $tagname:   标签名中文
-     * $sort: 排序  "/$tagname-$sort-$page/"
-     */
-    public static function listPager($page, $pageSize, $totalCount, $adjacents, $catname, $tagname, $sort) {
-        if($page == 0) $page = 1;                //默认从第一页开始
-        $prev = $page - 1;
-        $next = $page + 1;
-        $lastPage = ceil($totalCount/$pageSize); //最后一页编号
-        $lpm1 = $lastPage - 1;                   //倒数第二页编号
-
-        $pagination = '';
-        if($lastPage > 1) {
-            $pagination .= "<div class=\"pagination\">";
-            if($page > 1) {
-                $pagination .= "<a href=\"/$catname/$tagname-$sort-$prev/\">上一页</a>";
-            } else {
-                $pagination .= "<span class=\"disabled\">上一页</span>";
-            }
-            if($lastPage < 7 + ($adjacents * 2)) { //不需要隐藏额外的页码
-                for($counter = 1; $counter <= $lastPage; $counter++) {
-                    if($counter == $page) {
-                        $pagination .= "<span class=\"curr\">$counter</span>"; //高亮当前页
-                    } else {
-                        $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>"; //其余页面做成链接
-                    }
-                }
-            } elseif($lastPage > 5 + ($adjacents * 2)) { //页面很多，要隐藏部分页码
-                if($page < 1 + ($adjacents * 2)) {       //靠近前面，隐藏后面的页面
-                    for($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
-                        if($counter == $page) {
-                            $pagination .= "<span class=\"curr\">$counter</span>";
-                        } else {
-                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
-                        }
-                    }
-                    $pagination .= "...";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-$lpm1/\">$lpm1</a>";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-$lastPage/\">$lastPage</a>";
-                } elseif($lastPage - ($adjacents * 2) > $page && $page > ($adjacents * 2)) { //在中间，前后都隐藏部分
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-1/\">1</a>";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-2/\">2</a>";
-                    $pagination . "...";
-                    for($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++) {
-                        if($counter == $page) {
-                            $pagination .= "<span class=\"curr\">$counter</span>";
-                        } else {
-                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
-                        }
-                    }
-                } else { //靠近尾部，隐藏前面部分
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-1/\">1</a>";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-2/\">2</a>";
-                    $pagination .= "...";
-                    for($counter = $lastPage - (2 + ($adjacents * 2)); $counter <= $lastPage; $counter++) {
-                        if($counter == $page) {
-                            $pagination .= "<span class=\"/$catname/$tagname-$sort-$counter/\">$counter</span>";
-                        } else {
-                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
-                        }
-                    }
-                }
-            } //end elseif 对于很长的页面情况判断结束
-            if($page < $counter - 1) {
-                $pagination .= "<a href=\"/$catname/$tagname-$sort-$next/\">下一页</a>";
-            } else {
-                $pagination .= "<span class=\"disabled\">下一页</span>";
-            }
-            $pagination .= "</div>";
-            return $pagination;
-        } else {  //对于只有一页的情况，也做一个分页
-            $pagination .= "<div class=\"pagination\">";
-            $pagination .= "<span class=\"disabled\">上一页</span>";
-            $pagination .= "<span class=\"curr\">1</span>";
-            $pagination .= "<span class=\"disabled\">上一页</span>";
-            $pagination .= "</div>";
-            return $pagination;
-        }
-    }
-}
-</pre>
-
-
-<p>在我的网站上面试验了一下，基本符合我的要求，不过难怪php和javascript都要做一个分页类，手动实现分页真是太累了。还好有人共享代码，不然自己写有得写了。</p>
-
-<p>OMG,竟然把我代码里的html自动解析了，这让我怎么插入html代码啊。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1202,6 +1102,8 @@ class BaseFunction {
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
+    
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
     
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
@@ -1209,8 +1111,6 @@ class BaseFunction {
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
     
     <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
     
   </div>
 </section>
@@ -1228,7 +1128,7 @@ class BaseFunction {
     
     
     <a class="list-group-item " href="/blog/categories/web/index.html">
-      <span class="badge">2</span>
+      <span class="badge">3</span>
       web
     </a>
     
@@ -1286,6 +1186,12 @@ class BaseFunction {
       virtualization
     </a>
     
+    
+    <a class="list-group-item " href="/blog/categories/linux,/index.html">
+      <span class="badge">1</span>
+      linux,
+    </a>
+    
   </div>
 </section>
 
@@ -1299,7 +1205,7 @@ class BaseFunction {
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2014 - joey<br>
+  Copyright &copy; 2015 - joey<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.

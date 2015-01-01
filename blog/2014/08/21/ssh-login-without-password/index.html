@@ -158,6 +158,8 @@
 可以把公钥文件传到服务器上，也可以用一个简单的命令<code>ssh-copy-id</code>,这样就可以绕过手动输入密码了。</p>
 
 <p>真是搞不懂，运维们有这么好的方法不用为什么要给一个账户创建密码呢，直接向我要一个公钥，然后加到服务器就行了嘛。</p>
+
+<p>今天发现一个很好用的手机ssh客户端叫作juice ssh，拿它可以用手机来连接ssh服务器。不过这个app应该是记住密码的形式来完成连接的，因为没有在服务器上的<code>.ssh/authorized_keys</code>里面找到我的手机的公钥。而且连接公司服务器需要vpn，还得在手机上设置vpn连接，只能在wifi环境下才能连接vpn，如果开数据连接的话就连不上了。</p>
 </div>
 
 
@@ -230,6 +232,8 @@
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
+    
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
     
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
@@ -237,8 +241,6 @@
     <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
     
     <a class="list-group-item " href="/blog/2014/12/20/how-to-use-emacs/">如何使用emacs</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/07/learn-beautifulsoup/">又是一个采集</a>
     
   </div>
 </section>
@@ -261,7 +263,7 @@
     
     
     <a class="list-group-item " href="/blog/categories/web/index.html">
-      <span class="badge">2</span>
+      <span class="badge">3</span>
       web
     </a>
     
@@ -319,6 +321,12 @@
       virtualization
     </a>
     
+    
+    <a class="list-group-item " href="/blog/categories/linux,/index.html">
+      <span class="badge">1</span>
+      linux,
+    </a>
+    
   </div>
 </section>
 
@@ -332,7 +340,7 @@
     </div>
     <footer role="contentinfo"><div class="container">
     <p class="text-muted credits">
-  Copyright &copy; 2014 - joey<br>
+  Copyright &copy; 2015 - joey<br>
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
       <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
