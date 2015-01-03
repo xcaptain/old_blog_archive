@@ -2,10 +2,10 @@
 <html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Category: Python - Joey's Blog</title>
+  <title>部署邮件服务 - Joey's Blog</title>
   <meta name="author" content="joey">
 
-  <meta name="description" content="Category: python">
+  
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -14,16 +14,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xcaptain.github.io/blog/categories/python">
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
 
   <!-- http://opengraphprotocol.org/ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="http://xcaptain.github.io/blog/categories/python">
-  <meta property="og:title" content="Category: Python - Joey's Blog">
-  <meta property="og:description" content="Category: python">
+  <meta property="og:url" content="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service">
+  <meta property="og:title" content="部署邮件服务 - Joey's Blog">
+  
 
   <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
 
@@ -55,10 +55,10 @@
 
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li >
+                <li class="active">
                     <a rel="index" href="/">Blog</a>
                 </li>
-                <li class="active">
+                <li >
                     <a href="/blog/archives">Archives</a>
                 </li>
                 <li >
@@ -93,35 +93,16 @@
       <div id="main" role="main" class="container">
         <div id="content">
           <div class="row">
-  <div class="page-content col-md-9">
-    <article role="article">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://xcaptain.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
       
-        <header class="page-header">
-          
-          
-            <h1 class="entry-title">
-              Category: Python
-              
-            </h1>
-          
-        </header>
-      
-      <div class="entry-content">
-        <div id="blog-archives" class="category" itemscope itemtype="http://schema.org/Blog">
-<meta itemprop="name" content="Joey's Blog" />
-<meta itemprop="description" content="不甘平凡" />
-<meta itemprop="url" content="http://xcaptain.github.io" />
-
-
-
-  
-  <h2 class="year">2014</h2>
-
-<article class="page-header" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-  
-<h2 class="post-title" itemprop="name headline"><a href="/blog/2014/12/30/web-crawl-again/" itemprop="url">采集一个论坛的帖子来进行数据分析</a></h2>
-<p class="meta text-muted">
-  
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
 
 
 
@@ -134,74 +115,107 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-30T23:49:40+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-30</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/python/'>python</a>
-  
-</span>
-
-
-</p>
-
-</article>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-03T00:43:43+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-03</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        部署邮件服务
+        
+    </h1>
+    
+  </header>
 
 
+<div class="entry-content clearfix" itemprop="articleBody description"><p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
 
-<article class="page-header" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-  
-<h2 class="post-title" itemprop="name headline"><a href="/blog/2014/12/07/learn-beautifulsoup/" itemprop="url">又是一个采集</a></h2>
-<p class="meta text-muted">
-  
+<h4>首先确定一下发件服务。</h4>
 
+<p>根据网上的推荐，我用的是<a href="https://mandrillapp.com/">mandril</a>，这家公司为免费帐号提供每月发12000封邮件，对于个人玩来说足够了。接下来就是注册帐号，注册完成之后会有一个向导引导着去配置发件服务。填好之后配置都会出现在<a href="https://mandrillapp.com/settings">这里</a>，这些配置包括发件服务器的域名，端口，smtp用户名，以及密码，密码是网站生成的，要好好保存。</p>
 
+<h4>然后就是配置收件服务</h4>
 
+<p>同样也是根据网上的推荐，收件服务用的是国内一家公司的，叫做<a href="https://www.zoho.com/">zoho</a>，这家公司为每个免费帐号提供一个代收域名，15个免费邮箱，每个免费邮箱提供5G存储空间，对于个人玩来说也是足够了的，因为可以把邮件下载到本地，然后删除服务器上的邮件存档，所以这5G的空间可以永远也用不完。好像这家公司就在中关村，真想去参观一下。用zoho的原因是它提供邮件代收服务，我有一个域名<code>joxy.org</code>，我想注册一些邮箱以<code>@joxy.org</code>结尾，zoho就提供这种功能。过程也是很简单，需要先去注册帐号，注册帐号的时候要验证你是否对这个域名有所有权，所以还需要去<a href="https://mya.godaddy.com/">godaddy</a>上面验证一下，我是通过cname的形式来验证的。注册完成之后还得配置一下godaddy，因为在注册域名的时候默认设置了2个收件商，现在我不想用那2个厂商的收件服务了，所以要改改dns设置，找到mx这条配置，删掉额外的2个厂商的配置，然后加上一条mx记录，Host是@,表示joxy.org自身，Points to填mx2.zohomail.com，剩下的随便填就行了。这样当有人往<code>user@joxy.org</code>发邮件的时候，发件服务器通过dns查询的时候就知道要发给zoho，zoho就可以帮忙代收。</p>
 
+<h4>发件服务和收件服务都配置好了，接下来就是测试一下是否能收发邮件了。</h4>
 
+<p>用thunderbird可以很方便的写邮件收邮件。把我刚刚创建的xiefei@joxy.org这个帐号创建了，手动配置好这个帐号发送邮件和接收邮件的设置，就可以开始测试了。在配置smtp发件的时候需要输入密码验证用户是否有权限来发邮件，所以一定要记得填smtp的密码。我测试了一下和我的gamil邮箱互发邮件，一点问题都没有，而且邮件也没有进入垃圾箱。这真是太好了，图形界面的客户端可以收发邮件，真想看看通过php,ruby脚本能不能发邮件。</p>
 
+<p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
 
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-07T22:25:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-07</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/python/'>python</a>
-  
-</span>
-
-
-</p>
-
-</article>
-
+<p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
 </div>
 
-      </div>
-      
+
+      <footer>
+        <p class="meta text-muted">
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-03T00:43:43+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-03</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service/" data-via="" data-counturl="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2015/01/01/arch-pacman-broken/" title="Previous Post: 解决pacman依赖关系破裂问题">&laquo; 解决pacman依赖关系破裂问题</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section class="panel panel-default">
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Recent Posts</h3>
   </div>
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
+    <a class="list-group-item active" href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
     
     <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
     
@@ -273,7 +287,7 @@
     </a>
     
     
-    <a class="list-group-item active" href="/blog/categories/python/index.html">
+    <a class="list-group-item " href="/blog/categories/python/index.html">
       <span class="badge">2</span>
       python
     </a>
@@ -299,8 +313,8 @@
   </div>
 </section>
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 

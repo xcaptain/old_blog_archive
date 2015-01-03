@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-01T11:53:58+00:00</updated>
+  <updated>2015-01-03T23:12:10+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[部署邮件服务]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service/"/>
+    <updated>2015-01-03T00:43:43+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/03/deploy-email-service</id>
+    <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
+
+<h4>首先确定一下发件服务。</h4>
+
+<p>根据网上的推荐，我用的是<a href="https://mandrillapp.com/">mandril</a>，这家公司为免费帐号提供每月发12000封邮件，对于个人玩来说足够了。接下来就是注册帐号，注册完成之后会有一个向导引导着去配置发件服务。填好之后配置都会出现在<a href="https://mandrillapp.com/settings">这里</a>，这些配置包括发件服务器的域名，端口，smtp用户名，以及密码，密码是网站生成的，要好好保存。</p>
+
+<h4>然后就是配置收件服务</h4>
+
+<p>同样也是根据网上的推荐，收件服务用的是国内一家公司的，叫做<a href="https://www.zoho.com/">zoho</a>，这家公司为每个免费帐号提供一个代收域名，15个免费邮箱，每个免费邮箱提供5G存储空间，对于个人玩来说也是足够了的，因为可以把邮件下载到本地，然后删除服务器上的邮件存档，所以这5G的空间可以永远也用不完。好像这家公司就在中关村，真想去参观一下。用zoho的原因是它提供邮件代收服务，我有一个域名<code>joxy.org</code>，我想注册一些邮箱以<code>@joxy.org</code>结尾，zoho就提供这种功能。过程也是很简单，需要先去注册帐号，注册帐号的时候要验证你是否对这个域名有所有权，所以还需要去<a href="https://mya.godaddy.com/">godaddy</a>上面验证一下，我是通过cname的形式来验证的。注册完成之后还得配置一下godaddy，因为在注册域名的时候默认设置了2个收件商，现在我不想用那2个厂商的收件服务了，所以要改改dns设置，找到mx这条配置，删掉额外的2个厂商的配置，然后加上一条mx记录，Host是@,表示joxy.org自身，Points to填mx2.zohomail.com，剩下的随便填就行了。这样当有人往<code>user@joxy.org</code>发邮件的时候，发件服务器通过dns查询的时候就知道要发给zoho，zoho就可以帮忙代收。</p>
+
+<h4>发件服务和收件服务都配置好了，接下来就是测试一下是否能收发邮件了。</h4>
+
+<p>用thunderbird可以很方便的写邮件收邮件。把我刚刚创建的xiefei@joxy.org这个帐号创建了，手动配置好这个帐号发送邮件和接收邮件的设置，就可以开始测试了。在配置smtp发件的时候需要输入密码验证用户是否有权限来发邮件，所以一定要记得填smtp的密码。我测试了一下和我的gamil邮箱互发邮件，一点问题都没有，而且邮件也没有进入垃圾箱。这真是太好了，图形界面的客户端可以收发邮件，真想看看通过php,ruby脚本能不能发邮件。</p>
+
+<p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
+
+<p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
@@ -1069,46 +1094,6 @@ end
 是archlinux+gnome3.12，所以直接调用一个系统设置改的，找到tweak tool然后在typing里面选择
 swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来，现在ctrl靠近键盘中间了以后
 使用emacs写代码应该是更方便了吧。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[不用密码ssh登陆服务器]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/08/21/ssh-login-without-password/"/>
-    <updated>2014-08-21T15:50:42+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/08/21/ssh-login-without-password</id>
-    <content type="html"><![CDATA[<p>今天又拿到了一台服务器的权限，才来到这个公司没多久现在算一下已经拿到很多机器的权限了，本地测试机有3台，都拥有root权限，
-线上服务器有5台，有部分root权限。刚开始用xshell登陆服务器还没什么觉得不方便的，但是现在我已经完全使用linux办公了，所以
-只能用terminal来ssh连接服务器。手动输入密码太麻烦了，而且还是经常性的输密码。</p>
-
-<p>今天又花了点时间看了一下公钥加密的过程这块，了解了一个ssh连接的基本流程。ssh登陆有2种方法：</p>
-
-<ol>
-<li>基于密码的验证。</li>
-<li>基于公钥私钥的验证。</li>
-</ol>
-
-
-<p>基于密码的验证很好理解，当连接服务器的时候会提示你输入密码，等验证通过之后就能连接远程服务器了。这种方法很好理解，但是其实
-局限性是很大的，首先麻烦，每次登陆都得输密码，而一个安全的密码又不是那么好记。其次密码被暴露的次数越多就越不安全，万一哪一次
-在输入密码的时候被中间人给截获了这个密码，那么就没有丝毫秘密可言了。</p>
-
-<p>而基于公钥私钥的验证相比起来就安全多了，在服务器中保存一份你自己的公钥，服务器就会知道你是授权了的用户，客户端连接服务器的时候
-会检查这个用户的公钥是否在授权了的公钥列表中，如果在的话就放行，允许登陆。登陆之后加密的方法就很简单了，服务器用客户端的公钥加密信息
-后传给客户端，客户端收到这个加密的信息之后用自己的私钥解密。然后客户端给服务器发送信息，用服务器的公钥加密，服务器收到之后拿自己的
-私钥解密。</p>
-
-<p>所以总的来说ssh连接就是2步，一步是验证身份，剩下的就是交换公钥的加密数据传输。</p>
-
-<p>因为我现在都是使用运维给我分配的帐号密码来登陆服务器，每次连接都得输入密码很不方便，所以我还是改为通过公钥来验证身份好了。</p>
-
-<p>首先给自己生成一个公钥私钥对，使用<code>ssh-keygen</code>生成公钥和私钥对，一般的命名规则是id_rsa和id_rsa.pub， 默认使用的加密方法是rsa，
-默认使用2048字节的私钥。然后就是把自己的公钥添加到服务器上，保存在<code>~/.ssh/authorized_keys</code>里面。具体实现方法有很多，可以直接复制粘贴进去，
-可以把公钥文件传到服务器上，也可以用一个简单的命令<code>ssh-copy-id</code>,这样就可以绕过手动输入密码了。</p>
-
-<p>真是搞不懂，运维们有这么好的方法不用为什么要给一个账户创建密码呢，直接向我要一个公钥，然后加到服务器就行了嘛。</p>
-
-<p>今天发现一个很好用的手机ssh客户端叫作juice ssh，拿它可以用手机来连接ssh服务器。不过这个app应该是记住密码的形式来完成连接的，因为没有在服务器上的<code>.ssh/authorized_keys</code>里面找到我的手机的公钥。而且连接公司服务器需要vpn，还得在手机上设置vpn连接，只能在wifi环境下才能连接vpn，如果开数据连接的话就连不上了。</p>
 ]]></content>
   </entry>
   

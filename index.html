@@ -119,6 +119,59 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-03T00:43:43+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-03</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/03/deploy-email-service/" itemprop="url">部署邮件服务</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
+
+<h4>首先确定一下发件服务。</h4>
+
+<p>根据网上的推荐，我用的是<a href="https://mandrillapp.com/">mandril</a>，这家公司为免费帐号提供每月发12000封邮件，对于个人玩来说足够了。接下来就是注册帐号，注册完成之后会有一个向导引导着去配置发件服务。填好之后配置都会出现在<a href="https://mandrillapp.com/settings">这里</a>，这些配置包括发件服务器的域名，端口，smtp用户名，以及密码，密码是网站生成的，要好好保存。</p>
+
+<h4>然后就是配置收件服务</h4>
+
+<p>同样也是根据网上的推荐，收件服务用的是国内一家公司的，叫做<a href="https://www.zoho.com/">zoho</a>，这家公司为每个免费帐号提供一个代收域名，15个免费邮箱，每个免费邮箱提供5G存储空间，对于个人玩来说也是足够了的，因为可以把邮件下载到本地，然后删除服务器上的邮件存档，所以这5G的空间可以永远也用不完。好像这家公司就在中关村，真想去参观一下。用zoho的原因是它提供邮件代收服务，我有一个域名<code>joxy.org</code>，我想注册一些邮箱以<code>@joxy.org</code>结尾，zoho就提供这种功能。过程也是很简单，需要先去注册帐号，注册帐号的时候要验证你是否对这个域名有所有权，所以还需要去<a href="https://mya.godaddy.com/">godaddy</a>上面验证一下，我是通过cname的形式来验证的。注册完成之后还得配置一下godaddy，因为在注册域名的时候默认设置了2个收件商，现在我不想用那2个厂商的收件服务了，所以要改改dns设置，找到mx这条配置，删掉额外的2个厂商的配置，然后加上一条mx记录，Host是@,表示joxy.org自身，Points to填mx2.zohomail.com，剩下的随便填就行了。这样当有人往<code>user@joxy.org</code>发邮件的时候，发件服务器通过dns查询的时候就知道要发给zoho，zoho就可以帮忙代收。</p>
+
+<h4>发件服务和收件服务都配置好了，接下来就是测试一下是否能收发邮件了。</h4>
+
+<p>用thunderbird可以很方便的写邮件收邮件。把我刚刚创建的xiefei@joxy.org这个帐号创建了，手动配置好这个帐号发送邮件和接收邮件的设置，就可以开始测试了。在配置smtp发件的时候需要输入密码验证用户是否有权限来发邮件，所以一定要记得填smtp的密码。我测试了一下和我的gamil邮箱互发邮件，一点问题都没有，而且邮件也没有进入垃圾箱。这真是太好了，图形界面的客户端可以收发邮件，真想看看通过php,ruby脚本能不能发邮件。</p>
+
+<p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
+
+<p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-01T11:35:23+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-01</time>
         
       </p>
@@ -755,60 +808,6 @@ dd: writing `/EMPTY': No space left on device
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-02T00:36:37+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-02</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/11/02/redis-crash/" itemprop="url">Redis崩溃</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
-
-<p>telnet上redis服务器去查看了一下，也就10万+的key，按理来说不应该这么慢。后来事故达到高峰期了，好几个站出现502了，这时候运维报告redis服务器网卡io达到峰值，太恐怖了，服务器使用的是1000Mbps的网卡，每秒钟redis读写超过1G了，怎么会这样？这时候看来就好理解之前netstat的结果了，既然网卡达到上限了，肯定服务器就不能即使返回请求。</p>
-
-<p>redis读写过高我们分析可能原因是写入了很巨大的key，在redis里面monitor了一下最近的读写状况，发现大部分都是get一些很小的key，一般都是一些比较小的数组，既没有缓存文件，也没有缓存大段的页面，那么为什么会出现流量过高呢？我觉得很大的原因是redis真的出现性能问题了，如果性能下降了的话，而请求数又没变，也是会导致time_wait的。其实我早就发现我们现在编码很不规范，redis有5种数据结构，但是在大部分业务中都只用到了1种数据结构，也就是字符串。不得不说这是一个很傻的设计。在10几万的key中get一个key得有多慢，如果设计一些hash表，把不同的key存到hash里面，那么可以大大的提高redis的性能，毕竟redis的key大大的减少了，而在hash表里面查询某个key的值还是比较快的。肯定比在redis库里查询快。不过知道问题所在不意味着我们会去改，现在开发人员本来就少，但是新的项目一个接一个。目前简单测试了一下没问题就上线了，根本没有考虑过代码的性能问题，没有人审核代码，没有人压力测试代码，在开发的时候怎么省事怎么来，之前别人写的方法copy过来直接用，也不管之前的代码和现在的代码处理的问题有多不同，只要能用那就可以。</p>
-
-<p>这也是没办法的办法，可以做的不多，后来他们把一些代码的缓存时间缩短了，这样就不会有太多的key留在内存中，减少key的数量之后大概能加快一点查询效率。而且他们还审查了一部分代码，我看了他们找的一个文件，有个程序会一次性请求7个接口获得一大堆数据，但是真正有用的只是其中一部分，后来他们优化了一下，在取数据之前加了一些判断来觉得到底去取哪个数据。看起来效果挺明显的，至少这个文件的请求就少了7倍。</p>
-
-<p>顺便再来总结一下netstat(network statistics)的用法吧，用它来监控网络状况挺好的。
-1. 直接执行<code>netstat</code>，会输出当前所有的连接。
-2. <code>netstat -a</code>，输出所有的连接，和<code>netstat</code>的结果一样。
-3. <code>netstat -t</code>，列出所有的tcp连接。
-4. <code>netstat -i</code>，列出当前所有的网络接口，比如说我的笔记本有3个接口，一块以太网卡，一块无线网卡，一个回环接口。
-5. <code>netstat -s</code>，列出当前所有协议的统计状态，包括tcp, ip, udp, icmp等。
-6. <code>netstat -p</code>，列出进程名以及对应的pid。
-7. <code>netstat -r</code>，列出当前的路由表。</p>
-
-<p>主要得分析一下<code>netstat -a</code>的输出，这个连接状态太多了，得好好研究一下。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -832,6 +831,8 @@ dd: writing `/EMPTY': No space left on device
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
+    
     <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
     
     <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
@@ -839,8 +840,6 @@ dd: writing `/EMPTY': No space left on device
     <a class="list-group-item " href="/blog/2014/12/30/web-crawl-again/">采集一个论坛的帖子来进行数据分析</a>
     
     <a class="list-group-item " href="/blog/2014/12/26/install-coreos-with-vagrant/">通过vagrant安装coreos</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/25/learn-virtualization-1/">第一次接触虚拟化</a>
     
   </div>
 </section>
@@ -858,7 +857,7 @@ dd: writing `/EMPTY': No space left on device
     
     
     <a class="list-group-item " href="/blog/categories/web/index.html">
-      <span class="badge">3</span>
+      <span class="badge">4</span>
       web
     </a>
     
@@ -876,7 +875,7 @@ dd: writing `/EMPTY': No space left on device
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">6</span>
+      <span class="badge">7</span>
       linux
     </a>
     
