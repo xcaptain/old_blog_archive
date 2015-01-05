@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | Joey's Blog]]></title>
+  <link href="http://xcaptain.github.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://xcaptain.github.io/"/>
+  <updated>2015-01-05T23:53:35+00:00</updated>
+  <id>http://xcaptain.github.io/</id>
+  <author>
+    <name><![CDATA[joey]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[玩弄git]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/05/play-with-git/"/>
+    <updated>2015-01-05T22:54:11+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/05/play-with-git</id>
+    <content type="html"><![CDATA[<p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
+
+<p>今晚就稍微熟悉了一下discourse的结构。</p>
+
+<ol>
+<li>我本地的开发环境，这个没什么多说的，就是用vagrant跑了一个虚拟机，上面运行着discourse需要的环境。</li>
+<li>线上的环境是用docker运行的，这是官方推荐的安装方式，说实话最初我竟然没有明白discourse的架构。</li>
+</ol>
+
+
+<p>其实也是很简单的，在我的vps上跑着一个docker，docker类似于一个虚拟机，创建了一个容器，里面跑着discourse需要的环境。代码存放在<code>/var/www/discourse</code>下，但是因为是用官方的安装方法安装的，只能等官方的更新，如果我们要自定义怎么办呢？那就需要改git的配置了。</p>
+
+<p>我在github上面fork了官方的仓库，把这个自己的仓库拷贝到本地，改了一些简单的文件，提交，这时候我去官方仓库看，发现他们竟然领先我好多个版本，那就 把他们的改动也拿过来吧，这里需要添加官方仓库的配置，使用<code>git remote add upstream git://github.com/discourse/discourse.git</code>，这时候会发现在<code>.git/config</code>里面多了一个remote的配置，如果需要把这个upstream的改动也合并到自己的仓库，就要<code>git fetch upstream</code>，等改动都更新下来了之后会存放在<code>.git</code>目录下，这时候代码还没有变化。如果执行<code>git pull upstream master</code>，就能把版本库中的版本检出到主分支了。然后执行<code>git push origin master</code>就能把本地的版本更新到github了。</p>
+
+<p>我想把改动也更新到vps上，那就需要改vps上git仓库的配置了。</p>
+
+<ol>
+<li><p><code>cd /var/discourse/</code>
+切换到docker配置所在的目录</p></li>
+<li><p><code>./launcher ssh app</code>
+因为我当初初始化配置的时候用的是app来作为container的名字，所以要加上app参数</p></li>
+<li><p><code>cd /var/www/discourse/</code></p></li>
+<li><p><code>git remote add develop git://github.com/xcaptain/discourse.git</code>
+这样就把我的github仓库中的版本作为开发版加入到线上的配置了。</p></li>
+<li><p><code>git pull develop master</code>
+ 就能把我的版本拿下来了，因为我的这个版本都会现在本地开发环境测试过之后再上，所以是很安全的</p></li>
+</ol>
+
+
+<p>这样应该也算是和一大伙志愿者协同开发吧，虽然我没有提交pull request，但是我一直在用别人的免费的代码，真是惭愧。</p>
+]]></content>
+  </entry>
+  
+</feed>

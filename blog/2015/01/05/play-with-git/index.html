@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>一个php分页示例 - Joey's Blog</title>
+  <title>玩弄git - Joey's Blog</title>
   <meta name="author" content="joey">
 
   
@@ -14,15 +14,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example">
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2015/01/05/play-with-git">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
 
   <!-- http://opengraphprotocol.org/ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example">
-  <meta property="og:title" content="一个php分页示例 - Joey's Blog">
+  <meta property="og:url" content="http://xcaptain.github.io/blog/2015/01/05/play-with-git">
+  <meta property="og:title" content="玩弄git - Joey's Blog">
   
 
   <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
@@ -115,132 +115,49 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T09:26:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-05T22:54:11+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-05</time>
         
       </p>
     
     
     <h1 class="entry-title" itemprop="name headline">
-        一个php分页示例
+        玩弄git
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix" itemprop="articleBody description"><p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
-对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
-一句话就把我们辛辛苦苦写出来的代码给否决了，怎么说都还是很伤心的。不过伤心归伤心，活
-还是的继续干的，谁让我们是给别人打工的呢。</p>
+<div class="entry-content clearfix" itemprop="articleBody description"><p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
 
-<p>之前的实现方法是用jsonp来做的，我用php写好接口，输出一个回调函数和数据，前端获得这个数据，
-然后就能显示出页面了。不过现在要重写只能我自己来处理数据了。</p>
+<p>今晚就稍微熟悉了一下discourse的结构。</p>
 
-<p>首先遇到一个多级选择的问题，这个问题一点都不是问题，因为既然是反复请求，那么给每一级选项
-加上一个参数，然后传给后台就能取出相应的数据了。真正让我比较烦恼的是分页的功能如何实现。</p>
-
-<p>分页貌似简单，实则复杂。如果对于很少的页面当然可以把所有的页码罗列出来，但是如果页面很多，
-比如一个分类有100个页面，那么如何显示这100个页面就是个问题了，通常的惯例是显示头几个，当前页
-附近几个，和最后几个页面，剩下的用省略号表示。这时候就涉及到一个比较麻烦的问题了，怎么设计
-当前的分页结构，使得页面均匀分布。</p>
-
-<p>在网上搜了一段代码，稍微改动了一下加到我的页面中去了，不得不说这段代码的逻辑还是很复杂的，
-我甚至都没有仔细去研究为什么要这么做，只是稍微看了一下各种情况对应的代码实现。</p>
-
-<pre>
-class BaseFunction {
-    /**
-     * lol.7k7k.com列表页分页函数
-     * 返回一段html代码
-     * $page  当前页面号码，如1,2
-     * $totalCount: 总共视频数目，根据这个值获得总页数
-     * $adjacents:  现实与当前也相邻的几个页面
-     * $catname:  分类名，比如zmjs
-     * $tagname:   标签名中文
-     * $sort: 排序  "/$tagname-$sort-$page/"
-     */
-    public static function listPager($page, $pageSize, $totalCount, $adjacents, $catname, $tagname, $sort) {
-        if($page == 0) $page = 1;                //默认从第一页开始
-        $prev = $page - 1;
-        $next = $page + 1;
-        $lastPage = ceil($totalCount/$pageSize); //最后一页编号
-        $lpm1 = $lastPage - 1;                   //倒数第二页编号
-
-        $pagination = '';
-        if($lastPage > 1) {
-            $pagination .= "<div class=\"pagination\">";
-            if($page > 1) {
-                $pagination .= "<a href=\"/$catname/$tagname-$sort-$prev/\">上一页</a>";
-            } else {
-                $pagination .= "<span class=\"disabled\">上一页</span>";
-            }
-            if($lastPage < 7 + ($adjacents * 2)) { //不需要隐藏额外的页码
-                for($counter = 1; $counter <= $lastPage; $counter++) {
-                    if($counter == $page) {
-                        $pagination .= "<span class=\"curr\">$counter</span>"; //高亮当前页
-                    } else {
-                        $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>"; //其余页面做成链接
-                    }
-                }
-            } elseif($lastPage > 5 + ($adjacents * 2)) { //页面很多，要隐藏部分页码
-                if($page < 1 + ($adjacents * 2)) {       //靠近前面，隐藏后面的页面
-                    for($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
-                        if($counter == $page) {
-                            $pagination .= "<span class=\"curr\">$counter</span>";
-                        } else {
-                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
-                        }
-                    }
-                    $pagination .= "...";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-$lpm1/\">$lpm1</a>";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-$lastPage/\">$lastPage</a>";
-                } elseif($lastPage - ($adjacents * 2) > $page && $page > ($adjacents * 2)) { //在中间，前后都隐藏部分
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-1/\">1</a>";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-2/\">2</a>";
-                    $pagination . "...";
-                    for($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++) {
-                        if($counter == $page) {
-                            $pagination .= "<span class=\"curr\">$counter</span>";
-                        } else {
-                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
-                        }
-                    }
-                } else { //靠近尾部，隐藏前面部分
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-1/\">1</a>";
-                    $pagination .= "<a href=\"/$catname/$tagname-$sort-2/\">2</a>";
-                    $pagination .= "...";
-                    for($counter = $lastPage - (2 + ($adjacents * 2)); $counter <= $lastPage; $counter++) {
-                        if($counter == $page) {
-                            $pagination .= "<span class=\"/$catname/$tagname-$sort-$counter/\">$counter</span>";
-                        } else {
-                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
-                        }
-                    }
-                }
-            } //end elseif 对于很长的页面情况判断结束
-            if($page < $counter - 1) {
-                $pagination .= "<a href=\"/$catname/$tagname-$sort-$next/\">下一页</a>";
-            } else {
-                $pagination .= "<span class=\"disabled\">下一页</span>";
-            }
-            $pagination .= "</div>";
-            return $pagination;
-        } else {  //对于只有一页的情况，也做一个分页
-            $pagination .= "<div class=\"pagination\">";
-            $pagination .= "<span class=\"disabled\">上一页</span>";
-            $pagination .= "<span class=\"curr\">1</span>";
-            $pagination .= "<span class=\"disabled\">上一页</span>";
-            $pagination .= "</div>";
-            return $pagination;
-        }
-    }
-}
-</pre>
+<ol>
+<li>我本地的开发环境，这个没什么多说的，就是用vagrant跑了一个虚拟机，上面运行着discourse需要的环境。</li>
+<li>线上的环境是用docker运行的，这是官方推荐的安装方式，说实话最初我竟然没有明白discourse的架构。</li>
+</ol>
 
 
-<p>在我的网站上面试验了一下，基本符合我的要求，不过难怪php和javascript都要做一个分页类，手动实现分页真是太累了。还好有人共享代码，不然自己写有得写了。</p>
+<p>其实也是很简单的，在我的vps上跑着一个docker，docker类似于一个虚拟机，创建了一个容器，里面跑着discourse需要的环境。代码存放在<code>/var/www/discourse</code>下，但是因为是用官方的安装方法安装的，只能等官方的更新，如果我们要自定义怎么办呢？那就需要改git的配置了。</p>
 
-<p>OMG,竟然把我代码里的html自动解析了，这让我怎么插入html代码啊。</p>
+<p>我在github上面fork了官方的仓库，把这个自己的仓库拷贝到本地，改了一些简单的文件，提交，这时候我去官方仓库看，发现他们竟然领先我好多个版本，那就 把他们的改动也拿过来吧，这里需要添加官方仓库的配置，使用<code>git remote add upstream git://github.com/discourse/discourse.git</code>，这时候会发现在<code>.git/config</code>里面多了一个remote的配置，如果需要把这个upstream的改动也合并到自己的仓库，就要<code>git fetch upstream</code>，等改动都更新下来了之后会存放在<code>.git</code>目录下，这时候代码还没有变化。如果执行<code>git pull upstream master</code>，就能把版本库中的版本检出到主分支了。然后执行<code>git push origin master</code>就能把本地的版本更新到github了。</p>
+
+<p>我想把改动也更新到vps上，那就需要改vps上git仓库的配置了。</p>
+
+<ol>
+<li><p><code>cd /var/discourse/</code>
+切换到docker配置所在的目录</p></li>
+<li><p><code>./launcher ssh app</code>
+因为我当初初始化配置的时候用的是app来作为container的名字，所以要加上app参数</p></li>
+<li><p><code>cd /var/www/discourse/</code></p></li>
+<li><p><code>git remote add develop git://github.com/xcaptain/discourse.git</code>
+这样就把我的github仓库中的版本作为开发版加入到线上的配置了。</p></li>
+<li><p><code>git pull develop master</code>
+ 就能把我的版本拿下来了，因为我的这个版本都会现在本地开发环境测试过之后再上，所以是很安全的</p></li>
+</ol>
+
+
+<p>这样应该也算是和一大伙志愿者协同开发吧，虽然我没有提交pull request，但是我一直在用别人的免费的代码，真是惭愧。</p>
 </div>
 
 
@@ -264,13 +181,13 @@ class BaseFunction {
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T09:26:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-05T22:54:11+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-05</time>
           
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/blog/categories/php/'>php</a>
+    <a class='category' href='/blog/categories/docker/'>docker</a>, <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
   
 </span>
 
@@ -279,7 +196,7 @@ class BaseFunction {
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example/" data-via="" data-counturl="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2015/01/05/play-with-git/" data-via="" data-counturl="http://xcaptain.github.io/blog/2015/01/05/play-with-git/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -291,10 +208,8 @@ class BaseFunction {
         
           <ul class="meta text-muted pager">
             
-            <li class="previous"><a href="/blog/2014/08/12/jsonp-some-thought/" title="Previous Post: jsonp的一点简单看法">&laquo; jsonp的一点简单看法</a></li>
+            <li class="previous"><a href="/blog/2015/01/03/debug-shadowsocks/" title="Previous Post: 调试shadowsocks">&laquo; 调试shadowsocks</a></li>
             
-            
-            <li class="next"><a href="/blog/2014/08/16/freebsd-basic-operations/" title="Next Post: freebsd-basic-operations">freebsd-basic-operations &raquo;</a></li>
             
           </ul>
         
@@ -313,7 +228,7 @@ class BaseFunction {
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2015/01/05/play-with-git/">玩弄git</a>
+    <a class="list-group-item active" href="/blog/2015/01/05/play-with-git/">玩弄git</a>
     
     <a class="list-group-item " href="/blog/2015/01/03/debug-shadowsocks/">调试shadowsocks</a>
     

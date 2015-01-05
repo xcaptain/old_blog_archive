@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-03T23:48:15+00:00</updated>
+  <updated>2015-01-05T23:53:35+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩弄git]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/05/play-with-git/"/>
+    <updated>2015-01-05T22:54:11+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/05/play-with-git</id>
+    <content type="html"><![CDATA[<p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
+
+<p>今晚就稍微熟悉了一下discourse的结构。</p>
+
+<ol>
+<li>我本地的开发环境，这个没什么多说的，就是用vagrant跑了一个虚拟机，上面运行着discourse需要的环境。</li>
+<li>线上的环境是用docker运行的，这是官方推荐的安装方式，说实话最初我竟然没有明白discourse的架构。</li>
+</ol>
+
+
+<p>其实也是很简单的，在我的vps上跑着一个docker，docker类似于一个虚拟机，创建了一个容器，里面跑着discourse需要的环境。代码存放在<code>/var/www/discourse</code>下，但是因为是用官方的安装方法安装的，只能等官方的更新，如果我们要自定义怎么办呢？那就需要改git的配置了。</p>
+
+<p>我在github上面fork了官方的仓库，把这个自己的仓库拷贝到本地，改了一些简单的文件，提交，这时候我去官方仓库看，发现他们竟然领先我好多个版本，那就 把他们的改动也拿过来吧，这里需要添加官方仓库的配置，使用<code>git remote add upstream git://github.com/discourse/discourse.git</code>，这时候会发现在<code>.git/config</code>里面多了一个remote的配置，如果需要把这个upstream的改动也合并到自己的仓库，就要<code>git fetch upstream</code>，等改动都更新下来了之后会存放在<code>.git</code>目录下，这时候代码还没有变化。如果执行<code>git pull upstream master</code>，就能把版本库中的版本检出到主分支了。然后执行<code>git push origin master</code>就能把本地的版本更新到github了。</p>
+
+<p>我想把改动也更新到vps上，那就需要改vps上git仓库的配置了。</p>
+
+<ol>
+<li><p><code>cd /var/discourse/</code>
+切换到docker配置所在的目录</p></li>
+<li><p><code>./launcher ssh app</code>
+因为我当初初始化配置的时候用的是app来作为container的名字，所以要加上app参数</p></li>
+<li><p><code>cd /var/www/discourse/</code></p></li>
+<li><p><code>git remote add develop git://github.com/xcaptain/discourse.git</code>
+这样就把我的github仓库中的版本作为开发版加入到线上的配置了。</p></li>
+<li><p><code>git pull develop master</code>
+ 就能把我的版本拿下来了，因为我的这个版本都会现在本地开发环境测试过之后再上，所以是很安全的</p></li>
+</ol>
+
+
+<p>这样应该也算是和一大伙志愿者协同开发吧，虽然我没有提交pull request，但是我一直在用别人的免费的代码，真是惭愧。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[调试shadowsocks]]></title>
@@ -1074,55 +1112,6 @@ foreach($arr as $k => $v) {
 节点，会重写每个节点的这个相对位置，而用unset来删除则不会。</p>
 
 <p>不过作为上层应用开发者对于语言的具体实现不必要去研究，只要形象的知道这2种方法的不同就够了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用fish]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/08/31/use-fish-shell/"/>
-    <updated>2014-08-31T14:43:17+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/08/31/use-fish-shell</id>
-    <content type="html"><![CDATA[<p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
-从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
-这不是鱼，全名叫做(friendly interactive shell)，用户友好的shell，语法高亮功能使得不容易
-输错命令，自动补全功能比zsh还强大，能够根据man page里的关键字来补全，也能根据~/.ssh/config来
-补全ssh命令，历史记录功能也比bash之类的友好。</p>
-
-<p>fish的项目主页在<a href="https://github.com/fish-shell/fish-shell">这里</a>，可以看到这个项目的还是比较
-活跃的。因为我用的是archlinux，所以就没有去从build源代码，而是直接<code>pacman -S fish</code>安装的。</p>
-
-<p>默认的fish已经很强大了:
-    1. 内建了命令行语法高亮功能。输入不同的命令会用不同的颜色来显示。
-    2. 要查找一个命令的历史记录不要用ctrl-R来找，直接输入这个命令的开头几个字母fish会自动用阴影
-    显示上一次执行的这条命令，然后按下ctrl-E或者是右方向键就能全部补齐了，这个功能对于很长的命令
-    来说真是太赞了，而且感觉比bash的ctrl-R强大多了。
-    3. 自动补全功能非常强大。我在编辑这篇博客的时候不是输入<code>vim 20140-08-31-use-fish-shell.markdown</code>来
-    编辑的，而是直接<code>vim fish&lt;Tab&gt;</code>来找到这个文件的，真是强大的功能，这是我目前发现的唯一支持任意
-    位置补齐的shell，就算是也很不错的zsh也只支持从头补齐。
-    4. 自动命令行纠错。比如说你要执行<code>cd ~/Documents</code>但是输成了<code>cd ~/documents</code>也没有关系，直接就自动
-    纠错了。有了它真是方便。</p>
-
-<p>虽然默认的fish很不错，但是我还是从github上clone了<a href="https://github.com/bpinto/oh-my-fish">oh-my-fish</a>这个项目,
-这个项目和<a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a>的结构很像，里面的配置都很有用，而且有多种
-主题，当对目前这个主题审美疲劳了，换一个主题还是很不错的。使用oh-my-fish来作为fish的配置也很简单，按照github
-上面的操作一步一步做就是了。</p>
-
-<p>接下来就是根据自己的喜好自定义fish的theme了，要加载哪个theme只要改<code>~/.config/fish/config.fish</code>就ok，找到
-<code>set fish_theme</code>这一行，填入你要的theme就行了，我用的是<code>set fish_theme zish</code>，这个主题挺漂亮的。</p>
-
-<p>然后就是自定义一些别名了，fish没有alias这个命令，但是可以用函数来实现自定义别名。既然使用了oh-my-fish的配置
-就得按照它的结构来修改。在<code>~/.oh-my-fish/functions/</code>里面放的都是自定义的函数。我先给vi起了个别名vim，因为
-有了vim谁还用vi啊。在这个目录下建一个文件vi.fish。
-<code>
-function vi &ndash;description ‘alias of vim’
-    vim
-end
-</code>
-保存退出，然后在命令行输入vi，这时候打开的就是vim了，连重新打开一个shell都不用就生效了，真是好快啊。</p>
-
-<p>接下来就是一些关于fish的shell编程方面的问题了。不过这块没有怎么认真去看。工作中用的都是bash，谁会为了执行
-一个脚本而额外安装fish。不过我还是很喜欢fish的语法的，感觉和python和ruby很像，相比之下bash的语法就有点
-另类和老古董了。等以后要用到fish script的时候再去认真研究一下fish syntax。</p>
 ]]></content>
   </entry>
   
