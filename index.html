@@ -117,167 +117,6 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-13T00:06:21+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-13</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/13/python-encoding/" itemprop="url">Python-encoding</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
-
-<p>在执行rake new_post的时候，突然提示</p>
-
-<pre>
-rake aborted!
-LoadError: cannot load such file -- bundler/setup
-/home/joey/octopress/Rakefile:2:in `<top (required)>'
-(See full trace by running task with --trace)
-</pre>
-
-
-<p>突然感觉很奇怪，前几天更新博客的时候都没有遇到这种情况，后来执行<code>rake --trace</code>的时候发现</p>
-
-<pre>
-/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-/home/joey/octopress/Rakefile:2:in `<top (required)>'
-/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load'
-/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:689:in `raw_load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:94:in `block in load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
-/usr/lib/ruby/2.2.0/rake/application.rb:93:in `load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:77:in `block in run'
-/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
-/usr/lib/ruby/2.2.0/rake/application.rb:75:in `run'
-/usr/bin/rake:33:in `<main>'
-</pre>
-
-
-<p>原来是系统ruby的版本更新到2.2了，以前是2.1的，octopress用的是2.1的gem，也许是和2.2的ruby不兼容吧，所以要重装2.2的gem套系，执行<code>proxychains gem install bundle</code>，有经验了必须要通过代理才能访问rubygem网站，下载完之后需要把<code>/home/joey/.gem/ruby/2.2.0/bin</code>添加到环境变量中，因为我用的是fish，所以编辑<code>~/.config/fish/config.fish</code>就行了。然后用bundle安装完必要的依赖<code>proxychains bundle install</code>，下载一大堆gem，最后发现系统用的rake已经是10.4.2版的了，而配置文件中需要的还是10.4.0,手动编辑一下<code>Gemfile.lock</code>，把版本号改过来就行了。ruby管理gem果然是够麻烦的，而且小版本升级也这么麻烦。</p>
-
-<p>接下来就是说说今天写代码遇到的问题了。</p>
-
-<p>需求很简单（话说写采集需求都很明确），这回需要的是采集明星的信息，第一个方案用的是采集baidu整理的明星信息，过程很简单，写了一个简单的脚本采了900条数据，但是后来发现图片做了防盗链，采集过来的图片不是图片的绝对路径，而是通过一台服务器生成的图片，也许是做了cookie的限制或者是做了ip的限制，导致每次刷新页面的时候都会返回一个403错误，链接在<a href="http://www.baidu.com/s?wd=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8&amp;rsv_spt=1&amp;issp=1&amp;f=8&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=4&amp;rsv_sug4=83&amp;rsv_sug1=3&amp;rsv_pq=d5fdf7cd00002ac7&amp;rsv_t=975c0jUWTeYgIUYA%2FfdqSJ75f%2BipUP9QR9v8Qgqb2jzy3rnHgTU3k4rBD%2B5moP73i00p&amp;rsv_sug2=0&amp;inputT=5564">这里</a>，以后有时间也许会去看看这个防盗链的实现，但是现在我可懒得花时间去研究怎么破解这个限制，那就换别的站采集吧。</p>
-
-<p>和产品沟通了一下，他也觉得如果死扣baidu是不明智的选择，后来换成360整理的资源了，链接在<a href="http://www.haosou.com/s?ie=utf-8&amp;shb=1&amp;src=360sou_newhome&amp;q=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8">这里</a>，数据也比较明确，分成3栏：领域，地域，性别，这个分类还是比较好的，以后我们拿来查询也方便。通过chrome开发工具，找到了js的接口，简单分析了一下就知道要获取那块数据，接下来就是敲代码了，最后的代码下面可以看到。</p>
-
-<div><script src='https://gist.github.com/cbf9980f1b30b2467d8a.js?file=360_star.py'></script>
-<noscript><pre><code>#!/usr/bin/python
-# -*-coding: utf-8 -*-
-
-import requests
-from bs4 import BeautifulSoup
-import pinyin
-import mysql.connector
-import sys
-
-count_index = 0
-def make_query(base_url, arg1, arg2, arg3):
-    &#39;&#39;&#39;This function construct the real request address and returns the result&#39;&#39;&#39;
-    addInfo = &#39;field:%s|area:%s|sex:%s&#39; % (arg1, arg2, arg3)
-    payload = {
-        &#39;query&#39;: &#39;明星大全&#39;,
-        &#39;url&#39;: &#39;link&#39;,
-        &#39;type&#39;: &#39;star_card&#39;,
-        &#39;rank&#39;: &#39;1&#39;,
-        &#39;addInfo&#39;: addInfo,
-        &#39;d&#39;: &#39;pc&#39;,
-        &#39;jsonpTest&#39;: &#39;on&#39;,
-        &#39;_test&#39;: &#39;1&#39;,
-        &#39;_debug&#39;: &#39;0&#39;,
-        &#39;src&#39;: &#39;onebox&#39;,
-        &#39;tpl&#39;: &#39;1&#39;
-    }
-    header = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#39;}
-    r = requests.get(base_url, params=payload)
-    return r
-
-def run():
-    global count_index
-    base_url = &#39;http://open.onebox.haosou.com/dataApi&#39;
-    field_list = [&#39;明星&#39;, &#39;歌手&#39;, &#39;演员&#39;, &#39;模特&#39;, &#39;主持人&#39;, &#39;导演&#39;]
-    area_list = [&#39;内地&#39;, &#39;香港&#39;, &#39;台湾&#39;, &#39;日本&#39;, &#39;韩国&#39;]
-    sex_list = [&#39;男&#39;, &#39;女&#39;]
-    conn = mysql.connector.connect(unix_socket=&#39;/run/mysqld/mysqld.sock&#39;, user=&#39;username&#39;, password=&#39;password&#39;, database=&#39;database&#39;, charset=&#39;utf8&#39;)
-    for field in field_list:
-        for area in area_list:
-            for sex in sex_list:
-                r = make_query(base_url, field, area, sex)
-                if r.status_code == 200:
-                    html_text = r.text
-                    soup = BeautifulSoup(html_text, from_encoding=&#39;utf-8&#39;)
-                    link_div = soup.find(&#39;div&#39;, {&#39;class&#39;: &#39;mh-datas&#39;})
-                    links = link_div.text.strip(&#39;,&#39;)
-                    links_list = links.split(&#39;,&#39;)
-                    name_div = soup.find(&#39;div&#39;, {&#39;class&#39;: &#39;mh-names&#39;})
-                    names = name_div.text.strip(&#39;,&#39;)
-                    names_list = names.split(&#39;,&#39;)
-                    write2db(conn, names_list, links_list, field, area, sex)
-                    print(count_index)
-                    count_index += 1
-    conn.close()
-
-def write2db(conn, names_list, links_list, field, area, sex):
-    cur = conn.cursor()
-    name_len = len(names_list)
-    link_len = len(links_list)
-    if name_len &lt;= link_len:
-        l = name_len
-    else:
-        l = link_len
-    for i in range(l):
-        try:
-            name = names_list[i]
-            name_py = pinyin.get(name)
-            link = links_list[i]
-            sql = &quot;insert into 360_star(name, name_py, pic_link, field, area, sex) values(%s, %s, %s, %s, %s, %s)&quot;
-            cur.execute(sql, (name, name_py, link,  field, area, sex))
-        except UnicodeEncodeError:
-            print(name)
-            continue
-    conn.commit()
-    cur.close()
-
-run()
-</code></pre></noscript></div>
-
-
-<p>在编码过程中遇到的问题有：
-1. 使用python3而不是python2，因为用2我没法解决编码问题。
-2. 使用了一个第三方的拼音库，能够把汉字转换成拼音，很不错，项目在<a href="http://lxyu.github.io/pinyin/">这里</a>
-3. 使用mysql-connector而不是MySQLdb，这实在是无奈之举，因为python3中没有MySQLdb，所以只好使用自带的mysql-connector
-4. 在使用mysql-connector连接数据库的时候发现一个问题，不能指定通过tcp的形式来连接，必须要用unix_socket，不知道为什么。</p>
-
-<p>现在太晚了，为了避免影响室友休息，所以先列一个提纲，明天有时间再来详细补上。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-05T22:54:11+00:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-05</time>
         
       </p>
@@ -940,6 +779,52 @@ dd: writing `/EMPTY': No space left on device
 
         </article>
       
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-07T22:25:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-07</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/07/learn-beautifulsoup/" itemprop="url">又是一个采集</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>前几天看到有个同事在采集<a href="https://yande.re">这个</a>站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。</p>
+
+<p>之前采集过多玩和178的一些文章，需求还比较复杂，需要把ajax的接口也给搞定掉，还得把所有图片都本地化，那时候用的是urllib2+beautifulsoup这个东西采集的。</p>
+
+<p>今天闲着没事，打算再来搞个采集玩玩，<a href="https://yande.re">yande</a>上面的图片质量还是比较高的。还是使用老一套，不过这回我不打算使用urllib2了，这东西太弱了，编码问题总是会出现，搞得我莫名其妙的，实在是打算放弃urllib2了，上网搜一下，找到了一个叫做<code>requests</code>的网络库，这个东西目前开发还是蛮活跃的，而且口气比较大，直接在官网说urllib2的api很混乱，那就是它了。页面分析的库还是用回beautifulsoup，这么久了仍然是很不喜欢写正则，所以拿这个库来解析html还是比较顺手。至于信息入库，我用的是<code>MySQLdb</code>这个库来驱动mysql，似乎这个库也比较弱，反正我是遇到很多很简单的sql语句都报错的情况了，在网上搜了一下，发现别的第三方的mysql库也很多，但是还没有下定决心换。</p>
+
+<p>代码的思路很简单，和以前写的采集脚本差不多，都是先采集列表页，获得文章页的url，然后在文章页中采集想要的信息。信息采集完了就是入库，到这里采集过程就结束了。</p>
+
+<p>代码很简单，已经提交到<a href="https://github.com/xcaptain/yande">github</a>了，和之前写的脚本比起来，多增加了一些东西：
+1. 模糊匹配，比如说<code>soup.find(href=re.compile('user\/show'))</code>这样的东西。
+2. 断点续踩，程序在跑的时候如果按下<code>Ctrl-C</code>来终止它的话，会把当前采集到的页码写入到一个叫做<code>config.py</code>的文件。
+3. 异常处理，以前写的几个采集使用了很多if语句，很多嵌套的判断，就是为了人为规避异常，尽量让程序跑的时候都不遇到异常，这种写法真是太折磨人了，看到三四层嵌套判断我的头都要大了。这回尝试了一下直接在<code>try</code>里面执行代码段，如果遇到可能会有的异常就直接<code>except</code>上处理了它，真是省了很多心呀。</p>
+</div>
+  
+  
+
+
+        </article>
+      
     </div>
 
     <ul class="pager">
@@ -963,8 +848,6 @@ dd: writing `/EMPTY': No space left on device
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2015/01/13/python-encoding/">Python-encoding</a>
-    
     <a class="list-group-item " href="/blog/2015/01/05/play-with-git/">玩弄git</a>
     
     <a class="list-group-item " href="/blog/2015/01/03/debug-shadowsocks/">调试shadowsocks</a>
@@ -972,6 +855,8 @@ dd: writing `/EMPTY': No space left on device
     <a class="list-group-item " href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
     
     <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
+    
+    <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
     
   </div>
 </section>
@@ -1031,7 +916,7 @@ dd: writing `/EMPTY': No space left on device
     
     
     <a class="list-group-item " href="/blog/categories/python/index.html">
-      <span class="badge">3</span>
+      <span class="badge">2</span>
       python
     </a>
     
@@ -1063,12 +948,6 @@ dd: writing `/EMPTY': No space left on device
     <a class="list-group-item " href="/blog/categories/vagrant/index.html">
       <span class="badge">1</span>
       vagrant
-    </a>
-    
-    
-    <a class="list-group-item " href="/blog/categories/tips/index.html">
-      <span class="badge">1</span>
-      tips
     </a>
     
   </div>
