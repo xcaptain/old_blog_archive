@@ -117,6 +117,50 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-07T22:25:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-07</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/07/learn-beautifulsoup/" itemprop="url">又是一个采集</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>前几天看到有个同事在采集<a href="https://yande.re">这个</a>站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。</p>
+
+<p>之前采集过多玩和178的一些文章，需求还比较复杂，需要把ajax的接口也给搞定掉，还得把所有图片都本地化，那时候用的是urllib2+beautifulsoup这个东西采集的。</p>
+
+<p>今天闲着没事，打算再来搞个采集玩玩，<a href="https://yande.re">yande</a>上面的图片质量还是比较高的。还是使用老一套，不过这回我不打算使用urllib2了，这东西太弱了，编码问题总是会出现，搞得我莫名其妙的，实在是打算放弃urllib2了，上网搜一下，找到了一个叫做<code>requests</code>的网络库，这个东西目前开发还是蛮活跃的，而且口气比较大，直接在官网说urllib2的api很混乱，那就是它了。页面分析的库还是用回beautifulsoup，这么久了仍然是很不喜欢写正则，所以拿这个库来解析html还是比较顺手。至于信息入库，我用的是<code>MySQLdb</code>这个库来驱动mysql，似乎这个库也比较弱，反正我是遇到很多很简单的sql语句都报错的情况了，在网上搜了一下，发现别的第三方的mysql库也很多，但是还没有下定决心换。</p>
+
+<p>代码的思路很简单，和以前写的采集脚本差不多，都是先采集列表页，获得文章页的url，然后在文章页中采集想要的信息。信息采集完了就是入库，到这里采集过程就结束了。</p>
+
+<p>代码很简单，已经提交到<a href="https://github.com/xcaptain/yande">github</a>了，和之前写的脚本比起来，多增加了一些东西：
+1. 模糊匹配，比如说<code>soup.find(href=re.compile('user\/show'))</code>这样的东西。
+2. 断点续踩，程序在跑的时候如果按下<code>Ctrl-C</code>来终止它的话，会把当前采集到的页码写入到一个叫做<code>config.py</code>的文件。
+3. 异常处理，以前写的几个采集使用了很多if语句，很多嵌套的判断，就是为了人为规避异常，尽量让程序跑的时候都不遇到异常，这种写法真是太折磨人了，看到三四层嵌套判断我的头都要大了。这回尝试了一下直接在<code>try</code>里面执行代码段，如果遇到可能会有的异常就直接<code>except</code>上处理了它，真是省了很多心呀。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
 
 
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-23T21:09:30+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-23</time>
@@ -186,8 +230,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-09T17:25:52+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-09</time>
         
       </p>
@@ -231,8 +273,6 @@
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -295,8 +335,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-01T23:40:57+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-01</time>
         
       </p>
@@ -330,8 +368,6 @@
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -377,8 +413,6 @@
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -446,8 +480,6 @@
 
 
 
-
-
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-18T11:48:41+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-18</time>
         
       </p>
@@ -488,8 +520,6 @@
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -553,8 +583,6 @@
     
       <p class="meta text-muted text-uppercase">
         
-
-
 
 
 
@@ -950,73 +978,6 @@ defaults = defaultConfig {
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-02T14:21:55+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-02</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/02/php-array-splice/" itemprop="url">Php-array-splice</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
-一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
-
-<p>我的思路是把要过滤的数据都放到一个叫做<code>$filterGames</code>的数组里面，所有的数据存放在<code>$arr</code>这个数组里。
-因为要用php实现，没有现成的方法，随便写了一个线性复杂度的算法，挨个检测<code>in_array</code>，然后用<code>array_splice</code>这个
-函数来删除元素。本来思路是很简单的，但是就是得不到我要的结果。具体代码如下：
-<code>
-foreach($arr as $k => $v) {
-    if(in_array($v, $filterGames)) {
-        array_splice($arr, $k, 1)
-    }
-}
-return $arr;
-</code>
-结果总是过滤了部分数据但是还有部分不能过滤。</p>
-
-<p>今天发现问题之后我改了一下，用的是<code>unset</code>这个方法。
-<code>
-foreach($arr as $k => $v) {
-    if(in_array($v, $filterGames)) {
-        unset($arr[$k]);
-    }
-}
-</code>
-本来我应该用array_splice来删除数组元素的，因为这个方法不会在数组中留下一个洞，而unset把元素删了之后会留下一个洞，导致
-没法通过数组的key来遍历。至于为什么array_splice只能过滤部分数据而unset可以全部过滤掉也是因为当使用array_splice的时候
-删了一个元素后面的元素会往前面挤，导致错过了被删的机会。而unset则是删了一个元素之后就留出了一个洞，整个数组的结构不变。
-我觉得php的数组应该是用链表来实现的，在每个节点中有一个字段记录了当前节点相对于首节点的位置，如果用array_splice来删除
-节点，会重写每个节点的这个相对位置，而用unset来删除则不会。</p>
-
-<p>不过作为上层应用开发者对于语言的具体实现不必要去研究，只要形象的知道这2种方法的不同就够了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1040,6 +1001,8 @@ foreach($arr as $k => $v) {
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/01/13/python-encoding/">Python-encoding</a>
+    
     <a class="list-group-item " href="/blog/2015/01/05/play-with-git/">玩弄git</a>
     
     <a class="list-group-item " href="/blog/2015/01/03/debug-shadowsocks/">调试shadowsocks</a>
@@ -1047,8 +1010,6 @@ foreach($arr as $k => $v) {
     <a class="list-group-item " href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
     
     <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
-    
-    <a class="list-group-item " href="/blog/2014/12/31/try-hhvm/">尝试hhvm</a>
     
   </div>
 </section>
@@ -1108,7 +1069,7 @@ foreach($arr as $k => $v) {
     
     
     <a class="list-group-item " href="/blog/categories/python/index.html">
-      <span class="badge">2</span>
+      <span class="badge">3</span>
       python
     </a>
     
@@ -1140,6 +1101,12 @@ foreach($arr as $k => $v) {
     <a class="list-group-item " href="/blog/categories/vagrant/index.html">
       <span class="badge">1</span>
       vagrant
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/tips/index.html">
+      <span class="badge">1</span>
+      tips
     </a>
     
   </div>

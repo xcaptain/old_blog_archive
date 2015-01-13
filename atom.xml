@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-05T23:55:50+00:00</updated>
+  <updated>2015-01-13T13:17:00+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Python-encoding]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/13/python-encoding/"/>
+    <updated>2015-01-13T00:06:21+00:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/13/python-encoding</id>
+    <content type="html"><![CDATA[<p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
+
+<p>在执行rake new_post的时候，突然提示</p>
+
+<pre>
+rake aborted!
+LoadError: cannot load such file -- bundler/setup
+/home/joey/octopress/Rakefile:2:in `<top (required)>'
+(See full trace by running task with --trace)
+</pre>
+
+
+<p>突然感觉很奇怪，前几天更新博客的时候都没有遇到这种情况，后来执行<code>rake --trace</code>的时候发现</p>
+
+<pre>
+/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/home/joey/octopress/Rakefile:2:in `<top (required)>'
+/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load'
+/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:689:in `raw_load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:94:in `block in load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
+/usr/lib/ruby/2.2.0/rake/application.rb:93:in `load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:77:in `block in run'
+/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
+/usr/lib/ruby/2.2.0/rake/application.rb:75:in `run'
+/usr/bin/rake:33:in `<main>'
+</pre>
+
+
+<p>原来是系统ruby的版本更新到2.2了，以前是2.1的，octopress用的是2.1的gem，也许是和2.2的ruby不兼容吧，所以要重装2.2的gem套系，执行<code>proxychains gem install bundle</code>，有经验了必须要通过代理才能访问rubygem网站，下载完之后需要把<code>/home/joey/.gem/ruby/2.2.0/bin</code>添加到环境变量中，因为我用的是fish，所以编辑<code>~/.config/fish/config.fish</code>就行了。然后用bundle安装完必要的依赖<code>proxychains bundle install</code>，下载一大堆gem，最后发现系统用的rake已经是10.4.2版的了，而配置文件中需要的还是10.4.0,手动编辑一下<code>Gemfile.lock</code>，把版本号改过来就行了。ruby管理gem果然是够麻烦的，而且小版本升级也这么麻烦。</p>
+
+<p>接下来就是说说今天写代码遇到的问题了。</p>
+
+<p>需求很简单（话说写采集需求都很明确），这回需要的是采集明星的信息，第一个方案用的是采集baidu整理的明星信息，过程很简单，写了一个简单的脚本采了900条数据，但是后来发现图片做了防盗链，采集过来的图片不是图片的绝对路径，而是通过一台服务器生成的图片，也许是做了cookie的限制或者是做了ip的限制，导致每次刷新页面的时候都会返回一个403错误，链接在<a href="http://www.baidu.com/s?wd=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8&amp;rsv_spt=1&amp;issp=1&amp;f=8&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=4&amp;rsv_sug4=83&amp;rsv_sug1=3&amp;rsv_pq=d5fdf7cd00002ac7&amp;rsv_t=975c0jUWTeYgIUYA%2FfdqSJ75f%2BipUP9QR9v8Qgqb2jzy3rnHgTU3k4rBD%2B5moP73i00p&amp;rsv_sug2=0&amp;inputT=5564">这里</a>，以后有时间也许会去看看这个防盗链的实现，但是现在我可懒得花时间去研究怎么破解这个限制，那就换别的站采集吧。</p>
+
+<p>和产品沟通了一下，他也觉得如果死扣baidu是不明智的选择，后来换成360整理的资源了，链接在<a href="http://www.haosou.com/s?ie=utf-8&amp;shb=1&amp;src=360sou_newhome&amp;q=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8">这里</a>，数据也比较明确，分成3栏：领域，地域，性别，这个分类还是比较好的，以后我们拿来查询也方便。通过chrome开发工具，找到了js的接口，简单分析了一下就知道要获取那块数据，接下来就是敲代码了，最后的代码下面可以看到。</p>
+
+<div><script src='https://gist.github.com/cbf9980f1b30b2467d8a.js?file=360_star.py'></script>
+<noscript><pre><code>#!/usr/bin/python
+# -*-coding: utf-8 -*-
+
+import requests
+from bs4 import BeautifulSoup
+import pinyin
+import mysql.connector
+import sys
+
+count_index = 0
+def make_query(base_url, arg1, arg2, arg3):
+    &#39;&#39;&#39;This function construct the real request address and returns the result&#39;&#39;&#39;
+    addInfo = &#39;field:%s|area:%s|sex:%s&#39; % (arg1, arg2, arg3)
+    payload = {
+        &#39;query&#39;: &#39;明星大全&#39;,
+        &#39;url&#39;: &#39;link&#39;,
+        &#39;type&#39;: &#39;star_card&#39;,
+        &#39;rank&#39;: &#39;1&#39;,
+        &#39;addInfo&#39;: addInfo,
+        &#39;d&#39;: &#39;pc&#39;,
+        &#39;jsonpTest&#39;: &#39;on&#39;,
+        &#39;_test&#39;: &#39;1&#39;,
+        &#39;_debug&#39;: &#39;0&#39;,
+        &#39;src&#39;: &#39;onebox&#39;,
+        &#39;tpl&#39;: &#39;1&#39;
+    }
+    header = {&#39;User-Agent&#39;: &#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#39;}
+    r = requests.get(base_url, params=payload)
+    return r
+
+def run():
+    global count_index
+    base_url = &#39;http://open.onebox.haosou.com/dataApi&#39;
+    field_list = [&#39;明星&#39;, &#39;歌手&#39;, &#39;演员&#39;, &#39;模特&#39;, &#39;主持人&#39;, &#39;导演&#39;]
+    area_list = [&#39;内地&#39;, &#39;香港&#39;, &#39;台湾&#39;, &#39;日本&#39;, &#39;韩国&#39;]
+    sex_list = [&#39;男&#39;, &#39;女&#39;]
+    conn = mysql.connector.connect(unix_socket=&#39;/run/mysqld/mysqld.sock&#39;, user=&#39;username&#39;, password=&#39;password&#39;, database=&#39;database&#39;, charset=&#39;utf8&#39;)
+    for field in field_list:
+        for area in area_list:
+            for sex in sex_list:
+                r = make_query(base_url, field, area, sex)
+                if r.status_code == 200:
+                    html_text = r.text
+                    soup = BeautifulSoup(html_text, from_encoding=&#39;utf-8&#39;)
+                    link_div = soup.find(&#39;div&#39;, {&#39;class&#39;: &#39;mh-datas&#39;})
+                    links = link_div.text.strip(&#39;,&#39;)
+                    links_list = links.split(&#39;,&#39;)
+                    name_div = soup.find(&#39;div&#39;, {&#39;class&#39;: &#39;mh-names&#39;})
+                    names = name_div.text.strip(&#39;,&#39;)
+                    names_list = names.split(&#39;,&#39;)
+                    write2db(conn, names_list, links_list, field, area, sex)
+                    print(count_index)
+                    count_index += 1
+    conn.close()
+
+def write2db(conn, names_list, links_list, field, area, sex):
+    cur = conn.cursor()
+    name_len = len(names_list)
+    link_len = len(links_list)
+    if name_len &lt;= link_len:
+        l = name_len
+    else:
+        l = link_len
+    for i in range(l):
+        try:
+            name = names_list[i]
+            name_py = pinyin.get(name)
+            link = links_list[i]
+            sql = &quot;insert into 360_star(name, name_py, pic_link, field, area, sex) values(%s, %s, %s, %s, %s, %s)&quot;
+            cur.execute(sql, (name, name_py, link,  field, area, sex))
+        except UnicodeEncodeError:
+            print(name)
+            continue
+    conn.commit()
+    cur.close()
+
+run()
+</code></pre></noscript></div>
+
+
+<p>在编码过程中遇到的问题有：
+1. 使用python3而不是python2，因为用2我没法解决编码问题。
+2. 使用了一个第三方的拼音库，能够把汉字转换成拼音，很不错，项目在<a href="http://lxyu.github.io/pinyin/">这里</a>
+3. 使用mysql-connector而不是MySQLdb，这实在是无奈之举，因为python3中没有MySQLdb，所以只好使用自带的mysql-connector
+4. 在使用mysql-connector连接数据库的时候发现一个问题，不能指定通过tcp的形式来连接，必须要用unix_socket，不知道为什么。</p>
+
+<p>现在太晚了，为了避免影响室友休息，所以先列一个提纲，明天有时间再来详细补上。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩弄git]]></title>
@@ -1073,45 +1208,6 @@ defaults = defaultConfig {
 <p>今天(2014年10月26日)，修改了一下xmonad的配置，加入了快捷键控制音量，自定义了几个快捷键来截图，加入了背景图，加入了xmonar的配置。以前一直没设置背景图导致每次开机之后都是一片黑的背景，现在漂亮多了。xmobar是从arckwiki上面找来的配置，很不错的一个状态栏，包含了cpu使用率，内存使用率，网络使用率等。</p>
 
 <p>不过还是有点缺陷的，不能给每个桌面分配一个背景图真是遗憾，不然这样就漂亮了，用图片来标识各个桌面的作用。haskell还在学习中，将来还有得改的。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Php-array-splice]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/09/02/php-array-splice/"/>
-    <updated>2014-09-02T14:21:55+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/09/02/php-array-splice</id>
-    <content type="html"><![CDATA[<p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
-一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
-
-<p>我的思路是把要过滤的数据都放到一个叫做<code>$filterGames</code>的数组里面，所有的数据存放在<code>$arr</code>这个数组里。
-因为要用php实现，没有现成的方法，随便写了一个线性复杂度的算法，挨个检测<code>in_array</code>，然后用<code>array_splice</code>这个
-函数来删除元素。本来思路是很简单的，但是就是得不到我要的结果。具体代码如下：
-<code>
-foreach($arr as $k => $v) {
-    if(in_array($v, $filterGames)) {
-        array_splice($arr, $k, 1)
-    }
-}
-return $arr;
-</code>
-结果总是过滤了部分数据但是还有部分不能过滤。</p>
-
-<p>今天发现问题之后我改了一下，用的是<code>unset</code>这个方法。
-<code>
-foreach($arr as $k => $v) {
-    if(in_array($v, $filterGames)) {
-        unset($arr[$k]);
-    }
-}
-</code>
-本来我应该用array_splice来删除数组元素的，因为这个方法不会在数组中留下一个洞，而unset把元素删了之后会留下一个洞，导致
-没法通过数组的key来遍历。至于为什么array_splice只能过滤部分数据而unset可以全部过滤掉也是因为当使用array_splice的时候
-删了一个元素后面的元素会往前面挤，导致错过了被删的机会。而unset则是删了一个元素之后就留出了一个洞，整个数组的结构不变。
-我觉得php的数组应该是用链表来实现的，在每个节点中有一个字段记录了当前节点相对于首节点的位置，如果用array_splice来删除
-节点，会重写每个节点的这个相对位置，而用unset来删除则不会。</p>
-
-<p>不过作为上层应用开发者对于语言的具体实现不必要去研究，只要形象的知道这2种方法的不同就够了。</p>
 ]]></content>
   </entry>
   
