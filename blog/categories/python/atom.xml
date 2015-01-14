@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-14T00:19:47+00:00</updated>
+  <updated>2015-01-14T00:21:00+00:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Python-encoding]]></title>
+    <title type="html"><![CDATA[Python2编码问题]]></title>
     <link href="http://xcaptain.github.io/blog/2015/01/13/python-encoding/"/>
     <updated>2015-01-13T00:06:21+00:00</updated>
     <id>http://xcaptain.github.io/blog/2015/01/13/python-encoding</id>
