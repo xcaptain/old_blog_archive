@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Shell | Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/blog/categories/shell/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-14T00:21:00+00:00</updated>
+  <updated>2015-01-20T23:28:45+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[使用fish]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/31/use-fish-shell/"/>
-    <updated>2014-08-31T14:43:17+00:00</updated>
+    <updated>2014-08-31T22:43:17+08:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/31/use-fish-shell</id>
     <content type="html"><![CDATA[<p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
 从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。

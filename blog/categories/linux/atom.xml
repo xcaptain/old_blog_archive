@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-14T00:21:00+00:00</updated>
+  <updated>2015-01-20T23:28:45+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -14,10 +14,32 @@
 
   
   <entry>
+    <title type="html"><![CDATA[使用btsync]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/20/use-btsync/"/>
+    <updated>2015-01-20T18:18:25+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/20/use-btsync</id>
+    <content type="html"><![CDATA[<p><meta charset="UTF-8"/>
+昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
+
+<p>但是遇到了一个有点麻烦的问题，在最初我能够脸上p2p网络，并且找到了供源的机器，但是就是没法和他们同步，总是提示和另一方时间偏差太大无法同步，搜了一下发现是系统时间设置的问题，通过<a href="https://wiki.archlinux.org/index.php/Time">wiki</a>又好好了解了一下linux的时间机制。</p>
+
+<p>linux上的时间包括2种，一是硬件时间，另一个是系统时间。</p>
+
+<ol>
+<li><p>硬件时间：(Real Time Clock, RTC)是由机器硬件记录的时间，根据<a href="http://www.tldp.org/LDP/sag/html/hw-sw-clocks.html">tldp</a>的说法，个人电脑都内建了一块独立的电池，来给一个时钟供电，这个时钟可以通过BIOS来设置，或者开机之后通过操作系统来设置。</p></li>
+<li><p>系统时间:(software clock)，这个时间是由linux内核来设置的。在系统中存放着一个叫做<code>/etc/adjtime</code>的配置文件，我本机这个文件是7月份创建的，也就是我上次重装系统的时间，是linux的初始系统时间，之后linux估计用了某种还不清楚的手段，每次开机都会更新最新的系统时间。</p></li>
+</ol>
+
+
+<p>我的问题就是系统时间和硬件时间不一致，估计是因为双系统和windows共存导致的，解决方法就是通过执行<code>sudo hwclock --systz</code>来把系统时间和硬件时间都和本地时区的时间对齐。时区配置文件是<code>/etc/localtime</code>这个文件可以通过<code>timedatectl</code>命令来设置，也可以手动建立到<code>/usr/share/zoneinfo/Asia/Hong_Kong</code>的软链接，或者是直接复制<code>/usr/share/zoneinfo/Hong_Kong</code>到<code>/etc/localtime</code>来设置。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[调试shadowsocks]]></title>
-    <link href="http://xcaptain.github.io/blog/2015/01/03/debug-shadowsocks/"/>
-    <updated>2015-01-03T23:16:58+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2015/01/03/debug-shadowsocks</id>
+    <link href="http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks/"/>
+    <updated>2015-01-04T07:16:58+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks</id>
     <content type="html"><![CDATA[<p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
 
 <p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
@@ -83,7 +105,7 @@ nameserver 8.8.4.4
   <entry>
     <title type="html"><![CDATA[部署邮件服务]]></title>
     <link href="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service/"/>
-    <updated>2015-01-03T00:43:43+00:00</updated>
+    <updated>2015-01-03T08:43:43+08:00</updated>
     <id>http://xcaptain.github.io/blog/2015/01/03/deploy-email-service</id>
     <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
 
@@ -108,7 +130,7 @@ nameserver 8.8.4.4
   <entry>
     <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
     <link href="http://xcaptain.github.io/blog/2015/01/01/arch-pacman-broken/"/>
-    <updated>2015-01-01T11:35:23+00:00</updated>
+    <updated>2015-01-01T19:35:23+08:00</updated>
     <id>http://xcaptain.github.io/blog/2015/01/01/arch-pacman-broken</id>
     <content type="html"><![CDATA[<p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
 
@@ -152,9 +174,9 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
   
   <entry>
     <title type="html"><![CDATA[尝试hhvm]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/12/31/try-hhvm/"/>
-    <updated>2014-12-31T16:10:28+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/12/31/try-hhvm</id>
+    <link href="http://xcaptain.github.io/blog/2015/01/01/try-hhvm/"/>
+    <updated>2015-01-01T00:10:28+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/01/try-hhvm</id>
     <content type="html"><![CDATA[<p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
 
 <p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
@@ -162,32 +184,6 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
 <p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
 
 <p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Redis崩溃]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/11/02/redis-crash/"/>
-    <updated>2014-11-02T00:36:37+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/11/02/redis-crash</id>
-    <content type="html"><![CDATA[<p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
-
-<p>telnet上redis服务器去查看了一下，也就10万+的key，按理来说不应该这么慢。后来事故达到高峰期了，好几个站出现502了，这时候运维报告redis服务器网卡io达到峰值，太恐怖了，服务器使用的是1000Mbps的网卡，每秒钟redis读写超过1G了，怎么会这样？这时候看来就好理解之前netstat的结果了，既然网卡达到上限了，肯定服务器就不能即使返回请求。</p>
-
-<p>redis读写过高我们分析可能原因是写入了很巨大的key，在redis里面monitor了一下最近的读写状况，发现大部分都是get一些很小的key，一般都是一些比较小的数组，既没有缓存文件，也没有缓存大段的页面，那么为什么会出现流量过高呢？我觉得很大的原因是redis真的出现性能问题了，如果性能下降了的话，而请求数又没变，也是会导致time_wait的。其实我早就发现我们现在编码很不规范，redis有5种数据结构，但是在大部分业务中都只用到了1种数据结构，也就是字符串。不得不说这是一个很傻的设计。在10几万的key中get一个key得有多慢，如果设计一些hash表，把不同的key存到hash里面，那么可以大大的提高redis的性能，毕竟redis的key大大的减少了，而在hash表里面查询某个key的值还是比较快的。肯定比在redis库里查询快。不过知道问题所在不意味着我们会去改，现在开发人员本来就少，但是新的项目一个接一个。目前简单测试了一下没问题就上线了，根本没有考虑过代码的性能问题，没有人审核代码，没有人压力测试代码，在开发的时候怎么省事怎么来，之前别人写的方法copy过来直接用，也不管之前的代码和现在的代码处理的问题有多不同，只要能用那就可以。</p>
-
-<p>这也是没办法的办法，可以做的不多，后来他们把一些代码的缓存时间缩短了，这样就不会有太多的key留在内存中，减少key的数量之后大概能加快一点查询效率。而且他们还审查了一部分代码，我看了他们找的一个文件，有个程序会一次性请求7个接口获得一大堆数据，但是真正有用的只是其中一部分，后来他们优化了一下，在取数据之前加了一些判断来觉得到底去取哪个数据。看起来效果挺明显的，至少这个文件的请求就少了7倍。</p>
-
-<p>顺便再来总结一下netstat(network statistics)的用法吧，用它来监控网络状况挺好的。
-1. 直接执行<code>netstat</code>，会输出当前所有的连接。
-2. <code>netstat -a</code>，输出所有的连接，和<code>netstat</code>的结果一样。
-3. <code>netstat -t</code>，列出所有的tcp连接。
-4. <code>netstat -i</code>，列出当前所有的网络接口，比如说我的笔记本有3个接口，一块以太网卡，一块无线网卡，一个回环接口。
-5. <code>netstat -s</code>，列出当前所有协议的统计状态，包括tcp, ip, udp, icmp等。
-6. <code>netstat -p</code>，列出进程名以及对应的pid。
-7. <code>netstat -r</code>，列出当前的路由表。</p>
-
-<p>主要得分析一下<code>netstat -a</code>的输出，这个连接状态太多了，得好好研究一下。</p>
 ]]></content>
   </entry>
   

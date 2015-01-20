@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-14T00:21:00+00:00</updated>
+  <updated>2015-01-20T23:28:45+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[调试discuz（一）]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/11/01/debug-discuz-1/"/>
-    <updated>2014-11-01T23:40:57+00:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/11/01/debug-discuz-1</id>
+    <link href="http://xcaptain.github.io/blog/2014/11/02/debug-discuz-1/"/>
+    <updated>2014-11-02T07:40:57+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/02/debug-discuz-1</id>
     <content type="html"><![CDATA[<p>现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。</p>
 
 <p>我以前从没有接触过discuz，第一次碰到感觉压力很大，什么数据字典，缓存结构，插件机制，模板机制我都不懂，最初他们只叫我做了一点简单的部署问题，比如改个nginx的rewrite规则，改个简单的模板样式，不过渐渐的麻烦的任务也来了。</p>
@@ -33,7 +33,7 @@
   <entry>
     <title type="html"><![CDATA[Php-array-splice]]></title>
     <link href="http://xcaptain.github.io/blog/2014/09/02/php-array-splice/"/>
-    <updated>2014-09-02T14:21:55+00:00</updated>
+    <updated>2014-09-02T22:21:55+08:00</updated>
     <id>http://xcaptain.github.io/blog/2014/09/02/php-array-splice</id>
     <content type="html"><![CDATA[<p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
 一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
@@ -72,7 +72,7 @@ foreach($arr as $k => $v) {
   <entry>
     <title type="html"><![CDATA[一个php分页示例]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example/"/>
-    <updated>2014-08-16T09:26:45+00:00</updated>
+    <updated>2014-08-16T17:26:45+08:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/16/a-php-pagination-example</id>
     <content type="html"><![CDATA[<p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
 对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是

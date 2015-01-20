@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Unix | Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/blog/categories/unix/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-14T00:21:00+00:00</updated>
+  <updated>2015-01-20T23:28:45+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Freebsd-basic-operations]]></title>
     <link href="http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations/"/>
-    <updated>2014-08-16T14:04:13+00:00</updated>
+    <updated>2014-08-16T22:04:13+08:00</updated>
     <id>http://xcaptain.github.io/blog/2014/08/16/freebsd-basic-operations</id>
     <content type="html"><![CDATA[<p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
 很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理

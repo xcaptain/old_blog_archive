@@ -117,7 +117,409 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-02T14:21:55+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-02</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-08T12:12:48+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-08</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/08/my-xmonad-config/" itemprop="url">我的xmonad配置</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>xmonad是用haskell写的一个窗口管理器。所谓的窗口管理器和桌面环境最大的区别大概就是轻量和重量的区别吧。
+之前用过gnome3, unity, kde4, xfce4等桌面环境，感觉功能和配置都差不多，而且额外安装了太多不必要的东西，
+而且还很耗费系统资源。上个月在tumblr看到了某个人的xmonad桌面截图，感觉特别cool，所以开始折腾xmonad，不过
+刚开始接触这种窗口管理器还是比较费劲的。</p>
+
+<p>首先得安装xmonad，我现在用的是archlinux64位版本。可以用<code>sudo pacman -S xmonad</code>，安装好了可以执行<code>xmonad --version</code>
+看看版本，我的事0.11的版本。每次启动xmonad的时候都会从<code>~/.xmonad/</code>里面读取配置，所以安装完了之后还得检查一下
+是否自动生成了这个目录，一般安装成功之后都会出现的。</p>
+
+<p>然后就是配置桌面管理器了，因为我之前用的是gnome3的桌面环境，所以默认使用的桌面管理器是gdm，我如果要在登陆的时候
+选择进入那个桌面环境就得把这个地方配置好。首先增加一条xmonad的入口配置：</p>
+
+<pre>
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Xmonad
+Comment=Lightweight X11 tiled window manager written in Haskell
+Exec=xmonad
+Icon=xmonad
+Terminal=false
+StartupNotify=false
+Categories=Application;
+</pre>
+
+
+<p>登出系统，然后在登陆界面就会出现xmonad的选项了。默认登陆进去应该是黑乎乎一片，因为就开启了一个wm，什么应用都没有
+开。这时候可以输入<code>Alt Shift Return</code>，如果一切正常的话这个快捷键会打开一个终端。ok，有了终端一切都ok了，可以想做任何
+在linux都可以执行的操作，比如说打开pidgin聊天，firefox上网，thunderbird读邮件啊。</p>
+
+<p>不过默认的配置确实不好用，还是得上网搜点优化了的配置，</p>
+
+<pre>
+--
+-- xmonad example config file.
+--
+-- A template showing all available configuration hooks,
+-- and how to override the defaults in your own xmonad.hs conf file.
+--
+-- Normally, you'd only override those defaults you care about.
+--
+
+import XMonad
+import XMonad.Util.Run(spawnPipe)
+import Data.Monoid
+import System.Exit
+
+import qualified XMonad.StackSet as W
+import qualified Data.Map        as M
+
+-- The preferred terminal program, which is used in a binding below and by
+-- certain contrib modules.
+--
+myTerminal      = "urxvt"
+--myTerminal      = "gnome-terminal"
+
+-- Whether focus follows the mouse pointer.
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = True
+
+-- Whether clicking on a window to focus also passes the click to the window
+myClickJustFocuses :: Bool
+myClickJustFocuses = False
+
+-- Width of the window border in pixels.
+--
+myBorderWidth   = 1
+
+-- modMask lets you specify which modkey you want to use. The default
+-- is mod1Mask ("left alt").  You may also consider using mod3Mask
+-- ("right alt"), which does not conflict with emacs keybindings. The
+-- "windows key" is usually mod4Mask.
+--
+myModMask       = mod4Mask
+
+-- The default number of workspaces (virtual screens) and their names.
+-- By default we use numeric strings, but any string may be used as a
+-- workspace name. The number of workspaces is determined by the length
+-- of this list.
+--
+-- A tagging example:
+--
+-- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
+--
+myWorkspaces = ["1:term","2:code","3:web","4:media"] ++ map show [5..9]
+
+-- Border colors for unfocused and focused windows, respectively.
+--
+myNormalBorderColor  = "#7c7c7c"
+myFocusedBorderColor = "#ffb6b0"
+
+------------------------------------------------------------------------
+-- Key bindings. Add, modify or remove key bindings here.
+--
+myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
+
+    -- launch a terminal
+    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+
+    -- launch dmenu
+    --, ((modm               ,xK_p     ), spawn "dmenu-with-yeganesh")
+    , ((modm                ,xK_p     ), spawn "dmenu_run -nb black")
+
+    -- launch firefox
+    , ((modm                ,xK_f     ), spawn "firefox")
+
+    -- launch chromium
+    , ((modm                ,xK_h     ), spawn "chromium")
+
+    -- launch thunderbird
+    , ((modm                ,xK_t     ), spawn "thunderbird")
+
+    -- lock screen
+    , ((modm .|. controlMask, xK_l), spawn "xscreensaver-command -lock")
+
+    -- screenshoot
+    , ((modm, xK_s), spawn "select-screenshoot")
+
+    -- grab the whole screen
+    , ((modm .|. controlMask, xK_p), spawn "screenshoot")
+
+    -- Mute volume
+    , ((modm .|. controlMask, xK_m), spawn "amixer -q set Master toggle")
+
+    -- Decrease volume
+    , ((modm .|. controlMask, xK_j), spawn "amixer -q set Master 10%-")
+
+    -- Increase volume
+    , ((modm .|. controlMask, xK_k), spawn "amixer -q set Master 10%+")
+
+    -- close focused window
+    , ((modm .|. shiftMask, xK_c     ), kill)
+
+     -- Rotate through the available layout algorithms
+    , ((modm,               xK_space ), sendMessage NextLayout)
+
+    --  Reset the layouts on the current workspace to default
+    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+
+    -- Resize viewed windows to the correct size
+    , ((modm,               xK_n     ), refresh)
+
+    -- Move focus to the next window
+    , ((modm,               xK_Tab   ), windows W.focusDown)
+
+    -- Move focus to the next window
+    , ((modm,               xK_j     ), windows W.focusDown)
+
+    -- Move focus to the previous window
+    , ((modm,               xK_k     ), windows W.focusUp  )
+
+    -- Move focus to the master window
+    , ((modm,               xK_m     ), windows W.focusMaster  )
+
+    -- Swap the focused window and the master window
+    , ((modm,               xK_Return), windows W.swapMaster)
+
+    -- Swap the focused window with the next window
+    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
+
+    -- Swap the focused window with the previous window
+    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
+
+    -- Shrink the master area
+    , ((modm,               xK_h     ), sendMessage Shrink)
+
+    -- Expand the master area
+    , ((modm,               xK_l     ), sendMessage Expand)
+
+    -- Push window back into tiling
+    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
+
+    -- Increment the number of windows in the master area
+    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
+
+    -- Deincrement the number of windows in the master area
+    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
+
+    -- Toggle the status bar gap
+    -- Use this binding with avoidStruts from Hooks.ManageDocks.
+    -- See also the statusBar function from Hooks.DynamicLog.
+    --
+    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+
+    -- Quit xmonad
+    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
+
+    -- Restart xmonad
+    , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+
+    -- Run xmessage with a summary of the default keybindings (useful for beginners)
+--    , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
+    ]
+    ++
+
+    --
+    -- mod-[1..9], Switch to workspace N
+    -- mod-shift-[1..9], Move client to workspace N
+    --
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+    ++
+
+    --
+    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
+    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
+    --
+    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+
+------------------------------------------------------------------------
+-- Mouse bindings: default actions bound to mouse events
+--
+myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
+
+    -- mod-button1, Set the window to floating mode and move by dragging
+    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
+                                       >> windows W.shiftMaster))
+
+    -- mod-button2, Raise the window to the top of the stack
+    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+
+    -- mod-button3, Set the window to floating mode and resize by dragging
+    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
+                                       >> windows W.shiftMaster))
+
+    -- you may also bind events to the mouse scroll wheel (button4 and button5)
+    ]
+
+------------------------------------------------------------------------
+-- Layouts:
+
+-- You can specify and transform your layouts by modifying these values.
+-- If you change layout bindings be sure to use 'mod-shift-space' after
+-- restarting (with 'mod-q') to reset your layout state to the new
+-- defaults, as xmonad preserves your old layout settings by default.
+--
+-- The available layouts.  Note that each layout is separated by |||,
+-- which denotes layout choice.
+--
+myLayout = tiled ||| Mirror tiled ||| Full
+  where
+     -- default tiling algorithm partitions the screen into two panes
+     tiled   = Tall nmaster delta ratio
+
+     -- The default number of windows in the master pane
+     nmaster = 1
+
+     -- Default proportion of screen occupied by master pane
+     ratio   = 1/2
+
+     -- Percent of screen to increment by when resizing panes
+     delta   = 3/100
+
+
+------------------------------------------------------------------------
+-- Window rules:
+
+-- Execute arbitrary actions and WindowSet manipulations when managing
+-- a new window. You can use this to, for example, always float a
+-- particular program, or have a client always appear on a particular
+-- workspace.
+--
+-- To find the property name associated with a program, use
+-- > xprop | grep WM_CLASS
+-- and click on the client you're interested in.
+--
+-- To match on the WM_NAME, you can use 'title' in the same way that
+-- 'className' and 'resource' are used below.
+--
+myManageHook = composeAll
+    [ className =? "Urxvt"          --> doShift "1:term"
+    , className =? "Chromium"       --> doShift "3:web"
+    , className =? "Google-chrome"  --> doShift "3:web"
+    , className =? "Firefox"        --> doShift "3:web"
+    , className =? "Emacs"          --> doShift "2:code"
+    , className =? "Gvim"           --> doShift "2:code"
+    , className =? "Vlc"            --> doShift "4:media"
+    , className =? "Weechat"        --> doShift "4:media"
+    , className =? "Pidgin"         --> doShift "4:media"
+    , className =? "ThunderBird"    --> doShift "4:media"
+    , resource  =? "desktop_window" --> doIgnore
+    , className =? "Galculator"     --> doFloat
+    , className =? "Steam"          --> doFloat
+    , className =? "Gimp"           --> doFloat
+    , resource  =? "gpicview"       --> doFloat
+    , className =? "MPlayer"        --> doFloat
+    , className =? "Xchat"          --> doShift "4:media"
+    , className =? "stalonetray"    --> doIgnore]
+
+
+
+------------------------------------------------------------------------
+-- Event handling
+
+-- * EwmhDesktops users should change this to ewmhDesktopsEventHook
+--
+-- Defines a custom handler function for X Events. The function should
+-- return (All True) if the default handler is to be run afterwards. To
+-- combine event hooks use mappend or mconcat from Data.Monoid.
+--
+myEventHook = mempty
+
+------------------------------------------------------------------------
+-- Status bars and logging
+
+-- Perform an arbitrary action on each internal state change or X event.
+-- See the 'XMonad.Hooks.DynamicLog' extension for examples.
+--
+myLogHook = return ()
+
+------------------------------------------------------------------------
+-- Startup hook
+
+-- Perform an arbitrary action each time xmonad starts or is restarted
+-- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
+-- per-workspace layout choices.
+--
+-- By default, do nothing.
+myStartupHook = return ()
+
+------------------------------------------------------------------------
+-- Now run xmonad with all the defaults we set up.
+
+-- Run xmonad with the settings you specify. No need to modify this.
+--
+main = do
+     xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
+     xmproc <- spawnPipe "feh --bg-fill ~/.xmonad/colorNana.png"
+     xmonad $ defaults
+
+-- A structure containing your configuration settings, overriding
+-- fields in the default config. Any you don't override, will
+-- use the defaults defined in xmonad/XMonad/Config.hs
+--
+-- No need to modify this.
+--
+defaults = defaultConfig {
+      -- simple stuff
+        terminal           = myTerminal,
+        focusFollowsMouse  = myFocusFollowsMouse,
+        clickJustFocuses   = myClickJustFocuses,
+        borderWidth        = myBorderWidth,
+        modMask            = myModMask,
+        workspaces         = myWorkspaces,
+        normalBorderColor  = myNormalBorderColor,
+        focusedBorderColor = myFocusedBorderColor,
+
+      -- key bindings
+        keys               = myKeys,
+        mouseBindings      = myMouseBindings,
+
+      -- hooks, layouts
+        layoutHook         = myLayout,
+        manageHook         = myManageHook,
+        handleEventHook    = myEventHook,
+        logHook            = myLogHook,
+        startupHook        = myStartupHook
+    }
+</pre>
+
+
+<p>今天(2014年10月26日)，修改了一下xmonad的配置，加入了快捷键控制音量，自定义了几个快捷键来截图，加入了背景图，加入了xmonar的配置。以前一直没设置背景图导致每次开机之后都是一片黑的背景，现在漂亮多了。xmobar是从arckwiki上面找来的配置，很不错的一个状态栏，包含了cpu使用率，内存使用率，网络使用率等。</p>
+
+<p>不过还是有点缺陷的，不能给每个桌面分配一个背景图真是遗憾，不然这样就漂亮了，用图片来标识各个桌面的作用。haskell还在学习中，将来还有得改的。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-02T22:21:55+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-02</time>
         
       </p>
     
@@ -182,7 +584,7 @@ foreach($arr as $k => $v) {
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-31T14:43:17+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-31</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-31T22:43:17+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-31</time>
         
       </p>
     
@@ -257,7 +659,7 @@ end
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-25T15:32:42+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-25</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-25T23:32:42+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-25</time>
         
       </p>
     
@@ -321,7 +723,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-21T15:50:42+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-21</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-21T23:50:42+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-21</time>
         
       </p>
     
@@ -387,7 +789,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T14:04:13+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T22:04:13+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
         
       </p>
     
@@ -459,7 +861,7 @@ swap ctrl and caplock,然后就ok了，新的键盘不是很习惯，慢慢来�
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T09:26:45+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-16T17:26:45+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-16</time>
         
       </p>
     
@@ -606,7 +1008,7 @@ class BaseFunction {
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-12T14:28:53+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-12</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-12T22:28:53+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-12</time>
         
       </p>
     
@@ -683,7 +1085,7 @@ $data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-11T15:43:02+00:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-11</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-11T23:43:02+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-11</time>
         
       </p>
     
@@ -736,15 +1138,15 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
+    
     <a class="list-group-item " href="/blog/2015/01/13/python-encoding/">Python2编码问题</a>
     
-    <a class="list-group-item " href="/blog/2015/01/05/play-with-git/">玩弄git</a>
+    <a class="list-group-item " href="/blog/2015/01/06/play-with-git/">玩弄git</a>
     
-    <a class="list-group-item " href="/blog/2015/01/03/debug-shadowsocks/">调试shadowsocks</a>
+    <a class="list-group-item " href="/blog/2015/01/04/debug-shadowsocks/">调试shadowsocks</a>
     
     <a class="list-group-item " href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
-    
-    <a class="list-group-item " href="/blog/2015/01/01/arch-pacman-broken/">解决pacman依赖关系破裂问题</a>
     
   </div>
 </section>
@@ -780,7 +1182,7 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">9</span>
+      <span class="badge">10</span>
       linux
     </a>
     
@@ -798,7 +1200,7 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     
     
     <a class="list-group-item " href="/blog/categories/fun/index.html">
-      <span class="badge">2</span>
+      <span class="badge">3</span>
       fun
     </a>
     

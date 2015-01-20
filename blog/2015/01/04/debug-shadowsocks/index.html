@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>调试shadowsocks - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks">
+  <meta property="og:title" content="调试shadowsocks - Joey's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Joey's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a rel="index" href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+                <li >
+                    <a  href="/blog/categories/linux">Linux</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <form class="search navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+                            <input type="hidden" name="q" value="site:xcaptain.github.io">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="q" placeholder="Search">
+                            </div>
+                        </form>
+                    </li>
+                
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+      </header>
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://xcaptain.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-04T07:16:58+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-04</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        调试shadowsocks
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
+
+<p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
+
+<p>笔记本没法翻墙是什么问题呢？试了一下手机，用fqrouter是没问题的，那就说明服务器端是没问题的，好吧，在客户端上找原因。</p>
+
+<p>之前安装的客户端是nodejs版的，一直都这么用感觉没什么问题，现在我就打算换个客户端版本，试试python的。安装也很简单，但是就是上不了网，真是郁闷。没办法了，慢慢来调试找问题吧。我在服务器端和客户端都开启了-v参数，用来详细输出日志。</p>
+
+<ol>
+<li><p>用fqrouter访问的时候，服务器端输出：
+ <pre>
+ 2015-01-03 08:48:07 INFO: accept a connection.
+ 2015-01-03 08:48:07 INFO: connect to: 106.162.216.94:443
+ 2015-01-03 08:48:07 INFO: asyncns resolved.
+ 2015-01-03 08:48:07 INFO: remote connected.
+ </pre>
+ 看来这是正常连接，返回数据也正常。</p></li>
+<li><p>本地用firefox访问google，服务器端输出：
+ <pre>
+ 2015-01-03 08:49:56 INFO: accept a connection.
+ 2015-01-03 08:49:56 INFO: connect to: plus.google.com:443
+ 2015-01-03 08:50:16 INFO: asyncns resolved.
+ 2015-01-03 08:50:16 ERROR: getaddrinfo: Operation now in progress
+ 2015-01-03 08:50:16 INFO: current server connection: 2
+ </pre>
+ 这就是失败的连接在服务器的日志了，只看到一行错误，搞不懂原因。</p></li>
+<li><p>在服务器端执行<code>netstat -naltp | grep 8388</code>的输出：
+ <pre>
+ tcp        0      0 111.222.231.123:8388    0.0.0.0:*               LISTEN      1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29403     ESTABLISHED 1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29406     ESTABLISHED 1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29402     TIME_WAIT   -
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29400     TIME_WAIT   -
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29401     TIME_WAIT   -
+ </pre>
+ 本地可以连接服务器的端口，那为什么没有数据返回呢？</p></li>
+<li><p>在本地执行<code>netstat -naltp | grep 1080</code>的输出：
+ <pre>
+ tcp        0      0 127.0.0.1:1080          0.0.0.0:*               LISTEN      732/python
+ tcp        0      0 127.0.0.1:45312         127.0.0.1:1080          ESTABLISHED 744/firefox
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45312         ESTABLISHED 732/python
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45307         TIME_WAIT   -
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45309         TIME_WAIT   -
+ </pre>
+ 看来浏览器和本地端口之间也是通的。</p></li>
+</ol>
+
+
+<p>本地应用可以连接本地的端口，本地的端口可以连接服务器，为什么就是没有数据呢？不会调试web程序，不会抓包，这时候只能乱猜原因，一下午都没有想通问题，就在我想要发帖求助的时候，想了一下为什么用fqrouter的时候服务器端接收到的是一个ip，而本地客户端连接服务器的时候就是一个域名，也许dns出问题了，试了一下<code>ping www.google.com</code>，果然不通，问题找到了，虚拟机提供商这个机房的dns昨晚出问题了，导致解析失败，添加一个第三方的dns，问题解决。</p>
+
+<p><code>vi /etc/resolvconf/resolv.conf.d/base</code>添加下面2行</p>
+
+<pre>
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</pre>
+
+
+<p>然后执行<code>resolvconf -u</code>刷新dns，这样就能使用google的dns了。</p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
+          
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
+          
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-04T07:16:58+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-04</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks/" data-via="" data-counturl="http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2015/01/03/deploy-email-service/" title="Previous Post: 部署邮件服务">&laquo; 部署邮件服务</a></li>
+            
+            
+            <li class="next"><a href="/blog/2015/01/06/play-with-git/" title="Next Post: 玩弄git">玩弄git &raquo;</a></li>
+            
+          </ul>
+        
+      </footer>
+    </article>
+    
+  </div>
+
+  
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/13/python-encoding/">Python2编码问题</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/06/play-with-git/">玩弄git</a>
+    
+    <a class="list-group-item active" href="/blog/2015/01/04/debug-shadowsocks/">调试shadowsocks</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/03/deploy-email-service/">部署邮件服务</a>
+    
+  </div>
+</section>
+
+
+
+
+
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    
+    
+    <a class="list-group-item " href="/blog/categories/octopress/index.html">
+      <span class="badge">1</span>
+      octopress
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/web/index.html">
+      <span class="badge">5</span>
+      web
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/php/index.html">
+      <span class="badge">3</span>
+      php
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/unix/index.html">
+      <span class="badge">1</span>
+      unix
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/linux/index.html">
+      <span class="badge">10</span>
+      linux
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/shell/index.html">
+      <span class="badge">1</span>
+      shell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/haskell/index.html">
+      <span class="badge">2</span>
+      haskell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/fun/index.html">
+      <span class="badge">3</span>
+      fun
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/python/index.html">
+      <span class="badge">3</span>
+      python
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs/index.html">
+      <span class="badge">1</span>
+      emacs
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/virtualization/index.html">
+      <span class="badge">2</span>
+      virtualization
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/git/index.html">
+      <span class="badge">1</span>
+      git
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/docker/index.html">
+      <span class="badge">1</span>
+      docker
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/vagrant/index.html">
+      <span class="badge">1</span>
+      vagrant
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/tips/index.html">
+      <span class="badge">1</span>
+      tips
+    </a>
+    
+  </div>
+</section>
+
+    
+  </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2015 - joey<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
+
+  </body>
+</html>
