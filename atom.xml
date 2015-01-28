@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-28T23:17:29+08:00</updated>
+  <updated>2015-01-28T23:20:32+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -23,19 +23,23 @@
 
 <p>目前的计划还是慢慢来学习ruby on rails，所以空闲时间就做点有意思的事情了。现在来记录一下eww的用法，以后便于查阅，熟能生巧。eww的文档可以通过emacs自身来查看，现在就来总结一下emacs文档里对eww的介绍，我都是通过<code>C-h r</code>来打开emacs自带的info然后查找到eww的章节然后开始看的。</p>
 
-<p>基本操作：
-1. <code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。
-2. <code>l</code> 回到上一个页面，回退。
-3. <code>r</code> 回到下一个页面，回进。
-4. <code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。
-5. <code>g</code> 刷新当前页面。
-6. <code>w</code> 复制当前url到剪切板。
-7. <code>H</code> 查看历史记录。
-8. <code>b</code> 添加书签。
-9. <code>B</code> 查看书签。
-10. <code>&amp;</code> 调用外部浏览器打开当前url。
-11. <code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。
-12. <code>C</code> 查看所有存在的cookie</p>
+<p>基本操作：</p>
+
+<ol>
+<li><code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。</li>
+<li><code>l</code> 回到上一个页面，回退。</li>
+<li><code>r</code> 回到下一个页面，回进。</li>
+<li><code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。</li>
+<li><code>g</code> 刷新当前页面。</li>
+<li><code>w</code> 复制当前url到剪切板。</li>
+<li><code>H</code> 查看历史记录。</li>
+<li><code>b</code> 添加书签。</li>
+<li><code>B</code> 查看书签。</li>
+<li><code>&amp;</code> 调用外部浏览器打开当前url。</li>
+<li><code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。</li>
+<li><code>C</code> 查看所有存在的cookie</li>
+</ol>
+
 
 <p>上面这些东西都可以查看文档得到，比较没有营养，还是学习新东西有意思。</p>
 ]]></content>
