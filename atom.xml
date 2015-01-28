@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-01-20T23:28:45+08:00</updated>
+  <updated>2015-01-28T23:17:29+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,34 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[学习emacs-eww]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/01/28/emacs-eww/"/>
+    <updated>2015-01-28T22:50:06+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/28/emacs-eww</id>
+    <content type="html"><![CDATA[<p>最近一段时间比较无聊，<a href="http://www.iyue.club">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。
+而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
+
+<p>目前的计划还是慢慢来学习ruby on rails，所以空闲时间就做点有意思的事情了。现在来记录一下eww的用法，以后便于查阅，熟能生巧。eww的文档可以通过emacs自身来查看，现在就来总结一下emacs文档里对eww的介绍，我都是通过<code>C-h r</code>来打开emacs自带的info然后查找到eww的章节然后开始看的。</p>
+
+<p>基本操作：
+1. <code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。
+2. <code>l</code> 回到上一个页面，回退。
+3. <code>r</code> 回到下一个页面，回进。
+4. <code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。
+5. <code>g</code> 刷新当前页面。
+6. <code>w</code> 复制当前url到剪切板。
+7. <code>H</code> 查看历史记录。
+8. <code>b</code> 添加书签。
+9. <code>B</code> 查看书签。
+10. <code>&amp;</code> 调用外部浏览器打开当前url。
+11. <code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。
+12. <code>C</code> 查看所有存在的cookie</p>
+
+<p>上面这些东西都可以查看文档得到，比较没有营养，还是学习新东西有意思。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用btsync]]></title>
@@ -726,7 +754,7 @@ dd: writing `/EMPTY': No space left on device
 
 <p>haskell有多种内置的类型，我现在接触了数字，字符串，列表，元组这4个类型。要定义一个变量也很简单，直接<code>let a = 1</code>这样就定义了一个变量a，它绑定了一个数字1,当然我们也可以理解为这行代码定义了一个函数，当执行这个函数的时候会返回一个数字1,在这里函数也变成普通变量了。</p>
 
-<p>字符串是用双引号引起来的，<code>let s = "hello"</code> 就生成了一个字符串变量s，是把它当作函数还是当作普通变量就看个人喜好了。如果要获得某个字符串中间的一个字符，可以使用<code>!!</code>操作符，比如说<code>"hello" !! 2</code> 会返回一个&#8217;l&#8217;，看惯了c数组风格的字符串索引再来看haskell的形式，真是不习惯。</p>
+<p>字符串是用双引号引起来的，<code>let s = "hello"</code> 就生成了一个字符串变量s，是把它当作函数还是当作普通变量就看个人喜好了。如果要获得某个字符串中间的一个字符，可以使用<code>!!</code>操作符，比如说<code>"hello" !! 2</code> 会返回一个'l'，看惯了c数组风格的字符串索引再来看haskell的形式，真是不习惯。</p>
 
 <p>列表是函数式语言的最重要的数据结构，从50年代麦卡锡发明的表处理语言开始，在各个函数式语言里都可以看到列表的各种表现形式。scheme的car和cdr，sml的hd和tl，而在haskell里面则是head和tail。定义一个列表<code>let l = [1,2,3,4]</code>，<code>head l</code>返回列表第一个元素，<code>tail l</code>返回列表除了第一个元素外剩下的元素，<code>init l</code>返回列表除了最后一个元素外的所有元素，<code>last l</code>返回最后一个元素。剩下的还有maximum, minimum, reverse, length, null, take, drop, sum, product, elem等方法，看得眼花缭乱啊，至于为一个这么基本的数据结构写这么多方法吗？ 对于列表还有一个很重要的特性就是可以生成一个列表范围，如果一个集合的元素是可以用很清晰的语言枚举出来的话那么这个集合可以用列表表示出来，比如说如果要生成1到100的所有整数，那么只要<code>[1 .. 100]</code>就可以了，如果要确定步长的话只要枚举前2个元素就好了<code>[1, 3 .. 100]</code>这样就生成了1到100的所有奇数。那么能不能生成[1,2,4,8 &hellip;]这样的变步长的列表呢？很遗憾，haskell没有把这种列表写入最基本的列表方法里面，也很好理解，对于变步长的列表给出了前几个元素不是很好推测下一个元素，如果不清楚它那么就不能实现它，写程序的至理名言。</p>
 
@@ -759,43 +787,6 @@ dd: writing `/EMPTY': No space left on device
 
 <p>真是惊险刺激啊，要是我没有vpn的话这个站就得挂一晚上，要是文章和视频的耦合度太高的话我也束手无策，要是前端设计的页面太复杂的话也会给我的改动带来很多麻烦。还好
 这些假设都不存在。感谢Yii框架，大爱。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Connect-to-vpn]]></title>
-    <link href="http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn/"/>
-    <updated>2014-09-29T00:02:00+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/09/29/connect-to-vpn</id>
-    <content type="html"><![CDATA[<p>今天拿到vpn了，真是兴奋啊，早在实习结束的时候就要求了vpn，结果5个月后才拿到手，真是的。
-拿到了vpn意味着以后可以早点下班，有事情在家里远程办公还是无休止的工作，休息即工作呢？
-希望我不会把工作和生活混乱了。</p>
-
-<p>拿到的vpn就3条信息，一个服务器ip，帐号，密码。也不说一下vpn服务器是用什么软件部署的，这让我怎么
-挑客户端软件来连接呢？万一服务器和客户端所用的协议不一样我不是浪费时间吗。算了，都已经这么晚了
-还是先随便试一个吧，如果有问题明天到了公司再说。</p>
-
-<p>首先试的是pptp的客户端，因为这是使用最广泛的vpn协议了，虽然之前好像看到过这种通信的加密很弱，但是
-没关系，又不发表反动言论。</p>
-
-<p>首先要安装pptp的客户端，很简单，<code>sudo pacman -S pptpclient</code>。</p>
-
-<p>然后需要配置一下vpn连接的参数，比如说服务器ip多少，帐号密码多少。最麻烦的方法莫过于手动改写配置文件了，但是
-还好pptp自带了一个setup的功能，一条命令就可以创建vpn连接。
-<code>pptpsetup --create my_tunnel --server vpn.example.com --username alice --password foo --encrypt</code>
-把my_tunnel替换成一个隧道别名，以后就可以使用这个别名来连接指定的vpn服务器了。
-在&ndash;server参数后改为需要连接的ip地址，作为公司内部访问才不会为vpn服务配置一个域名呢，又不是给外人开放使用，没必要好记。
-在&ndash;username参数后面输入分配的用户名
-然后回车执行这条命令就会提示输入密码，输入密码，ok如果没问题的话现在已经创建好了一个vpn连接，接下来需要做的就是启用这个连接。</p>
-
-<p>直接<code>pon my_tunnel</code>就可以开启这个vpn连接了，然后输入<code>ifconfig</code>查看一下，如果出现了ppp0这个接口那就说明连接建立成功。</p>
-
-<p>这时候试图访问公司内网，可是还是连接不上去，因为没有配置路由规则，默认情况下流量都走wlp3s0这个接口了，这是我的无线网卡的接口。
-稍微配置一下公司服务器网段就行了，内部测试机是192.168.10.0/24的网段，所以在命令行输入<code>ip route add 192.168.10.0/24 dev ppp0</code>
-然后就可以在本地通过ssh连接这个网段的机器了。</p>
-
-<p>昨晚遇到一个紧急情况，又用了一下vpn，不知道为什么可以连接，也可以执行一些简单的命令，比如cd，ls，svn之类的，就是不能执行vim, cat这类命令，一查看某个文件
-连接就会卡死，不得不在本地kill掉这个ssh会话，kill掉之后ppp0这个接口也自动关闭了，又得重新开一遍。不知道是什么原因。</p>
 ]]></content>
   </entry>
   

@@ -2,10 +2,10 @@
 <html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Category: Emacs - Joey's Blog</title>
+  <title>学习emacs-eww - Joey's Blog</title>
   <meta name="author" content="joey">
 
-  <meta name="description" content="Category: emacs">
+  
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -14,16 +14,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://xcaptain.github.io/blog/categories/emacs">
+  <link rel="canonical" href="http://xcaptain.github.io/blog/2015/01/28/emacs-eww">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
 
   <!-- http://opengraphprotocol.org/ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="http://xcaptain.github.io/blog/categories/emacs">
-  <meta property="og:title" content="Category: Emacs - Joey's Blog">
-  <meta property="og:description" content="Category: emacs">
+  <meta property="og:url" content="http://xcaptain.github.io/blog/2015/01/28/emacs-eww">
+  <meta property="og:title" content="学习emacs-eww - Joey's Blog">
+  
 
   <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
 
@@ -55,10 +55,10 @@
 
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li >
+                <li class="active">
                     <a rel="index" href="/">Blog</a>
                 </li>
-                <li class="active">
+                <li >
                     <a href="/blog/archives">Archives</a>
                 </li>
                 <li >
@@ -93,35 +93,16 @@
       <div id="main" role="main" class="container">
         <div id="content">
           <div class="row">
-  <div class="page-content col-md-9">
-    <article role="article">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://xcaptain.github.io" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
       
-        <header class="page-header">
-          
-          
-            <h1 class="entry-title">
-              Category: Emacs
-              
-            </h1>
-          
-        </header>
-      
-      <div class="entry-content">
-        <div id="blog-archives" class="category" itemscope itemtype="http://schema.org/Blog">
-<meta itemprop="name" content="Joey's Blog" />
-<meta itemprop="description" content="不甘平凡" />
-<meta itemprop="url" content="http://xcaptain.github.io" />
-
-
-
-  
-  <h2 class="year">2015</h2>
-
-<article class="page-header" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-  
-<h2 class="post-title" itemprop="name headline"><a href="/blog/2015/01/28/emacs-eww/" itemprop="url">学习emacs-eww</a></h2>
-<p class="meta text-muted">
-  
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
 
 
 
@@ -135,76 +116,109 @@
 
 
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-28T22:50:06+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-28</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/emacs/'>emacs</a>
-  
-</span>
-
-
-</p>
-
-</article>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        学习emacs-eww
+        
+    </h1>
+    
+  </header>
 
 
+<div class="entry-content clearfix" itemprop="articleBody description"><p>最近一段时间比较无聊，<a href="http://www.iyue.club">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。
+而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
 
-  
-  <h2 class="year">2014</h2>
+<p>目前的计划还是慢慢来学习ruby on rails，所以空闲时间就做点有意思的事情了。现在来记录一下eww的用法，以后便于查阅，熟能生巧。eww的文档可以通过emacs自身来查看，现在就来总结一下emacs文档里对eww的介绍，我都是通过<code>C-h r</code>来打开emacs自带的info然后查找到eww的章节然后开始看的。</p>
 
-<article class="page-header" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-  
-<h2 class="post-title" itemprop="name headline"><a href="/blog/2014/12/20/how-to-use-emacs/" itemprop="url">如何使用emacs</a></h2>
-<p class="meta text-muted">
-  
+<p>基本操作：
+1. <code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。
+2. <code>l</code> 回到上一个页面，回退。
+3. <code>r</code> 回到下一个页面，回进。
+4. <code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。
+5. <code>g</code> 刷新当前页面。
+6. <code>w</code> 复制当前url到剪切板。
+7. <code>H</code> 查看历史记录。
+8. <code>b</code> 添加书签。
+9. <code>B</code> 查看书签。
+10. <code>&amp;</code> 调用外部浏览器打开当前url。
+11. <code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。
+12. <code>C</code> 查看所有存在的cookie</p>
 
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-20T19:44:35+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-20</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/emacs/'>emacs</a>
-  
-</span>
-
-
-</p>
-
-</article>
-
+<p>上面这些东西都可以查看文档得到，比较没有营养，还是学习新东西有意思。</p>
 </div>
 
-      </div>
-      
+
+      <footer>
+        <p class="meta text-muted">
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-28T22:50:06+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-28</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/emacs/'>emacs</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://xcaptain.github.io/blog/2015/01/28/emacs-eww/" data-via="" data-counturl="http://xcaptain.github.io/blog/2015/01/28/emacs-eww/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2015/01/20/use-btsync/" title="Previous Post: 使用btsync">&laquo; 使用btsync</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section class="panel panel-default">
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Recent Posts</h3>
   </div>
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
+    <a class="list-group-item active" href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
     
     <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
     
@@ -282,7 +296,7 @@
     </a>
     
     
-    <a class="list-group-item active" href="/blog/categories/emacs/index.html">
+    <a class="list-group-item " href="/blog/categories/emacs/index.html">
       <span class="badge">2</span>
       emacs
     </a>
@@ -320,8 +334,8 @@
   </div>
 </section>
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 
