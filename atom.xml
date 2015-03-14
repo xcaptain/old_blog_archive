@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
   <link href="http://xcaptain.github.io/"/>
-  <updated>2015-03-15T01:26:39+08:00</updated>
+  <updated>2015-03-15T01:29:56+08:00</updated>
   <id>http://xcaptain.github.io/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Use-orgmode]]></title>
+    <title type="html"><![CDATA[用orgmode来记笔记]]></title>
     <link href="http://xcaptain.github.io/blog/2015/03/15/use-orgmode/"/>
     <updated>2015-03-15T00:58:56+08:00</updated>
     <id>http://xcaptain.github.io/blog/2015/03/15/use-orgmode</id>
@@ -33,7 +33,7 @@
 <ol>
 <li>使用星号来表明段落的层级，和md的使用#差不多的概念</li>
 <li>支持有序列表，无序列表，语法和md类似，org或自动缩进对其每个列表项，如果发现不匹配了那就肯定某个地方缩进出问题了</li>
-<li>插入链接\[[链接]\[名字]] 这样就能插入一条链接了</li>
+<li>插入链接[[链接][名字]] 这样就能插入一条链接了</li>
 <li>用\\来断行，这样就不必要把一段话写在一行了</li>
 <li>C-c C-e m m 来导出markdown文件</li>
 </ol>
