@@ -119,6 +119,85 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-12T22:28:53+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-12</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/12/jsonp-some-thought/" itemprop="url">Jsonp的一点简单看法</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><h3>jsonp是ajax的异域传输技术</h3>
+
+<p>因为我不懂javascript，更不用说jquery了，所以现在在做的一个需要后台请求的页面只能让前端去做。
+昨晚在公司加班和前端对接口，但是到了9点也没有解决掉bug，太失望了，不过今天来了之后和一个大牛
+说了一下，他立刻就指出了问题所在。</p>
+
+<p>先简单描述一下我做的这个项目吧。</p>
+
+<p>项目不麻烦，后端用php+yii框架处理好页面间数据流逻辑，前端使用css和js做一些特效。我这边的工作
+都做得差不多了，但是有一个分类页涉及到多级选择的问题，最初的设计是一次性从后台取几百个数据出来
+但是评估了一下发现这种方法可行性不好，一次加载太多内容对用户的体验不好，而且不能充分读取数据库
+的内容。后面和前端商量了一下采用ajax请求的方式，打开一个页面之后只加载进当前页面的内容，剩下
+的内容等用户点击相应的链接触发相应的js事件之后以jsonp的方式给服务器发请求，然后服务器把要显示的
+内容取出来。</p>
+
+<p>在我看来jsonp就是一个站给出接口，另一个站通过js获得这个接口给的数据。这样就是异域了，最大的好处就是
+后端的压力减轻了，之前如果所有的页面都在一个站上，那么所有相关的信息都得后端开发人员想办法从数据库
+中取，也就是俗话说的套页面。我是很反感套页面这种工作的，没有一点技术含量，枯燥无聊，但是不可否认，
+在phpweb开发中很大一部分时间花在这里了。现在如果php程序员只要给出接口，前端写js获得这个接口的数据，
+他们来渲染页面，这样真是大大减轻了后端的压力，节省下来的时间可以上g+上看看新闻，在博客上发发文章，
+怎么说前端对于html要比后端熟悉。</p>
+
+<p>前端给出的接口也有要求，最主要的内容就是回调。
+<code>
+echo $callback . “(“ . $data . “)”;
+</code>
+在php的代码里加上这个语句，<code>$callback</code>是jquery的回调函数，<code>$data</code>是要传出去的接口数据，一般是一个
+json数组的形式。我这个站的$data是由4个参数共同生成的，前端访问接口的时候是通过<code>http://www.example.com/api/?callback=Jquery_function&amp;arg1=1&amp;arg2=2&amp;arg3=3&amp;arg4=4</code>
+既然明白请求的形式了，那么很好知道这个接口文件的写法了。</p>
+
+<pre>
+$callback = $_GET[‘callback’]; //获得回调函数
+$arg1     = $_GET[‘arg1’];
+$arg2     = $_GET[‘arg2’];
+$arg3     = $_GET[‘arg3’];
+$arg4     = $_GET[‘arg4’]; //获得剩下的4个参数
+$data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要返回的数据
+</pre>
+
+
+<p>很神奇吧，当你点击一个网页的时候，这个页面不是立刻向后台请求数据，而是通过js从另一个接口文件里拿数据。</p>
+
+<p>我的经验还是很不丰富啊，以后要多学习，不然遇到一点比较新的技术就搞半天太丢脸了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-11T23:43:02+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-11</time>
         
       </p>
@@ -172,6 +251,8 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
+    
     <a class="list-group-item " href="/blog/2015/03/07/emacs-grep-find/">Emacs自定义grep-find的模板</a>
     
     <a class="list-group-item " href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
@@ -179,8 +260,6 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
     
     <a class="list-group-item " href="/blog/2015/01/13/python-encoding/">Python2编码问题</a>
-    
-    <a class="list-group-item " href="/blog/2015/01/06/play-with-git/">玩弄git</a>
     
   </div>
 </section>
@@ -284,6 +363,18 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     <a class="list-group-item " href="/blog/categories/emacs,fish/index.html">
       <span class="badge">1</span>
       emacs,fish
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,/index.html">
+      <span class="badge">1</span>
+      emacs,
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/orgmode/index.html">
+      <span class="badge">1</span>
+      orgmode
     </a>
     
   </div>
