@@ -2,17 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Emacs, | Joey's Blog]]></title>
-<<<<<<< HEAD
   <link href="http://blog.joxy.org/blog/categories/emacs/atom.xml" rel="self"/>
   <link href="http://blog.joxy.org/"/>
   <updated>2015-03-26T23:53:55+08:00</updated>
   <id>http://blog.joxy.org/</id>
-=======
-  <link href="http://xcaptain.github.io/blog/categories/emacs/atom.xml" rel="self"/>
-  <link href="http://xcaptain.github.io/"/>
-  <updated>2015-03-15T01:29:56+08:00</updated>
-  <id>http://xcaptain.github.io/</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -21,17 +14,10 @@
 
   
   <entry>
-<<<<<<< HEAD
     <title type="html"><![CDATA[Use-orgmode]]></title>
     <link href="http://blog.joxy.org/blog/2015/03/15/use-orgmode/"/>
     <updated>2015-03-15T00:58:56+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/03/15/use-orgmode</id>
-=======
-    <title type="html"><![CDATA[用orgmode来记笔记]]></title>
-    <link href="http://xcaptain.github.io/blog/2015/03/15/use-orgmode/"/>
-    <updated>2015-03-15T00:58:56+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2015/03/15/use-orgmode</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>最近看书学习感觉非常没有劲，究其原因感觉是缺少一个做笔记的工具，原来那支跟随我4年的钢笔放家里没有带过来，
 京东上预订的lamy也还没有到货，看书不动笔我是什么都记不住的，所以感觉学习效率低了很多。印象笔记确实不错，
 配合浏览器的markdown-here扩展就能支持markdown语法了，但是缺少一个所见即所得的笔记客户端，用markdown写完
@@ -47,11 +33,7 @@
 <ol>
 <li>使用星号来表明段落的层级，和md的使用#差不多的概念</li>
 <li>支持有序列表，无序列表，语法和md类似，org或自动缩进对其每个列表项，如果发现不匹配了那就肯定某个地方缩进出问题了</li>
-<<<<<<< HEAD
 <li>插入链接\[[链接]\[名字]] 这样就能插入一条链接了</li>
-=======
-<li>插入链接[[链接][名字]] 这样就能插入一条链接了</li>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
 <li>用&#92;来断行，这样就不必要把一段话写在一行了</li>
 <li>C-c C-e m m 来导出markdown文件</li>
 </ol>

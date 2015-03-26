@@ -2,17 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Haskell | Joey's Blog]]></title>
-<<<<<<< HEAD
   <link href="http://blog.joxy.org/blog/categories/haskell/atom.xml" rel="self"/>
   <link href="http://blog.joxy.org/"/>
   <updated>2015-03-26T23:53:55+08:00</updated>
   <id>http://blog.joxy.org/</id>
-=======
-  <link href="http://xcaptain.github.io/blog/categories/haskell/atom.xml" rel="self"/>
-  <link href="http://xcaptain.github.io/"/>
-  <updated>2015-03-15T01:29:56+08:00</updated>
-  <id>http://xcaptain.github.io/</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -22,15 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[学习haskell（二）]]></title>
-<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/10/27/learn-haskell-2/"/>
     <updated>2014-10-27T01:13:53+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/10/27/learn-haskell-2</id>
-=======
-    <link href="http://xcaptain.github.io/blog/2014/10/27/learn-haskell-2/"/>
-    <updated>2014-10-27T01:13:53+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/10/27/learn-haskell-2</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天发现一件很有趣的事，我在ghci下输入<code>:i zip</code>来查看zip这个函数的用法的时候得到的结果是<code>zip :: [a] -&gt; [b] -&gt; [(a, b)]   -- Defined in ‘GHC.List’</code>，zip明明是接收2个列表作为参数，然后一个元组的列表，但是根据这个输出，感觉zip是先处理列表[a]，然后再处理列表[b]，最后得到一个得到一个列表[(a, b)]。</p>
 
 <p>为了验证我的猜想，先试<code>zip [1,2,3] [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>。这是意料之中的，zip的作用就是这个。</p>
@@ -47,15 +34,9 @@
   
   <entry>
     <title type="html"><![CDATA[学习haskell（一）]]></title>
-<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/10/26/learn-haskell-1/"/>
     <updated>2014-10-26T06:15:29+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/10/26/learn-haskell-1</id>
-=======
-    <link href="http://xcaptain.github.io/blog/2014/10/26/learn-haskell-1/"/>
-    <updated>2014-10-26T06:15:29+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2014/10/26/learn-haskell-1</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>上周去国图还书的时候无意中看到了一本讲haskell的书，就顺手借回来了。想想第一次听说haskell这个名字还是从王垠的博客里看到的，那时候听他在博客里讲惰性求值，列表解析，lambda函数啊，什么的，根本听不懂。不过到现在为止，深入学习了python，对于列表解析，lambda函数还算是有一个浅浅的了解。而且已经学习过scheme和sml了，虽然都没有花太多时间去学习它们，但是至少对函数式编程了解了一个大概。</p>
 
 <p>以我目前对于函数式编程的理解来说，主要就是一切都是函数，数据是函数，函数也是函数。一个变量只有一个值，不能通过赋值来改变一个变量的值，只能让它重新绑定到另外一个值，所以变量的状态不会改变，不会出现副作用。这些都是一些很粗浅的理解，毕竟没有正儿八经的研究过函数式编程。主要有一个原因就是现在用函数式语言来开发的项目不多，我们学习编程主要还是用来解决实际问题，如果这门语言现实中没什么人用，或者是没法用到，那么学习它的激情就不会太高，虽然说学习过之后可能会提升编程思维。目前我了解的比较有名的函数式语言开发的项目有emacs，这个是用elisp语言来开发的一个编辑器，很强大。texmacs，一个所见即所得的tex编辑器，用的是scheme开发的。guile，gnu世界中的一个lisp编译器，能把lisp代码编译为c语言代码。chicken scheme，又一个scheme的编译器，按照官网说的它编译机器码的效率也是很高的，而且好像第三方库也比较多。lisp族就这些了，而sml族就没有听说过什么大的项目，不得不说很令人沮丧。相比现在流行的c/c++,java,perl/python/php等语言，函数式语言处于一个很小众的地位。为什么这种语言这么强大但是却没什么发展呢？真是搞不懂。</p>

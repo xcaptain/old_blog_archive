@@ -2,17 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Git | Joey's Blog]]></title>
-<<<<<<< HEAD
   <link href="http://blog.joxy.org/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://blog.joxy.org/"/>
   <updated>2015-03-26T23:53:55+08:00</updated>
   <id>http://blog.joxy.org/</id>
-=======
-  <link href="http://xcaptain.github.io/blog/categories/git/atom.xml" rel="self"/>
-  <link href="http://xcaptain.github.io/"/>
-  <updated>2015-03-15T01:29:56+08:00</updated>
-  <id>http://xcaptain.github.io/</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -22,15 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[玩弄git]]></title>
-<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/06/play-with-git/"/>
     <updated>2015-01-06T06:54:11+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/06/play-with-git</id>
-=======
-    <link href="http://xcaptain.github.io/blog/2015/01/06/play-with-git/"/>
-    <updated>2015-01-06T06:54:11+08:00</updated>
-    <id>http://xcaptain.github.io/blog/2015/01/06/play-with-git</id>
->>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
 
 <p>今晚就稍微熟悉了一下discourse的结构。</p>
