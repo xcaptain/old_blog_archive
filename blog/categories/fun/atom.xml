@@ -2,10 +2,17 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Fun | Joey's Blog]]></title>
+<<<<<<< HEAD
   <link href="http://blog.joxy.org/blog/categories/fun/atom.xml" rel="self"/>
   <link href="http://blog.joxy.org/"/>
   <updated>2015-03-26T23:53:55+08:00</updated>
   <id>http://blog.joxy.org/</id>
+=======
+  <link href="http://xcaptain.github.io/blog/categories/fun/atom.xml" rel="self"/>
+  <link href="http://xcaptain.github.io/"/>
+  <updated>2015-03-15T01:29:56+08:00</updated>
+  <id>http://xcaptain.github.io/</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +22,15 @@
   
   <entry>
     <title type="html"><![CDATA[使用btsync]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/20/use-btsync/"/>
     <updated>2015-01-20T18:18:25+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/20/use-btsync</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/20/use-btsync/"/>
+    <updated>2015-01-20T18:18:25+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/20/use-btsync</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p><meta charset="UTF-8"/>
 昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
 
@@ -37,9 +50,15 @@
   
   <entry>
     <title type="html"><![CDATA[入手一台二手PC]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/11/24/got-an-old-pc/"/>
     <updated>2014-11-24T05:09:30+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/11/24/got-an-old-pc</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/11/24/got-an-old-pc/"/>
+    <updated>2014-11-24T05:09:30+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/24/got-an-old-pc</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天下午在58上面看到一条消息，说的是190出售双核电脑，立即就心动了。作为一个linux，总是忍不住手痒想重装系统，或者是自定义系统，但是因为现在自己手头上只有一台笔记本，实在是不敢轻举妄动，不然把这电脑弄崩溃了，或者是丢失数据了那就损失惨重了。如果有一台空闲的机器那就好了，我可以随便在那台机器上面装系统，可以随意定制。而且有一台局域网内部的PC当作服务器，拿来当测试机很不错，在这里测试过代码之后再上传到线上vps上去。</p>
 
 <p>说干就干，反正190也不贵，现在出去随便找个饭店吃个稍微好点的饭都不止190.给卖家打了电话先问了一下基本的情况，大致确定了消息的真实性，然后就是出发去验货了。那个卖家在东城区，好远啊，看了一下时间都已经3点半了，赶紧出发。又是转公交又是转地铁，终于到了东四北大街，来到了卖家的家里。太震惊了，卖家竟然是一个50多岁的老头，家里很简陋，胡同里很老的房子，但是里面堆满了电脑主机，估计有2,3百台。我要买的那台电脑正开着呢，装着win7系统，正在通过pptv看视频呢。cpu是amd的，1.9GHZ，ddr2内存1G大，网卡是100M的螃蟹卡，这种网卡对于*unix来说几乎都是免驱动的了，使用的太广泛了。剩下的就没什么说了，反正是打算拿来当服务器的，对于显卡没什么要求。</p>
@@ -78,9 +97,15 @@
   
   <entry>
     <title type="html"><![CDATA[我的第一块机械键盘]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard/"/>
     <updated>2014-11-10T01:25:52+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/11/10/my-first-machanical-keyboard/"/>
+    <updated>2014-11-10T01:25:52+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/10/my-first-machanical-keyboard</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。</p>
 
 <h3>在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。</h3>

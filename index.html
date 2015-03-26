@@ -14,14 +14,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
+<<<<<<< HEAD
   <link rel="canonical" href="http://blog.joxy.org">
+=======
+  <link rel="canonical" href="http://xcaptain.github.io">
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
 
   <!-- http://opengraphprotocol.org/ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
+<<<<<<< HEAD
   <meta property="og:url" content="http://blog.joxy.org">
+=======
+  <meta property="og:url" content="http://xcaptain.github.io">
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <meta property="og:title" content="Joey's Blog">
   <meta property="og:description" content="不甘平凡">
 
@@ -69,7 +77,11 @@
                 
                     <li>
                         <form class="search navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+<<<<<<< HEAD
                             <input type="hidden" name="q" value="site:blog.joxy.org">
+=======
+                            <input type="hidden" name="q" value="site:xcaptain.github.io">
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
                             <div class="form-group">
                                 <input class="form-control" type="text" name="q" placeholder="Search">
                             </div>
@@ -97,7 +109,11 @@
     <div class="blog-index" itemscope itemtype="http://schema.org/Blog">
     <meta itemprop="name" content="Joey's Blog" />
     <meta itemprop="description" content="不甘平凡" />
+<<<<<<< HEAD
     <meta itemprop="url" content="http://blog.joxy.org" />
+=======
+    <meta itemprop="url" content="http://xcaptain.github.io" />
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
       
       
       
@@ -119,6 +135,7 @@
 
 
 
+<<<<<<< HEAD
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-26T23:12:37+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-26</time>
         
       </p>
@@ -173,12 +190,18 @@
 
 
 
+=======
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-15T00:58:56+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-15</time>
         
       </p>
     
     
+<<<<<<< HEAD
       <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/15/use-orgmode/" itemprop="url">Use-orgmode</a></h2>
+=======
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/15/use-orgmode/" itemprop="url">用orgmode来记笔记</a></h2>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     
   </header>
 
@@ -198,7 +221,11 @@
 <ol>
 <li>使用星号来表明段落的层级，和md的使用#差不多的概念</li>
 <li>支持有序列表，无序列表，语法和md类似，org或自动缩进对其每个列表项，如果发现不匹配了那就肯定某个地方缩进出问题了</li>
+<<<<<<< HEAD
 <li>插入链接\[[链接]\[名字]] 这样就能插入一条链接了</li>
+=======
+<li>插入链接[[链接][名字]] 这样就能插入一条链接了</li>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
 <li>用\\来断行，这样就不必要把一段话写在一行了</li>
 <li>C-c C-e m m 来导出markdown文件</li>
 </ol>
@@ -755,6 +782,52 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
 
         </article>
       
+<<<<<<< HEAD
+=======
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-01T00:10:28+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-01</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/01/try-hhvm/" itemprop="url">尝试hhvm</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
+
+<p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
+
+<p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
+
+<p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     </div>
 
     <ul class="pager">
@@ -778,9 +851,13 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
   
   <div id="recent_posts" class="list-group">
     
+<<<<<<< HEAD
     <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
     
     <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
+=======
+    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">用orgmode来记笔记</a>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     
     <a class="list-group-item " href="/blog/2015/03/07/emacs-grep-find/">Emacs自定义grep-find的模板</a>
     
@@ -788,6 +865,11 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
     
     <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
     
+<<<<<<< HEAD
+=======
+    <a class="list-group-item " href="/blog/2015/01/13/python-encoding/">Python2编码问题</a>
+    
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   </div>
 </section>
 <section class="panel panel-default">
@@ -822,7 +904,11 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
+<<<<<<< HEAD
       <span class="badge">11</span>
+=======
+      <span class="badge">10</span>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
       linux
     </a>
     

@@ -2,10 +2,17 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Joey's Blog]]></title>
+<<<<<<< HEAD
   <link href="http://blog.joxy.org/atom.xml" rel="self"/>
   <link href="http://blog.joxy.org/"/>
   <updated>2015-03-26T23:53:55+08:00</updated>
   <id>http://blog.joxy.org/</id>
+=======
+  <link href="http://xcaptain.github.io/atom.xml" rel="self"/>
+  <link href="http://xcaptain.github.io/"/>
+  <updated>2015-03-15T01:29:56+08:00</updated>
+  <id>http://xcaptain.github.io/</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -14,6 +21,7 @@
 
   
   <entry>
+<<<<<<< HEAD
     <title type="html"><![CDATA[Btrfs损坏之后的一系列麻烦]]></title>
     <link href="http://blog.joxy.org/blog/2015/03/26/btrfs-crash/"/>
     <updated>2015-03-26T23:12:37+08:00</updated>
@@ -44,6 +52,12 @@
     <link href="http://blog.joxy.org/blog/2015/03/15/use-orgmode/"/>
     <updated>2015-03-15T00:58:56+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/03/15/use-orgmode</id>
+=======
+    <title type="html"><![CDATA[用orgmode来记笔记]]></title>
+    <link href="http://xcaptain.github.io/blog/2015/03/15/use-orgmode/"/>
+    <updated>2015-03-15T00:58:56+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/03/15/use-orgmode</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>最近看书学习感觉非常没有劲，究其原因感觉是缺少一个做笔记的工具，原来那支跟随我4年的钢笔放家里没有带过来，
 京东上预订的lamy也还没有到货，看书不动笔我是什么都记不住的，所以感觉学习效率低了很多。印象笔记确实不错，
 配合浏览器的markdown-here扩展就能支持markdown语法了，但是缺少一个所见即所得的笔记客户端，用markdown写完
@@ -59,7 +73,11 @@
 <ol>
 <li>使用星号来表明段落的层级，和md的使用#差不多的概念</li>
 <li>支持有序列表，无序列表，语法和md类似，org或自动缩进对其每个列表项，如果发现不匹配了那就肯定某个地方缩进出问题了</li>
+<<<<<<< HEAD
 <li>插入链接\[[链接]\[名字]] 这样就能插入一条链接了</li>
+=======
+<li>插入链接[[链接][名字]] 这样就能插入一条链接了</li>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
 <li>用\\来断行，这样就不必要把一段话写在一行了</li>
 <li>C-c C-e m m 来导出markdown文件</li>
 </ol>
@@ -71,9 +89,15 @@
   
   <entry>
     <title type="html"><![CDATA[Emacs自定义grep-find的模板]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/03/07/emacs-grep-find/"/>
     <updated>2015-03-07T22:40:19+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/03/07/emacs-grep-find</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/03/07/emacs-grep-find/"/>
+    <updated>2015-03-07T22:40:19+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/03/07/emacs-grep-find</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>被emacs的搜索功能纠结好久了，今天下定决心来解决一下。以前执行<code>grep-find</code>命令的时候查找的模板都是<code>find . -type f -exec grep -nH -e {} +</code>，但是这条命令在fish下没法用，找了一下发现在<a href="https://github.com/fish-shell/fish-shell/issues/95">这个issue</a>里面作者提到了为什么fish里面没法用find，因为在fish里面<code>{}</code>是有意义的，所以就会提示exec缺少参数，所以如果写成<code>find . -type f -exec grep -nH -e '{}' +</code>就可以了，接下来的任务就是修改emacs的配置，把默认的<code>grep-find</code>的行为改掉。</p>
 
 <p>因为查找功能是emacs默认就有的，所以我直接就去源代码目录找了，在<code>/usr/share/emacs/24.4/</code>下执行<code>grep 'grep-find' -R *</code>，然后在<code>lisp/ldefs-boot.el</code>和<code>lisp/loaddefs.el</code>找到了相关的代码，然后试着修改第12669行，这行看起来像是相关的代码，结果改完了半天不生效，无奈之下去<a href="http://stackoverflow.com/questions/28915372/change-the-default-find-grep-command-in-emacs/">stackoverflow</a>提问，这个网站效率真的不是一般的高，很快就拿到答案了，有人说我找到的代码只不过是docstring而已，要修改的话得改<code>grep-find-template</code>,通过<code>C-h v</code>查看了一下这个变量的值，默认的是<code>"find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; {} +"</code>，修改它就行了，编辑<code>~/.emacs.d/personal/custom.el</code>，在最底下加上<code>(setq grep-find-template "find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; \'{}\' +")</code>，然后<code>eval-buffer</code>，问题完美解决，不得不说emacs真是灵活，不用改源代码就能实现自定义功能。</p>
@@ -84,9 +108,15 @@
   
   <entry>
     <title type="html"><![CDATA[学习emacs-eww]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/28/emacs-eww/"/>
     <updated>2015-01-28T22:50:06+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/28/emacs-eww</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/28/emacs-eww/"/>
+    <updated>2015-01-28T22:50:06+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/28/emacs-eww</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>最近一段时间比较无聊，<a href="http://www.iyue.club">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。
 而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
 
@@ -116,9 +146,15 @@
   
   <entry>
     <title type="html"><![CDATA[使用btsync]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/20/use-btsync/"/>
     <updated>2015-01-20T18:18:25+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/20/use-btsync</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/20/use-btsync/"/>
+    <updated>2015-01-20T18:18:25+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/20/use-btsync</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p><meta charset="UTF-8"/>
 昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
 
@@ -138,9 +174,15 @@
   
   <entry>
     <title type="html"><![CDATA[Python2编码问题]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/13/python-encoding/"/>
     <updated>2015-01-13T08:06:21+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/13/python-encoding</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/13/python-encoding/"/>
+    <updated>2015-01-13T08:06:21+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/13/python-encoding</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
 
 <p>在执行rake new_post的时候，突然提示</p>
@@ -215,9 +257,15 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
   
   <entry>
     <title type="html"><![CDATA[玩弄git]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/06/play-with-git/"/>
     <updated>2015-01-06T06:54:11+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/06/play-with-git</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/06/play-with-git/"/>
+    <updated>2015-01-06T06:54:11+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/06/play-with-git</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
 
 <p>今晚就稍微熟悉了一下discourse的结构。</p>
@@ -253,9 +301,15 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
   
   <entry>
     <title type="html"><![CDATA[调试shadowsocks]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks/"/>
     <updated>2015-01-04T07:16:58+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks/"/>
+    <updated>2015-01-04T07:16:58+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/04/debug-shadowsocks</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
 
 <p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
@@ -320,9 +374,15 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[部署邮件服务]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/03/deploy-email-service/"/>
     <updated>2015-01-03T08:43:43+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/03/deploy-email-service</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/03/deploy-email-service/"/>
+    <updated>2015-01-03T08:43:43+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/03/deploy-email-service</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
 
 <h4>首先确定一下发件服务。</h4>
@@ -345,9 +405,15 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/01/arch-pacman-broken/"/>
     <updated>2015-01-01T19:35:23+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/01/arch-pacman-broken</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/01/arch-pacman-broken/"/>
+    <updated>2015-01-01T19:35:23+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/01/arch-pacman-broken</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
 
 <pre>
@@ -390,9 +456,15 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
   
   <entry>
     <title type="html"><![CDATA[尝试hhvm]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2015/01/01/try-hhvm/"/>
     <updated>2015-01-01T00:10:28+08:00</updated>
     <id>http://blog.joxy.org/blog/2015/01/01/try-hhvm</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2015/01/01/try-hhvm/"/>
+    <updated>2015-01-01T00:10:28+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2015/01/01/try-hhvm</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
 
 <p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
@@ -405,9 +477,15 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
   
   <entry>
     <title type="html"><![CDATA[采集一个论坛的帖子来进行数据分析]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/12/31/web-crawl-again/"/>
     <updated>2014-12-31T07:49:40+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/12/31/web-crawl-again</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/12/31/web-crawl-again/"/>
+    <updated>2014-12-31T07:49:40+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/12/31/web-crawl-again</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天接到一个小小的需求，又是和采集相关的，我都要烦死了，采集这东西写得都要腻了。</p>
 
 <p>不过和以前的那些采集有点区别，不再是采集文章了，而是开始采集论坛的帖子。说实话我觉得采集论坛比较简单，因为论坛都是php的页面，页面组织布局一般不会怎么变，而新闻站基本都是cms系统生成的html静态页，静态的页面就有太多可能性了，而且不排除有的编辑太敬业把每个页面都做得不一样。</p>
@@ -447,9 +525,15 @@ category: 帖子所属分类，用来来分析哪些大类的话题比较火
   
   <entry>
     <title type="html"><![CDATA[通过vagrant安装coreos]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/12/27/install-coreos-with-vagrant/"/>
     <updated>2014-12-27T05:54:57+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/12/27/install-coreos-with-vagrant</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/12/27/install-coreos-with-vagrant/"/>
+    <updated>2014-12-27T05:54:57+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/12/27/install-coreos-with-vagrant</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
 
 <p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
@@ -584,9 +668,15 @@ coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
   
   <entry>
     <title type="html"><![CDATA[第一次接触虚拟化]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1/"/>
     <updated>2014-12-26T04:27:01+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/12/26/learn-virtualization-1/"/>
+    <updated>2014-12-26T04:27:01+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/12/26/learn-virtualization-1</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
 
 <p>按照原来部署<a href="http://f.joxy.org">http://f.joxy.org</a>的模式打算先在本地部署好环境，然后提交到git server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
@@ -630,9 +720,15 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[如何使用emacs]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/12/20/how-to-use-emacs/"/>
     <updated>2014-12-20T19:44:35+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/12/20/how-to-use-emacs</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs/"/>
+    <updated>2014-12-20T19:44:35+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/12/20/how-to-use-emacs</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天闲着没事，又上我们的<a href="https://github.com/ncuopen">ncuopen</a>上面看了一下，发现小组现在活动极其不频繁，首页和wiki都没有怎么更新，然后上irc上看了一下，发现也没有人在线。</p>
 
 <blockquote><p>一个开源社区最大的悲哀就是没有活跃的用户，没有一个持续贡献的志愿者团队。</p></blockquote>
@@ -660,9 +756,15 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[又是一个采集]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/12/08/learn-beautifulsoup/"/>
     <updated>2014-12-08T06:25:45+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/12/08/learn-beautifulsoup</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/12/08/learn-beautifulsoup/"/>
+    <updated>2014-12-08T06:25:45+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/12/08/learn-beautifulsoup</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>前几天看到有个同事在采集<a href="https://yande.re">这个</a>站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。</p>
 
 <p>之前采集过多玩和178的一些文章，需求还比较复杂，需要把ajax的接口也给搞定掉，还得把所有图片都本地化，那时候用的是urllib2+beautifulsoup这个东西采集的。</p>
@@ -680,9 +782,15 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[入手一台二手PC]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/11/24/got-an-old-pc/"/>
     <updated>2014-11-24T05:09:30+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/11/24/got-an-old-pc</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/11/24/got-an-old-pc/"/>
+    <updated>2014-11-24T05:09:30+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/24/got-an-old-pc</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>今天下午在58上面看到一条消息，说的是190出售双核电脑，立即就心动了。作为一个linux，总是忍不住手痒想重装系统，或者是自定义系统，但是因为现在自己手头上只有一台笔记本，实在是不敢轻举妄动，不然把这电脑弄崩溃了，或者是丢失数据了那就损失惨重了。如果有一台空闲的机器那就好了，我可以随便在那台机器上面装系统，可以随意定制。而且有一台局域网内部的PC当作服务器，拿来当测试机很不错，在这里测试过代码之后再上传到线上vps上去。</p>
 
 <p>说干就干，反正190也不贵，现在出去随便找个饭店吃个稍微好点的饭都不止190.给卖家打了电话先问了一下基本的情况，大致确定了消息的真实性，然后就是出发去验货了。那个卖家在东城区，好远啊，看了一下时间都已经3点半了，赶紧出发。又是转公交又是转地铁，终于到了东四北大街，来到了卖家的家里。太震惊了，卖家竟然是一个50多岁的老头，家里很简陋，胡同里很老的房子，但是里面堆满了电脑主机，估计有2,3百台。我要买的那台电脑正开着呢，装着win7系统，正在通过pptv看视频呢。cpu是amd的，1.9GHZ，ddr2内存1G大，网卡是100M的螃蟹卡，这种网卡对于*unix来说几乎都是免驱动的了，使用的太广泛了。剩下的就没什么说了，反正是打算拿来当服务器的，对于显卡没什么要求。</p>
@@ -721,9 +829,15 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[我的第一块机械键盘]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard/"/>
     <updated>2014-11-10T01:25:52+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/11/10/my-first-machanical-keyboard/"/>
+    <updated>2014-11-10T01:25:52+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/10/my-first-machanical-keyboard</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。</p>
 
 <h3>在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。</h3>
@@ -748,9 +862,15 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[Redis崩溃]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/11/02/redis-crash/"/>
     <updated>2014-11-02T08:36:37+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/11/02/redis-crash</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/11/02/redis-crash/"/>
+    <updated>2014-11-02T08:36:37+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/02/redis-crash</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
 
 <p>telnet上redis服务器去查看了一下，也就10万+的key，按理来说不应该这么慢。后来事故达到高峰期了，好几个站出现502了，这时候运维报告redis服务器网卡io达到峰值，太恐怖了，服务器使用的是1000Mbps的网卡，每秒钟redis读写超过1G了，怎么会这样？这时候看来就好理解之前netstat的结果了，既然网卡达到上限了，肯定服务器就不能即使返回请求。</p>
@@ -774,9 +894,15 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[调试discuz（一）]]></title>
+<<<<<<< HEAD
     <link href="http://blog.joxy.org/blog/2014/11/02/debug-discuz-1/"/>
     <updated>2014-11-02T07:40:57+08:00</updated>
     <id>http://blog.joxy.org/blog/2014/11/02/debug-discuz-1</id>
+=======
+    <link href="http://xcaptain.github.io/blog/2014/11/02/debug-discuz-1/"/>
+    <updated>2014-11-02T07:40:57+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/11/02/debug-discuz-1</id>
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
     <content type="html"><![CDATA[<p>现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。</p>
 
 <p>我以前从没有接触过discuz，第一次碰到感觉压力很大，什么数据字典，缓存结构，插件机制，模板机制我都不懂，最初他们只叫我做了一点简单的部署问题，比如改个nginx的rewrite规则，改个简单的模板样式，不过渐渐的麻烦的任务也来了。</p>
@@ -789,4 +915,26 @@ dd: writing `/EMPTY': No space left on device
 ]]></content>
   </entry>
   
+<<<<<<< HEAD
+=======
+  <entry>
+    <title type="html"><![CDATA[学习haskell（二）]]></title>
+    <link href="http://xcaptain.github.io/blog/2014/10/27/learn-haskell-2/"/>
+    <updated>2014-10-27T01:13:53+08:00</updated>
+    <id>http://xcaptain.github.io/blog/2014/10/27/learn-haskell-2</id>
+    <content type="html"><![CDATA[<p>今天发现一件很有趣的事，我在ghci下输入<code>:i zip</code>来查看zip这个函数的用法的时候得到的结果是<code>zip :: [a] -&gt; [b] -&gt; [(a, b)]   -- Defined in ‘GHC.List’</code>，zip明明是接收2个列表作为参数，然后一个元组的列表，但是根据这个输出，感觉zip是先处理列表[a]，然后再处理列表[b]，最后得到一个得到一个列表[(a, b)]。</p>
+
+<p>为了验证我的猜想，先试<code>zip [1,2,3] [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>。这是意料之中的，zip的作用就是这个。</p>
+
+<p>然后再试验：<code>(zip [1,2,3]) [3,2,1]</code> 得到 <code>[(1,3),(2,2),(3,1)]</code>，在这个函数调用中，我用括号把前一部分括起来了，也就是说先处理一个列表，然后返回一个函数再处理另一个列表。很奇怪，在实际函数调用中使用的是什么顺序来求值的呢？</p>
+
+<p>在<a href="http://stackoverflow.com/questions/26571897/haskell-function-invoke-order">stackoverflow</a>上面问了一下这个问题，原来这种现象有一个专业术语叫作<a href="http://en.wikipedia.org/wiki/Currying">currying</a>，也就是说函数如何处理多个参数。没有看到后面就问问题还是比较尴尬的，在haskell里面大名鼎鼎的术语都不知道，太丢人了。</p>
+
+<p>后来我在搜索curry的时候还发现了<a href="http://www-history.mcs.st-andrews.ac.uk/Biographies/Curry.html">Haskell Brooks Curry</a>这个人，haskell就是以他的名字命名的，真是牛得不行的一个家伙，16岁上哈佛，先是学医，后来又转学数学，后来有修了一个物理学的硕士，博士又开始搞数学，开始是打算写偏微分方面的论文的，到最后发现兴趣在逻辑学上，就转而研究逻辑去了。在40岁的时候成为了世界上最有名的逻辑学家。haskell的爱好者看起来都有很强的数理逻辑的背景啊，对于写过程式的代码也许真会越写越傻，因为思维到最后都变成机器的思维了。</p>
+
+<p>还有一件很有意思的事就是惰性求值，在别的语言里可真是不多见。所谓的惰性求值就是如果这个变量没有被用到那就不会去求值。比如说<code>let a = 1</code>，在这里定义了一个变量a，但是其实这时候a还没有求值，只有在我们调用a的时候才会打印它的值。再比如说<code>let a = cycle [1,2,3]</code>，这会一直循环[1,2,3]这个列表，但是如果我们不去调用a就没关系，反正不调用就没有值。或者我们<code>take 10 a</code>，就会得到返回列表的前10个值，在这里调用了a，但是在求值的时候只用到了前10个，所以a没有一直循环下去。别的语言有这种定义无限个元素的列表的能力吗？别的语言有惰性求值的能力吗？</p>
+]]></content>
+  </entry>
+  
+>>>>>>> ef491f7e3b6a305f0005fdec2c77e7adc9544322
 </feed>
