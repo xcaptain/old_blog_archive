@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>第一次接触虚拟化 - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1">
+  <meta property="og:title" content="第一次接触虚拟化 - Joey's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Joey's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a rel="index" href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+                <li >
+                    <a  href="/blog/categories/linux">Linux</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <form class="search navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+                            <input type="hidden" name="q" value="site:blog.joxy.org">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="q" placeholder="Search">
+                            </div>
+                        </form>
+                    </li>
+                
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+      </header>
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://blog.joxy.org" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-26T04:27:01+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-26</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        第一次接触虚拟化
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
+
+<p>按照原来部署<a href="http://f.joxy.org">http://f.joxy.org</a>的模式打算先在本地部署好环境，然后提交到git server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
+
+<p>搜索了一下发现现在比较流行的服务器环境配置，服务器管理都是通过container也就是容器来进行的，最老土的服务器管理方式是通过ssh连接上服务器，然后手动编译或者包管理的形式安装软件。但是这种方式有很大的局限性，不易把所有的机器都统一配置，因为所有配置文件都要由手动编辑，然后手动更新，必然有的机器版本早，有的机器版本晚，对于管理一个服务器集群来说这是很不方便的。而且服务器多了软件更新就是一个麻烦事，不可能一台机器一台机器的去更新。</p>
+
+<p>目前找到了3个比较有名的虚拟化技术：</p>
+
+<ol>
+<li>docker， 更类似于chroot</li>
+<li>vagrant，用来管理virtualbox虚拟机</li>
+<li>rocket，暂时没什么太多了解</li>
+</ol>
+
+
+<p>早上出门的时候在youtube上看了一个通过docker来安装coreos的视频，但是感觉要学习yaml语法配置，比较繁琐，那就先来看看vagrant吧。</p>
+
+<p>在vagrant的<a href="http://docs.vagrantup.com/v2/getting-started/index.html">官方文档</a>上找到了简单的使用方法，其实说白了就是一个自动安装运行virtualbox的脚本。首先得安装vagrant，<code>sudo pacman -S vagrant</code>，然后得安装virtualbox，<code>sudo pacman -S virtualbox</code>，然后还得安装一大堆的依赖，<code>sudo pacman -S virtualbox-host-modules</code>是用来安装virtualbox用来和宿主机通信的模块，如果这个软件太老了就会无法正常使用vagrant，那么一个补救措施就是<code>sudo pacman -S virtualbox-host-dkms</code>，virtualbox安装好了之后还得解决一些内核的驱动，最简单的就是<code>sudo dkms autoinstall</code>，这个命令会自动搜索<code>linux-headers</code>然后编译对应的驱动，如果系统上没有装<code>linux-header</code>那么还是会报错的，那就得<code>sudo pacman -S linux-headers</code>。需要安装的软件，驱动，都装好了之后就是在内核加载virtualbox的驱动了，很简单<code>sudo modprobe vboxdrv</code>，这时候就大功告成了。</p>
+
+<p>对照着教程在自己的笔记本上一步一步的做，先<code>vagrant init hashicorp/precise32</code>，这回在当前的目录下创建一个叫作<code>Vagrantfile</code>的文件，这里面包含了一大堆虚拟机的配置信息。然后<code>vagrant up</code>就会启动虚拟机，这时候<code>ps aux | grep -i virtualbox</code>就会发现virtualbox已经自动在运行了，在家目录的<code>VirtualBox\ VMs/</code>目录下也会创建对应虚拟机的目录，但是没有启动那个讨厌的图形界面这很不错。因为vagrant主要是用来配置服务器的，所以不需要图形界面，等系统下载安装好了之后就可以执行<code>vagrant up</code>来启动虚拟机了，这个操作会检测是否有<code>Vagrantfile</code>里面写的系统，如果没有就会自动从网上下载。系统下完之后<code>vagrant ssh</code>可以远程连接上虚拟机，发现虚拟机上面有一个网卡ip是<code>10.0.2.15</code>，好奇怪的东西，联网方式是NAT还是bridge呢？有一个自动安装系统的脚本，叫作<code>postinstall.sh</code>，以root身份执行它会自动安装系统，等最后跑完的时候吓我一大跳</p>
+
+<pre><code>++ rm -f '/home/vagrant/*.iso' /home/vagrant/postinstall.sh
+++ dd if=/dev/zero of=/EMPTY bs=1M
+dd: writing `/EMPTY': No space left on device
+78697+0 records in
+78696+0 records out
+82518818816 bytes (83 GB) copied, 207.558 s, 398 MB/s
+++ rm -f /EMPTY
+++ exit
+</code></pre>
+
+<p>一下dd我83G的硬盘，这可是我整个宿主机所有的空间了，不会影响到我吧，后来<code>df -h</code>了一下才发现虚拟机没有使用多少硬盘空间，而且宿主机也没有消耗掉很多硬盘空间。这样就有了一台虚拟机了，这可比直接用virtualbox方便多了，没有预先问我分配多少颗CPU，没有问我分配多少RAM，没有问我分配多少硬盘就把系统装好了，我喜欢。</p>
+
+<p>vagrant有一个共享目录就是宿主机的<code>Vagrantfile</code>所在的那个目录，也是虚拟机的<code>/vagrant</code>目录，这个目录双方都可以读写，想想真是有点小激动，要是以后我虚拟一个windows出来在上面跑一个qq，然后今天志军通过qq传给我的《刺杀金正恩》就不用在windows上跑着vlc服务器给我的arch笔记本供源了，不知道有没有人为vagrant做windows的box。</p>
+
+<p>不过vagrant毕竟是建立在virtualbox之上的，虽然说虚拟机占用宿主机的资源少了，但是还可以做得更好，要让机器资源更加充分的利用就得学习docker了，加油。</p>
+
+<p>另外今天和小青谈了一下学习方式的问题，他说我三天打鱼两天晒网没有持之以恒的做一件事，想想也确实是这样，从工作开始学习和使用php来干活，python是原来就会的所以也就没有怎么学，但是又学了几个礼拜ruby，学了几个礼拜haskell，工作在二次开发discuz，但是业余时间却自己搭了一个esotalk的论坛，现在又在研究虚拟化技术。虽然我一直认为身为一个互联网从业者就得把握住互联网的发展方向，不断学习最新的技术，我们生活在一个很开放的社会，最新最热的技术都是开源的有详细的文档，如果不去学习不去研究而是抱着把会的东西研究透彻的话，我有种辜负了这个时代的感觉。希望时代别辜负了我。</p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-26T04:27:01+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-26</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/virtualization/'>virtualization</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1/" data-via="" data-counturl="http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2014/12/20/how-to-use-emacs/" title="Previous Post: 如何使用emacs">&laquo; 如何使用emacs</a></li>
+            
+            
+            <li class="next"><a href="/blog/2014/12/27/install-coreos-with-vagrant/" title="Next Post: 通过vagrant安装coreos">通过vagrant安装coreos &raquo;</a></li>
+            
+          </ul>
+        
+      </footer>
+    </article>
+    
+  </div>
+
+  
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
+    
+    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
+    
+    <a class="list-group-item " href="/blog/2015/03/07/emacs-grep-find/">Emacs自定义grep-find的模板</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
+    
+  </div>
+</section>
+
+
+
+
+
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    
+    
+    <a class="list-group-item " href="/blog/categories/octopress/index.html">
+      <span class="badge">1</span>
+      octopress
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/web/index.html">
+      <span class="badge">5</span>
+      web
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/php/index.html">
+      <span class="badge">3</span>
+      php
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/unix/index.html">
+      <span class="badge">1</span>
+      unix
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/linux/index.html">
+      <span class="badge">11</span>
+      linux
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/shell/index.html">
+      <span class="badge">1</span>
+      shell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/haskell/index.html">
+      <span class="badge">2</span>
+      haskell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/fun/index.html">
+      <span class="badge">3</span>
+      fun
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/python/index.html">
+      <span class="badge">3</span>
+      python
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs/index.html">
+      <span class="badge">2</span>
+      emacs
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/virtualization/index.html">
+      <span class="badge">2</span>
+      virtualization
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/git/index.html">
+      <span class="badge">1</span>
+      git
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/docker/index.html">
+      <span class="badge">1</span>
+      docker
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/vagrant/index.html">
+      <span class="badge">1</span>
+      vagrant
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/tips/index.html">
+      <span class="badge">1</span>
+      tips
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,fish/index.html">
+      <span class="badge">1</span>
+      emacs,fish
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,/index.html">
+      <span class="badge">1</span>
+      emacs,
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/orgmode/index.html">
+      <span class="badge">1</span>
+      orgmode
+    </a>
+    
+  </div>
+</section>
+
+    
+  </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2015 - joey<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
+
+  </body>
+</html>

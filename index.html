@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.joxy.org">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.joxy.org">
+  <meta property="og:title" content="Joey's Blog">
+  <meta property="og:description" content="不甘平凡">
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Joey's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a rel="index" href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+                <li >
+                    <a  href="/blog/categories/linux">Linux</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <form class="search navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+                            <input type="hidden" name="q" value="site:blog.joxy.org">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="q" placeholder="Search">
+                            </div>
+                        </form>
+                    </li>
+                
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+      </header>
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9">
+    <div class="blog-index" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://blog.joxy.org" />
+      
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-26T23:12:37+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-26</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/26/btrfs-crash/" itemprop="url">Btrfs损坏之后的一系列麻烦</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>上周六晚上玩电脑的时候忘记插上电源了，直接导致笔记本意外断电关机，本来这只是一件小事，重启电脑即可，个人电脑一般没有多大的磁盘IO，数据基本都是在内存中读写的，但是等我重启电脑的时候却发现没法进系统了，一直卡在fsck那步，然后就是一直提示出现多少个<code>block error</code>，心立刻亮了半截，我用的arch没有做备份，如果硬盘损坏，里面的重要文件就都没了。于是重启进入win8下载了一个system-rescue-cd打算进入livecd修复分区，进去之后执行<code>btrfs check --repair /dev/sda3</code>，倒是检查出了一个块错误，但是没有修复，尝试重启电脑，结果出现<code>bad super block, unknown fs</code>，似乎问题加重了，上网搜了一下superblock损坏的话要找备份的superblock来替换，但是我没有定时做文件系统备份，行不通，后来尝试给<code>btrfs check</code>加上<code>--init-scum</code>参数，重启之后一大堆错误，死心，对数据不报期望了。</p>
+
+<p>上一个系统用了1年多没换，好不容易有一次机会折腾可不能放过，先尝试安装funtoo，和以前无数次一样，都是到最后驱动不了我的博通无线网卡，后面尝试sabayon这个桌面系统，自带了桌面肯定自带了所有驱动。尝试安装，这回小心了，把<code>/boot</code>单独放到一个ext2的分区中去了，然后/用的是xfs，毕竟SGI的技术还是非常可以的。安装之后果然不需要手动装驱动，这种傻瓜式操作我最喜欢了，gnome中总是配置不好fcitx，而且ghc编译的时候总是会报错，也是莫名其妙的问题，supervisor的配置都得自己手动写，一大堆反人类的事情真是头疼，被arch的KISS哲学熏陶得simple且stupid之后，实在是受不了gentoo的diy思想。用<code>btrfs restore /mnt/arch /mnt/arch_bak</code>备份大部分数据之后，继续重装arch。</p>
+
+<p>备份分区之后就多出了一个分区可以用来安装第三个系统，对于懒人来说肯定不愿意折腾文本安装界面，直接下载antergos的livecd开始图形化安装，一步一步做，选文件系统的时候还是不死心，不愿意放弃心爱的btrfs，又做死选了它。系统倒是很快就装好了，麻烦的地方是配置，不过默认的gnome3界面用得真心不习惯，所有应用窗口挤在一个桌面上，反复切换实在是太麻烦了。在安装fcitx输入法的时候不小心<code>systemctl stop dbus.service</code>，结果gnome桌面自动推出了，卡在一个黑乎乎的界面，对于一切操作都没有响应，强制关机之后发现又进不了硬盘了，满头黑线。</p>
+
+<p>反正这个新安装的系统没有什么数据，重装即可，这回发誓在也不用btrfs了，试试ext4这个根正苗红的linux传人，果然一切OK，有线无线网卡自动激活，电源管理自带，安装xmonad没问题，安装fcitx一切顺利，安装dmenu用来管理菜单，安装urxvt，复制之前的Xresources文件，安装fish，安装vim，安装emacs，安装supervisor，安装shadowsocks，安装proxychains，github上面拷贝spf13的vim配置，prelude的emacs配置，oh-my-fish，一切都是这么简单，几乎不需要自己做额外的配置。进入熟悉的xmonad界面之后内心久久不能平静，我就喜欢这种一份配置一直使用的wm。最大的遗憾就是没能找回原来用的rsa密钥对，也就是说我的服务器连接都得重新来一遍，password-store也不能用了，几十个密码没法导出来。</p>
+
+<p>从周日开始一知道今天（周四），花了太多时间，上班也用的是公司的电脑，太影响效率了，不过还好一切都解决了。总结一下这场事故中学到的东西吧：</p>
+
+<ol>
+<li>数据无价，平时得定时做好数据备份工作。鉴于xfs和ext4都没有磁盘快照功能，所以只能备份文件了，btsync似乎是一个不错的选择。</li>
+<li>不要把/boot和/放在一起，其实最好的分区规范应该是分为/boot, /usr, /这3块，这样就算/挂了，还能进入内核利用/usr里面的软件来修复自身。</li>
+<li>btrfs最近2年都不会再去碰了，虽然有很多很新的特性，但是一个礼拜伤我2次，这份大仇2年内都不能忘记。</li>
+<li>配置文件非常重要，最好是保存在网上，之前仅仅star了一下prelude的配置导致后面很多本地的自定义都没有提交到自己的仓库，分区崩溃之后自己写的代码都没了。</li>
+<li>最后再赞美一下xmonad，这是我用过的最好的桌面了。</li>
+</ol>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-15T00:58:56+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-15</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/15/use-orgmode/" itemprop="url">Use-orgmode</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>最近看书学习感觉非常没有劲，究其原因感觉是缺少一个做笔记的工具，原来那支跟随我4年的钢笔放家里没有带过来，
+京东上预订的lamy也还没有到货，看书不动笔我是什么都记不住的，所以感觉学习效率低了很多。印象笔记确实不错，
+配合浏览器的markdown-here扩展就能支持markdown语法了，但是缺少一个所见即所得的笔记客户端，用markdown写完
+之后转换为html还是感觉不够方便，并且总是要有网才能看到和编辑笔记很不方便。gnome自带的tomboy我也尝试了，
+这东西更加不好用，连markdown都不支持怎么能拿来记笔记。</p>
+
+<p>今天反正周六闲着没事就拿起了orgmode的<a href="http://orgmode.org/org.html">手册</a> 来看，看了几页竟然发现org转md是这么方便，果断以后就用emacs来
+记笔记了，又学会一个新技能。</p>
+
+<ul>
+<li>下面就来讲讲org做笔记的基本用法吧:
+
+<ol>
+<li>使用星号来表明段落的层级，和md的使用#差不多的概念</li>
+<li>支持有序列表，无序列表，语法和md类似，org或自动缩进对其每个列表项，如果发现不匹配了那就肯定某个地方缩进出问题了</li>
+<li>插入链接\[[链接]\[名字]] 这样就能插入一条链接了</li>
+<li>用\\来断行，这样就不必要把一段话写在一行了</li>
+<li>C-c C-e m m 来导出markdown文件</li>
+</ol>
+</li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-07T22:40:19+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-07</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/07/emacs-grep-find/" itemprop="url">Emacs自定义grep-find的模板</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>被emacs的搜索功能纠结好久了，今天下定决心来解决一下。以前执行<code>grep-find</code>命令的时候查找的模板都是<code>find . -type f -exec grep -nH -e {} +</code>，但是这条命令在fish下没法用，找了一下发现在<a href="https://github.com/fish-shell/fish-shell/issues/95">这个issue</a>里面作者提到了为什么fish里面没法用find，因为在fish里面<code>{}</code>是有意义的，所以就会提示exec缺少参数，所以如果写成<code>find . -type f -exec grep -nH -e '{}' +</code>就可以了，接下来的任务就是修改emacs的配置，把默认的<code>grep-find</code>的行为改掉。</p>
+
+<p>因为查找功能是emacs默认就有的，所以我直接就去源代码目录找了，在<code>/usr/share/emacs/24.4/</code>下执行<code>grep 'grep-find' -R *</code>，然后在<code>lisp/ldefs-boot.el</code>和<code>lisp/loaddefs.el</code>找到了相关的代码，然后试着修改第12669行，这行看起来像是相关的代码，结果改完了半天不生效，无奈之下去<a href="http://stackoverflow.com/questions/28915372/change-the-default-find-grep-command-in-emacs/">stackoverflow</a>提问，这个网站效率真的不是一般的高，很快就拿到答案了，有人说我找到的代码只不过是docstring而已，要修改的话得改<code>grep-find-template</code>,通过<code>C-h v</code>查看了一下这个变量的值，默认的是<code>"find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; {} +"</code>，修改它就行了，编辑<code>~/.emacs.d/personal/custom.el</code>，在最底下加上<code>(setq grep-find-template "find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; \'{}\' +")</code>，然后<code>eval-buffer</code>，问题完美解决，不得不说emacs真是灵活，不用改源代码就能实现自定义功能。</p>
+
+<p>后面又修改了<code>find-grep-dired</code>的模板，好像这条命令没有模板，所以我直接改的代码，<code>/usr/share/emacs/24.4/lisp/find-dired.el.gz</code>编辑第278行，把{}转义了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-28T22:50:06+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-28</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/28/emacs-eww/" itemprop="url">学习emacs-eww</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>最近一段时间比较无聊，<a href="http://www.iyue.club">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。
+而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
+
+<p>目前的计划还是慢慢来学习ruby on rails，所以空闲时间就做点有意思的事情了。现在来记录一下eww的用法，以后便于查阅，熟能生巧。eww的文档可以通过emacs自身来查看，现在就来总结一下emacs文档里对eww的介绍，我都是通过<code>C-h r</code>来打开emacs自带的info然后查找到eww的章节然后开始看的。</p>
+
+<p>基本操作：</p>
+
+<ol>
+<li><code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。</li>
+<li><code>l</code> 回到上一个页面，回退。</li>
+<li><code>r</code> 回到下一个页面，回进。</li>
+<li><code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。</li>
+<li><code>g</code> 刷新当前页面。</li>
+<li><code>w</code> 复制当前url到剪切板。</li>
+<li><code>H</code> 查看历史记录。</li>
+<li><code>b</code> 添加书签。</li>
+<li><code>B</code> 查看书签。</li>
+<li><code>&amp;</code> 调用外部浏览器打开当前url。</li>
+<li><code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。</li>
+<li><code>C</code> 查看所有存在的cookie</li>
+</ol>
+
+
+<p>上面这些东西都可以查看文档得到，比较没有营养，还是学习新东西有意思。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-20T18:18:25+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-20</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/20/use-btsync/" itemprop="url">使用btsync</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p><meta charset="UTF-8"/>
+昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
+
+<p>但是遇到了一个有点麻烦的问题，在最初我能够脸上p2p网络，并且找到了供源的机器，但是就是没法和他们同步，总是提示和另一方时间偏差太大无法同步，搜了一下发现是系统时间设置的问题，通过<a href="https://wiki.archlinux.org/index.php/Time">wiki</a>又好好了解了一下linux的时间机制。</p>
+
+<p>linux上的时间包括2种，一是硬件时间，另一个是系统时间。</p>
+
+<ol>
+<li><p>硬件时间：(Real Time Clock, RTC)是由机器硬件记录的时间，根据<a href="http://www.tldp.org/LDP/sag/html/hw-sw-clocks.html">tldp</a>的说法，个人电脑都内建了一块独立的电池，来给一个时钟供电，这个时钟可以通过BIOS来设置，或者开机之后通过操作系统来设置。</p></li>
+<li><p>系统时间:(software clock)，这个时间是由linux内核来设置的。在系统中存放着一个叫做<code>/etc/adjtime</code>的配置文件，我本机这个文件是7月份创建的，也就是我上次重装系统的时间，是linux的初始系统时间，之后linux估计用了某种还不清楚的手段，每次开机都会更新最新的系统时间。</p></li>
+</ol>
+
+
+<p>我的问题就是系统时间和硬件时间不一致，估计是因为双系统和windows共存导致的，解决方法就是通过执行<code>sudo hwclock --systz</code>来把系统时间和硬件时间都和本地时区的时间对齐。时区配置文件是<code>/etc/localtime</code>这个文件可以通过<code>timedatectl</code>命令来设置，也可以手动建立到<code>/usr/share/zoneinfo/Asia/Hong_Kong</code>的软链接，或者是直接复制<code>/usr/share/zoneinfo/Hong_Kong</code>到<code>/etc/localtime</code>来设置。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-13T08:06:21+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-13</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/13/python-encoding/" itemprop="url">Python2编码问题</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
+
+<p>在执行rake new_post的时候，突然提示</p>
+
+<pre>
+rake aborted!
+LoadError: cannot load such file -- bundler/setup
+/home/joey/octopress/Rakefile:2:in `<top (required)>'
+(See full trace by running task with --trace)
+</pre>
+
+
+<p>突然感觉很奇怪，前几天更新博客的时候都没有遇到这种情况，后来执行<code>rake --trace</code>的时候发现</p>
+
+<pre>
+/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+/home/joey/octopress/Rakefile:2:in `<top (required)>'
+/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load'
+/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:689:in `raw_load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:94:in `block in load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
+/usr/lib/ruby/2.2.0/rake/application.rb:93:in `load_rakefile'
+/usr/lib/ruby/2.2.0/rake/application.rb:77:in `block in run'
+/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
+/usr/lib/ruby/2.2.0/rake/application.rb:75:in `run'
+/usr/bin/rake:33:in `<main>'
+</pre>
+
+
+<p>原来是系统ruby的版本更新到2.2了，以前是2.1的，octopress用的是2.1的gem，也许是和2.2的ruby不兼容吧，所以要重装2.2的gem套系，执行<code>proxychains gem install bundle</code>，有经验了必须要通过代理才能访问rubygem网站，下载完之后需要把<code>/home/joey/.gem/ruby/2.2.0/bin</code> 添加到环境变量中，因为我用的是fish，所以编辑<code>~/.config/fish/config.fish</code>就行了。然后用bundle安装完必要的依赖<code>proxychains bundle install</code>，下载一大堆gem，最后发现系统用的rake已经是10.4.2版的了，而配置文件中需要的还是10.4.0,手动编辑一下<code>Gemfile.lock</code>，把版本号改过来就行了，后来又重装了一下<code>safe_yaml</code>和<code>liquid</code>，把对应的版本号也都改过来了，一个小版本升级搞得这么麻烦，真是郁闷。</p>
+
+<p>接下来就是说说今天写代码遇到的问题了。</p>
+
+<p>需求很简单（话说写采集需求都很明确），这回需要的是采集明星的信息，第一个方案用的是采集baidu整理的明星信息，过程很简单，写了一个简单的脚本采了900条数据，但是后来发现图片做了防盗链，采集过来的图片不是图片的绝对路径，而是通过一台服务器生成的图片，也许是做了cookie的限制或者是做了ip的限制，导致每次刷新页面的时候都会返回一个403错误，链接在<a href="http://www.baidu.com/s?wd=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8&amp;rsv_spt=1&amp;issp=1&amp;f=8&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=4&amp;rsv_sug4=83&amp;rsv_sug1=3&amp;rsv_pq=d5fdf7cd00002ac7&amp;rsv_t=975c0jUWTeYgIUYA%2FfdqSJ75f%2BipUP9QR9v8Qgqb2jzy3rnHgTU3k4rBD%2B5moP73i00p&amp;rsv_sug2=0&amp;inputT=5564">这里</a>，以后有时间也许会去看看这个防盗链的实现，但是现在我可懒得花时间去研究怎么破解这个限制，那就换别的站采集吧。</p>
+
+<p>和产品沟通了一下，他也觉得如果死扣baidu是不明智的选择，后来换成360整理的资源了，链接在<a href="http://www.haosou.com/s?ie=utf-8&amp;shb=1&amp;src=360sou_newhome&amp;q=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8">这里</a>，数据也比较明确，分成3栏：领域，地域，性别，这个分类还是比较好的，以后我们拿来查询也方便。通过chrome开发工具，找到了js的接口，简单分析了一下就知道要获取那块数据，接下来就是敲代码了，最后的代码在<a href="https://gist.github.com/xcaptain/cbf9980f1b30b2467d8a">这里</a>，本来是打算试试octopress对于gist的支持的，但是因为gist在国内被墙了，会影响整篇文章的阅读，所以就换个链接在这里，有兴趣的朋友就去看看。</p>
+
+<p>在写代码过程中遇到一个编码问题，困扰我很久，不过最终还是解决了。</p>
+
+<p>在使用python2的时候，要自己手动设置编码，python默认的字符串编码是ascii，这就导致如果在python2程序中出现了中文都会提示一个语法错误，但是如果在python2文件中强制加上一句<code># -*- coding: utf-8 -*-</code> 这样python在执行程序的时候就知道使用utf-8来编码里面的字符串了。也许是我本地locale的设置，在打开python解释器的时候总是会自动帮我使用utf-8编码。
+首先说说ascii编码，ascii只能编码代码点从0到127的字符，也就是英文字符，如果遇到代码点很高的字符，比如说中文，就没法争取的编码了，就会报错。下面来举几个例子：</p>
+
+<pre><code class="python2">s1 = '你好，world' #这里如果指定了文件的编码为utf-8，会自动把这个字符串编码成utf-8
+s1 =&gt; '\xe4\xbd\xa0\xe5\xa5\xbd\xef\xbc\x8cworld'
+s2 = u'你好，world' #这里前面加了一个u来表明这个字符串是一个unicode字符串
+s2 =&gt; u'\u4f60\u597d\uff0cworld'
+u2 = s2.encode('utf-8')
+u2 =&gt; '\xe4\xbd\xa0\xe5\xa5\xbd\xef\xbc\x8cworld'
+</code></pre>
+
+<p>字符串在内存中应该是用类似utf-8的形式存储的，这样比较节省内存空间，而且也不会出现太多的0导致字符串在大尾和小尾机器上的不兼容。所以对于一个python字符串的旅程可以大致归结为：</p>
+
+<ol>
+<li>在编辑器里写下<code>s1 = '你好，world'</code>然后保存为一个python文件的时候，编辑器会自动选择某种编码来保存这个文件，一般来说都是用的utf-8。</li>
+<li>python把这个程序加载进解释器的时候，会根据文件头来判断使用什么编码来解码这个文件，也就是<code># -*-coding: utf-8 -*-</code>这行，如果没有这行就会用默认的<code>ascii</code>来解码。</li>
+<li>这时候程序里的字符串都是utf8的。
+写到这里突然发现昨晚的问题实在不算问题，看来之前是没有静下心来研究，写博客还是有好处的。</li>
+</ol>
+
+
+<p>接下来再看看python3,python3的默认编码是unicode，而实际存在内存中的就是字节码，bytecode。也就是说一个字符串只有2种状态，unicode和byte，这样就节省很多事情了，没有各种编码解码的麻烦。
+<code>python3
+s = '你好，world' #这是一个str类型的字符串
+b1 = s.encode('utf-8') #这是把s编码为utf-8后的字节码
+b2 = s.encode('gbk') #把s编码为gbk后的字节码
+</code>
+相对于2来说，3最大的进步就是不需要手动encode，decode，对于处理未知编码的文件最方便了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-06T06:54:11+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-06</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/06/play-with-git/" itemprop="url">玩弄git</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
+
+<p>今晚就稍微熟悉了一下discourse的结构。</p>
+
+<ol>
+<li>我本地的开发环境，这个没什么多说的，就是用vagrant跑了一个虚拟机，上面运行着discourse需要的环境。</li>
+<li>线上的环境是用docker运行的，这是官方推荐的安装方式，说实话最初我竟然没有明白discourse的架构。</li>
+</ol>
+
+
+<p>其实也是很简单的，在我的vps上跑着一个docker，docker类似于一个虚拟机，创建了一个容器，里面跑着discourse需要的环境。代码存放在<code>/var/www/discourse</code>下，但是因为是用官方的安装方法安装的，只能等官方的更新，如果我们要自定义怎么办呢？那就需要改git的配置了。</p>
+
+<p>我在github上面fork了官方的仓库，把这个自己的仓库拷贝到本地，改了一些简单的文件，提交，这时候我去官方仓库看，发现他们竟然领先我好多个版本，那就 把他们的改动也拿过来吧，这里需要添加官方仓库的配置，使用<code>git remote add upstream git://github.com/discourse/discourse.git</code>，这时候会发现在<code>.git/config</code>里面多了一个remote的配置，如果需要把这个upstream的改动也合并到自己的仓库，就要<code>git fetch upstream</code>，等改动都更新下来了之后会存放在<code>.git</code>目录下，这时候代码还没有变化。如果执行<code>git pull upstream master</code>，就能把版本库中的版本检出到主分支了。然后执行<code>git push origin master</code>就能把本地的版本更新到github了。</p>
+
+<p>我想把改动也更新到vps上，那就需要改vps上git仓库的配置了。</p>
+
+<ol>
+<li><p><code>cd /var/discourse/</code>
+切换到docker配置所在的目录</p></li>
+<li><p><code>./launcher ssh app</code>
+因为我当初初始化配置的时候用的是app来作为container的名字，所以要加上app参数</p></li>
+<li><p><code>cd /var/www/discourse/</code></p></li>
+<li><p><code>git remote add develop git://github.com/xcaptain/discourse.git</code>
+这样就把我的github仓库中的版本作为开发版加入到线上的配置了。</p></li>
+<li><p><code>git pull develop master</code>
+ 就能把我的版本拿下来了，因为我的这个版本都会现在本地开发环境测试过之后再上，所以是很安全的</p></li>
+</ol>
+
+
+<p>这样应该也算是和一大伙志愿者协同开发吧，虽然我没有提交pull request，但是我一直在用别人的免费的代码，真是惭愧。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-04T07:16:58+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-04</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/04/debug-shadowsocks/" itemprop="url">调试shadowsocks</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
+
+<p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
+
+<p>笔记本没法翻墙是什么问题呢？试了一下手机，用fqrouter是没问题的，那就说明服务器端是没问题的，好吧，在客户端上找原因。</p>
+
+<p>之前安装的客户端是nodejs版的，一直都这么用感觉没什么问题，现在我就打算换个客户端版本，试试python的。安装也很简单，但是就是上不了网，真是郁闷。没办法了，慢慢来调试找问题吧。我在服务器端和客户端都开启了-v参数，用来详细输出日志。</p>
+
+<ol>
+<li><p>用fqrouter访问的时候，服务器端输出：
+ <pre>
+ 2015-01-03 08:48:07 INFO: accept a connection.
+ 2015-01-03 08:48:07 INFO: connect to: 106.162.216.94:443
+ 2015-01-03 08:48:07 INFO: asyncns resolved.
+ 2015-01-03 08:48:07 INFO: remote connected.
+ </pre>
+ 看来这是正常连接，返回数据也正常。</p></li>
+<li><p>本地用firefox访问google，服务器端输出：
+ <pre>
+ 2015-01-03 08:49:56 INFO: accept a connection.
+ 2015-01-03 08:49:56 INFO: connect to: plus.google.com:443
+ 2015-01-03 08:50:16 INFO: asyncns resolved.
+ 2015-01-03 08:50:16 ERROR: getaddrinfo: Operation now in progress
+ 2015-01-03 08:50:16 INFO: current server connection: 2
+ </pre>
+ 这就是失败的连接在服务器的日志了，只看到一行错误，搞不懂原因。</p></li>
+<li><p>在服务器端执行<code>netstat -naltp | grep 8388</code>的输出：
+ <pre>
+ tcp        0      0 111.222.231.123:8388    0.0.0.0:*               LISTEN      1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29403     ESTABLISHED 1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29406     ESTABLISHED 1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29402     TIME_WAIT   -
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29400     TIME_WAIT   -
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29401     TIME_WAIT   -
+ </pre>
+ 本地可以连接服务器的端口，那为什么没有数据返回呢？</p></li>
+<li><p>在本地执行<code>netstat -naltp | grep 1080</code>的输出：
+ <pre>
+ tcp        0      0 127.0.0.1:1080          0.0.0.0:*               LISTEN      732/python
+ tcp        0      0 127.0.0.1:45312         127.0.0.1:1080          ESTABLISHED 744/firefox
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45312         ESTABLISHED 732/python
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45307         TIME_WAIT   -
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45309         TIME_WAIT   -
+ </pre>
+ 看来浏览器和本地端口之间也是通的。</p></li>
+</ol>
+
+
+<p>本地应用可以连接本地的端口，本地的端口可以连接服务器，为什么就是没有数据呢？不会调试web程序，不会抓包，这时候只能乱猜原因，一下午都没有想通问题，就在我想要发帖求助的时候，想了一下为什么用fqrouter的时候服务器端接收到的是一个ip，而本地客户端连接服务器的时候就是一个域名，也许dns出问题了，试了一下<code>ping www.google.com</code>，果然不通，问题找到了，虚拟机提供商这个机房的dns昨晚出问题了，导致解析失败，添加一个第三方的dns，问题解决。</p>
+
+<p><code>vi /etc/resolvconf/resolv.conf.d/base</code>添加下面2行</p>
+
+<pre>
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</pre>
+
+
+<p>然后执行<code>resolvconf -u</code>刷新dns，这样就能使用google的dns了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-03T08:43:43+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-03</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/03/deploy-email-service/" itemprop="url">部署邮件服务</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
+
+<h4>首先确定一下发件服务。</h4>
+
+<p>根据网上的推荐，我用的是<a href="https://mandrillapp.com/">mandril</a>，这家公司为免费帐号提供每月发12000封邮件，对于个人玩来说足够了。接下来就是注册帐号，注册完成之后会有一个向导引导着去配置发件服务。填好之后配置都会出现在<a href="https://mandrillapp.com/settings">这里</a>，这些配置包括发件服务器的域名，端口，smtp用户名，以及密码，密码是网站生成的，要好好保存。</p>
+
+<h4>然后就是配置收件服务</h4>
+
+<p>同样也是根据网上的推荐，收件服务用的是国内一家公司的，叫做<a href="https://www.zoho.com/">zoho</a>，这家公司为每个免费帐号提供一个代收域名，15个免费邮箱，每个免费邮箱提供5G存储空间，对于个人玩来说也是足够了的，因为可以把邮件下载到本地，然后删除服务器上的邮件存档，所以这5G的空间可以永远也用不完。好像这家公司就在中关村，真想去参观一下。用zoho的原因是它提供邮件代收服务，我有一个域名<code>joxy.org</code>，我想注册一些邮箱以<code>@joxy.org</code>结尾，zoho就提供这种功能。过程也是很简单，需要先去注册帐号，注册帐号的时候要验证你是否对这个域名有所有权，所以还需要去<a href="https://mya.godaddy.com/">godaddy</a>上面验证一下，我是通过cname的形式来验证的。注册完成之后还得配置一下godaddy，因为在注册域名的时候默认设置了2个收件商，现在我不想用那2个厂商的收件服务了，所以要改改dns设置，找到mx这条配置，删掉额外的2个厂商的配置，然后加上一条mx记录，Host是@,表示joxy.org自身，Points to填mx2.zohomail.com，剩下的随便填就行了。这样当有人往<code>user@joxy.org</code>发邮件的时候，发件服务器通过dns查询的时候就知道要发给zoho，zoho就可以帮忙代收。</p>
+
+<h4>发件服务和收件服务都配置好了，接下来就是测试一下是否能收发邮件了。</h4>
+
+<p>用thunderbird可以很方便的写邮件收邮件。把我刚刚创建的xiefei@joxy.org这个帐号创建了，手动配置好这个帐号发送邮件和接收邮件的设置，就可以开始测试了。在配置smtp发件的时候需要输入密码验证用户是否有权限来发邮件，所以一定要记得填smtp的密码。我测试了一下和我的gamil邮箱互发邮件，一点问题都没有，而且邮件也没有进入垃圾箱。这真是太好了，图形界面的客户端可以收发邮件，真想看看通过php,ruby脚本能不能发邮件。</p>
+
+<p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
+
+<p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-01T19:35:23+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-01</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/01/arch-pacman-broken/" itemprop="url">解决pacman依赖关系破裂问题</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
+
+<pre>
+packagekit: requires pacman<4.2.0
+package-query: requires pacman<4.2.0
+</pre>
+
+
+<p>但是我查看了一下pacman的版本,<code>pacman --version</code>发现是4.1的满足需求啊，为什么会有这样的提示呢？我想用<code>sudo pacman -S pacman</code>重装pacman也不行，真是费解，这么重要的软件可千万不能出错啊。后来上网搜了一下，发现有人也遇到这种情况，都是直接<code>sudo pacman -R packagekit python-packagekit yaourt package-query</code>，然后再<code>sudo pacman-db-upgrade</code>升级一下数据库，然后再<code>sudo pacman -Syu</code>，ok问题解决。</p>
+
+<p>还有一点是关于virtualbox的，今天我又用了一下vagrant，发现每次<code>vagrant up</code>都会提示：</p>
+
+<pre>
+VirtualBox is complaining that the kernel module is not loaded. Please
+run `VBoxManage --version` or open the VirtualBox GUI to see the error
+message which should contain instructions on how to fix this error.
+</pre>
+
+
+<p>用最简单的方法<code>sudo modprobe vboxdrv</code>然后<code>lsmod | grep vbox</code>发现加载进了</p>
+
+<pre>
+vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci`
+</pre>
+
+
+<p>但是这时候还是会报错说找不到网卡驱动，后来我执行<code>sudo vboxreload</code>显示：</p>
+
+<pre>
+vboxpci                23139  0
+vboxnetflt             27412  0
+vboxnetadp             25443  0
+vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
+</pre>
+
+
+<p>这时候才算是真正的把所有的驱动都加进来了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+    </div>
+
+    <ul class="pager">
+      
+        <li class="previous"><a href="/posts/2">&larr;&nbsp;Older</a></li>
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+        <li class="next disabled"><a href="#">Newer&nbsp;&rarr;</a></li>
+      
+    </ul>
+  </div>
+
+  
+    <aside class="sidebar col-md-3">
+      
+        <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
+    
+    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
+    
+    <a class="list-group-item " href="/blog/2015/03/07/emacs-grep-find/">Emacs自定义grep-find的模板</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
+    
+  </div>
+</section>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    
+    
+    <a class="list-group-item " href="/blog/categories/octopress/index.html">
+      <span class="badge">1</span>
+      octopress
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/web/index.html">
+      <span class="badge">5</span>
+      web
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/php/index.html">
+      <span class="badge">3</span>
+      php
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/unix/index.html">
+      <span class="badge">1</span>
+      unix
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/linux/index.html">
+      <span class="badge">11</span>
+      linux
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/shell/index.html">
+      <span class="badge">1</span>
+      shell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/haskell/index.html">
+      <span class="badge">2</span>
+      haskell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/fun/index.html">
+      <span class="badge">3</span>
+      fun
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/python/index.html">
+      <span class="badge">3</span>
+      python
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs/index.html">
+      <span class="badge">2</span>
+      emacs
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/virtualization/index.html">
+      <span class="badge">2</span>
+      virtualization
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/git/index.html">
+      <span class="badge">1</span>
+      git
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/docker/index.html">
+      <span class="badge">1</span>
+      docker
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/vagrant/index.html">
+      <span class="badge">1</span>
+      vagrant
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/tips/index.html">
+      <span class="badge">1</span>
+      tips
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,fish/index.html">
+      <span class="badge">1</span>
+      emacs,fish
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,/index.html">
+      <span class="badge">1</span>
+      emacs,
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/orgmode/index.html">
+      <span class="badge">1</span>
+      orgmode
+    </a>
+    
+  </div>
+</section>
+
+      
+    </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2015 - joey<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
+
+  </body>
+</html>

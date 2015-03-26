@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Php | Joey's Blog]]></title>
+  <link href="http://blog.joxy.org/blog/categories/php/atom.xml" rel="self"/>
+  <link href="http://blog.joxy.org/"/>
+  <updated>2015-03-26T23:53:55+08:00</updated>
+  <id>http://blog.joxy.org/</id>
+  <author>
+    <name><![CDATA[joey]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[调试discuz（一）]]></title>
+    <link href="http://blog.joxy.org/blog/2014/11/02/debug-discuz-1/"/>
+    <updated>2014-11-02T07:40:57+08:00</updated>
+    <id>http://blog.joxy.org/blog/2014/11/02/debug-discuz-1</id>
+    <content type="html"><![CDATA[<p>现在他们在做一个论坛，因为人手不够，所以最后决定使用discuz来快速搭建一个论坛。我是很反感这种做法的，大公司怎么会用discuz来搭建自己的社区呢？太丢脸了，这不是告诉别人你没有研发能力吗？不过现在我们这边的研发能力确实很弱，公司不是研发型的，太悲哀了。</p>
+
+<p>我以前从没有接触过discuz，第一次碰到感觉压力很大，什么数据字典，缓存结构，插件机制，模板机制我都不懂，最初他们只叫我做了一点简单的部署问题，比如改个nginx的rewrite规则，改个简单的模板样式，不过渐渐的麻烦的任务也来了。</p>
+
+<p>首先是说他们买了一个模板（真够丢人的），但是这个模板是被加密了的，现在要稍微二次开发一下，比如说改一些url的规则，使得url更加seo友好。其实模板上的url还是很好改的，模板改了之后再加点rewrite到nginx就好了。但是在分页上的url就不好改了，需要去看插件是如何获得数据，输出数据的，结果可恨的是这个插件的开发者把取数据，传数据的过程都给加密了，让人非常郁闷。到最后甚至一度想要把这些加密的方法破解了，不过到底不可能花太多时间去破解，干活才是最重要的。</p>
+
+<p>调了一晚上，终于发现了插件在实现分页的时候调用到了一个discuz的分页函数，在<code>source/function/</code>里面执行<code>grep 'multi' -R *</code>在<code>function_core.php</code>这个文件里找到了multi这个函数，然后发现这个函数调用了<code>helper_page::multi</code>这个函数，继续找这个函数。首先找<code>helper_page</code>这个类，那就去<code>source/class/</code>里面找，<code>grep 'multi' -R *</code>在<code>helper/helper_page.php</code>里面找到了multi这个静态方法。接下来就是改造这个方法了。大致看了一下，这个函数接受一个url，一个当前页码，以及一些不太重要的东西作为参数，最后输出一段分页代码。在生成html的时候调用到了一个叫做<code>mpurl</code>的方法，这个函数会决定使用什么形式的分隔符来输出url。到这里形势大概就很明朗了，我不必要去改分页函数的逻辑，我只要改<code>mpurl</code>这个函数就好了，如果是这个插件的url，我就让这个函数特殊照顾一下这个插件。</p>
+
+<p>那么现在问题来了，我是该怎么去改造这个函数呢？在它里面加判断？外面加判断？重写一个自定义的函数？我的想法是加入一个自定义的分页函数，<code>multi</code>在调用<code>mpurl</code>的时候会判断一下是调用它还是调用我写的自定义的函数。我想要通过函数名复制来实现，但是我不知道在php里怎么做，所以我就去<a href="http://stackoverflow.com/questions/26657161/can-i-assign-a-function-in-php">stackoverflow</a>上问了一下，有个家伙说可以通过变量来保存函数名，比如说<code>$func = 'add';</code>，那么<code>$func(1,2);</code>就等同于<code>add(1,2);</code>了。这个方法有点函数式编程的意思了，不过还是不够，本质上不属于函数名赋值，而且对于调用类里的方法不起作用，我尝试着<code>$func = 'self::add'</code>，然后发现总是会报错。后来采用了另一个家伙的方法，写一个帮助函数，在这个帮助函数里面会判断到底是使用dz原生的<code>mpurl</code>还是使用我的<code>my_mpurl</code>，这个方法挺好，我照着做了，终于把分页搞定了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Php-array-splice]]></title>
+    <link href="http://blog.joxy.org/blog/2014/09/02/php-array-splice/"/>
+    <updated>2014-09-02T22:21:55+08:00</updated>
+    <id>http://blog.joxy.org/blog/2014/09/02/php-array-splice</id>
+    <content type="html"><![CDATA[<p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
+一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
+
+<p>我的思路是把要过滤的数据都放到一个叫做<code>$filterGames</code>的数组里面，所有的数据存放在<code>$arr</code>这个数组里。
+因为要用php实现，没有现成的方法，随便写了一个线性复杂度的算法，挨个检测<code>in_array</code>，然后用<code>array_splice</code>这个
+函数来删除元素。本来思路是很简单的，但是就是得不到我要的结果。具体代码如下：
+<code>
+foreach($arr as $k => $v) {
+    if(in_array($v, $filterGames)) {
+        array_splice($arr, $k, 1)
+    }
+}
+return $arr;
+</code>
+结果总是过滤了部分数据但是还有部分不能过滤。</p>
+
+<p>今天发现问题之后我改了一下，用的是<code>unset</code>这个方法。
+<code>
+foreach($arr as $k => $v) {
+    if(in_array($v, $filterGames)) {
+        unset($arr[$k]);
+    }
+}
+</code>
+本来我应该用array_splice来删除数组元素的，因为这个方法不会在数组中留下一个洞，而unset把元素删了之后会留下一个洞，导致
+没法通过数组的key来遍历。至于为什么array_splice只能过滤部分数据而unset可以全部过滤掉也是因为当使用array_splice的时候
+删了一个元素后面的元素会往前面挤，导致错过了被删的机会。而unset则是删了一个元素之后就留出了一个洞，整个数组的结构不变。
+我觉得php的数组应该是用链表来实现的，在每个节点中有一个字段记录了当前节点相对于首节点的位置，如果用array_splice来删除
+节点，会重写每个节点的这个相对位置，而用unset来删除则不会。</p>
+
+<p>不过作为上层应用开发者对于语言的具体实现不必要去研究，只要形象的知道这2种方法的不同就够了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[一个php分页示例]]></title>
+    <link href="http://blog.joxy.org/blog/2014/08/16/a-php-pagination-example/"/>
+    <updated>2014-08-16T17:26:45+08:00</updated>
+    <id>http://blog.joxy.org/blog/2014/08/16/a-php-pagination-example</id>
+    <content type="html"><![CDATA[<p>上次做的那个视频站有一个页面被领导否决了，因为之前是使用ajax加载数据的，他们说这种方法
+对seo不友好，所以让我重新再写一遍。不得不吐槽这些可恶的领导了，虽然我们只是个小兵，可是
+一句话就把我们辛辛苦苦写出来的代码给否决了，怎么说都还是很伤心的。不过伤心归伤心，活
+还是的继续干的，谁让我们是给别人打工的呢。</p>
+
+<p>之前的实现方法是用jsonp来做的，我用php写好接口，输出一个回调函数和数据，前端获得这个数据，
+然后就能显示出页面了。不过现在要重写只能我自己来处理数据了。</p>
+
+<p>首先遇到一个多级选择的问题，这个问题一点都不是问题，因为既然是反复请求，那么给每一级选项
+加上一个参数，然后传给后台就能取出相应的数据了。真正让我比较烦恼的是分页的功能如何实现。</p>
+
+<p>分页貌似简单，实则复杂。如果对于很少的页面当然可以把所有的页码罗列出来，但是如果页面很多，
+比如一个分类有100个页面，那么如何显示这100个页面就是个问题了，通常的惯例是显示头几个，当前页
+附近几个，和最后几个页面，剩下的用省略号表示。这时候就涉及到一个比较麻烦的问题了，怎么设计
+当前的分页结构，使得页面均匀分布。</p>
+
+<p>在网上搜了一段代码，稍微改动了一下加到我的页面中去了，不得不说这段代码的逻辑还是很复杂的，
+我甚至都没有仔细去研究为什么要这么做，只是稍微看了一下各种情况对应的代码实现。</p>
+
+<pre>
+class BaseFunction {
+    /**
+     * lol.7k7k.com列表页分页函数
+     * 返回一段html代码
+     * $page  当前页面号码，如1,2
+     * $totalCount: 总共视频数目，根据这个值获得总页数
+     * $adjacents:  现实与当前也相邻的几个页面
+     * $catname:  分类名，比如zmjs
+     * $tagname:   标签名中文
+     * $sort: 排序  "/$tagname-$sort-$page/"
+     */
+    public static function listPager($page, $pageSize, $totalCount, $adjacents, $catname, $tagname, $sort) {
+        if($page == 0) $page = 1;                //默认从第一页开始
+        $prev = $page - 1;
+        $next = $page + 1;
+        $lastPage = ceil($totalCount/$pageSize); //最后一页编号
+        $lpm1 = $lastPage - 1;                   //倒数第二页编号
+
+        $pagination = '';
+        if($lastPage > 1) {
+            $pagination .= "<div class=\"pagination\">";
+            if($page > 1) {
+                $pagination .= "<a href=\"/$catname/$tagname-$sort-$prev/\">上一页</a>";
+            } else {
+                $pagination .= "<span class=\"disabled\">上一页</span>";
+            }
+            if($lastPage < 7 + ($adjacents * 2)) { //不需要隐藏额外的页码
+                for($counter = 1; $counter <= $lastPage; $counter++) {
+                    if($counter == $page) {
+                        $pagination .= "<span class=\"curr\">$counter</span>"; //高亮当前页
+                    } else {
+                        $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>"; //其余页面做成链接
+                    }
+                }
+            } elseif($lastPage > 5 + ($adjacents * 2)) { //页面很多，要隐藏部分页码
+                if($page < 1 + ($adjacents * 2)) {       //靠近前面，隐藏后面的页面
+                    for($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
+                        if($counter == $page) {
+                            $pagination .= "<span class=\"curr\">$counter</span>";
+                        } else {
+                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
+                        }
+                    }
+                    $pagination .= "...";
+                    $pagination .= "<a href=\"/$catname/$tagname-$sort-$lpm1/\">$lpm1</a>";
+                    $pagination .= "<a href=\"/$catname/$tagname-$sort-$lastPage/\">$lastPage</a>";
+                } elseif($lastPage - ($adjacents * 2) > $page && $page > ($adjacents * 2)) { //在中间，前后都隐藏部分
+                    $pagination .= "<a href=\"/$catname/$tagname-$sort-1/\">1</a>";
+                    $pagination .= "<a href=\"/$catname/$tagname-$sort-2/\">2</a>";
+                    $pagination . "...";
+                    for($counter = $page - $adjacents; $counter <= $page + $adjacents; $counter++) {
+                        if($counter == $page) {
+                            $pagination .= "<span class=\"curr\">$counter</span>";
+                        } else {
+                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
+                        }
+                    }
+                } else { //靠近尾部，隐藏前面部分
+                    $pagination .= "<a href=\"/$catname/$tagname-$sort-1/\">1</a>";
+                    $pagination .= "<a href=\"/$catname/$tagname-$sort-2/\">2</a>";
+                    $pagination .= "...";
+                    for($counter = $lastPage - (2 + ($adjacents * 2)); $counter <= $lastPage; $counter++) {
+                        if($counter == $page) {
+                            $pagination .= "<span class=\"/$catname/$tagname-$sort-$counter/\">$counter</span>";
+                        } else {
+                            $pagination .= "<a href=\"/$catname/$tagname-$sort-$counter/\">$counter</a>";
+                        }
+                    }
+                }
+            } //end elseif 对于很长的页面情况判断结束
+            if($page < $counter - 1) {
+                $pagination .= "<a href=\"/$catname/$tagname-$sort-$next/\">下一页</a>";
+            } else {
+                $pagination .= "<span class=\"disabled\">下一页</span>";
+            }
+            $pagination .= "</div>";
+            return $pagination;
+        } else {  //对于只有一页的情况，也做一个分页
+            $pagination .= "<div class=\"pagination\">";
+            $pagination .= "<span class=\"disabled\">上一页</span>";
+            $pagination .= "<span class=\"curr\">1</span>";
+            $pagination .= "<span class=\"disabled\">上一页</span>";
+            $pagination .= "</div>";
+            return $pagination;
+        }
+    }
+}
+</pre>
+
+
+<p>在我的网站上面试验了一下，基本符合我的要求，不过难怪php和javascript都要做一个分页类，手动实现分页真是太累了。还好有人共享代码，不然自己写有得写了。</p>
+
+<p>OMG,竟然把我代码里的html自动解析了，这让我怎么插入html代码啊。</p>
+]]></content>
+  </entry>
+  
+</feed>

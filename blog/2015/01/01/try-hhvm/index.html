@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>尝试hhvm - Joey's Blog</title>
+  <meta name="author" content="joey">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.joxy.org/blog/2015/01/01/try-hhvm">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
+
+  <!-- http://opengraphprotocol.org/ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://blog.joxy.org/blog/2015/01/01/try-hhvm">
+  <meta property="og:title" content="尝试hhvm - Joey's Blog">
+  
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+
+<link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+
+  
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+  <body   >
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Joey's Blog</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a rel="index" href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+                <li >
+                    <a  href="/blog/categories/linux">Linux</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <form class="search navbar-form navbar-right" action="https://www.google.com/search" method="GET">
+                            <input type="hidden" name="q" value="site:blog.joxy.org">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="q" placeholder="Search">
+                            </div>
+                        </form>
+                    </li>
+                
+                <li>
+                    <a class="subscribe-rss" href="/atom.xml" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+      </header>
+      <div id="main" role="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://blog.joxy.org" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-01T00:10:28+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-01</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        尝试hhvm
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
+
+<p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
+
+<p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
+
+<p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-01T00:10:28+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-01</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.joxy.org/blog/2015/01/01/try-hhvm/" data-via="" data-counturl="http://blog.joxy.org/blog/2015/01/01/try-hhvm/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2014/12/31/web-crawl-again/" title="Previous Post: 采集一个论坛的帖子来进行数据分析">&laquo; 采集一个论坛的帖子来进行数据分析</a></li>
+            
+            
+            <li class="next"><a href="/blog/2015/01/01/arch-pacman-broken/" title="Next Post: 解决pacman依赖关系破裂问题">解决pacman依赖关系破裂问题 &raquo;</a></li>
+            
+          </ul>
+        
+      </footer>
+    </article>
+    
+  </div>
+
+  
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
+    
+    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
+    
+    <a class="list-group-item " href="/blog/2015/03/07/emacs-grep-find/">Emacs自定义grep-find的模板</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
+    
+    <a class="list-group-item " href="/blog/2015/01/20/use-btsync/">使用btsync</a>
+    
+  </div>
+</section>
+
+
+
+
+
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    
+    
+    <a class="list-group-item " href="/blog/categories/octopress/index.html">
+      <span class="badge">1</span>
+      octopress
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/web/index.html">
+      <span class="badge">5</span>
+      web
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/php/index.html">
+      <span class="badge">3</span>
+      php
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/unix/index.html">
+      <span class="badge">1</span>
+      unix
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/linux/index.html">
+      <span class="badge">11</span>
+      linux
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/shell/index.html">
+      <span class="badge">1</span>
+      shell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/haskell/index.html">
+      <span class="badge">2</span>
+      haskell
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/fun/index.html">
+      <span class="badge">3</span>
+      fun
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/python/index.html">
+      <span class="badge">3</span>
+      python
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs/index.html">
+      <span class="badge">2</span>
+      emacs
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/virtualization/index.html">
+      <span class="badge">2</span>
+      virtualization
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/git/index.html">
+      <span class="badge">1</span>
+      git
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/docker/index.html">
+      <span class="badge">1</span>
+      docker
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/vagrant/index.html">
+      <span class="badge">1</span>
+      vagrant
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/tips/index.html">
+      <span class="badge">1</span>
+      tips
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,fish/index.html">
+      <span class="badge">1</span>
+      emacs,fish
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/emacs,/index.html">
+      <span class="badge">1</span>
+      emacs,
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/orgmode/index.html">
+      <span class="badge">1</span>
+      orgmode
+    </a>
+    
+  </div>
+</section>
+
+    
+  </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2015 - joey<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
+
+  </body>
+</html>

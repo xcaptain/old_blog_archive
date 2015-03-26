@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Web | Joey's Blog]]></title>
+  <link href="http://blog.joxy.org/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://blog.joxy.org/"/>
+  <updated>2015-03-26T23:53:55+08:00</updated>
+  <id>http://blog.joxy.org/</id>
+  <author>
+    <name><![CDATA[joey]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[调试shadowsocks]]></title>
+    <link href="http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks/"/>
+    <updated>2015-01-04T07:16:58+08:00</updated>
+    <id>http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks</id>
+    <content type="html"><![CDATA[<p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
+
+<p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
+
+<p>笔记本没法翻墙是什么问题呢？试了一下手机，用fqrouter是没问题的，那就说明服务器端是没问题的，好吧，在客户端上找原因。</p>
+
+<p>之前安装的客户端是nodejs版的，一直都这么用感觉没什么问题，现在我就打算换个客户端版本，试试python的。安装也很简单，但是就是上不了网，真是郁闷。没办法了，慢慢来调试找问题吧。我在服务器端和客户端都开启了-v参数，用来详细输出日志。</p>
+
+<ol>
+<li><p>用fqrouter访问的时候，服务器端输出：
+ <pre>
+ 2015-01-03 08:48:07 INFO: accept a connection.
+ 2015-01-03 08:48:07 INFO: connect to: 106.162.216.94:443
+ 2015-01-03 08:48:07 INFO: asyncns resolved.
+ 2015-01-03 08:48:07 INFO: remote connected.
+ </pre>
+ 看来这是正常连接，返回数据也正常。</p></li>
+<li><p>本地用firefox访问google，服务器端输出：
+ <pre>
+ 2015-01-03 08:49:56 INFO: accept a connection.
+ 2015-01-03 08:49:56 INFO: connect to: plus.google.com:443
+ 2015-01-03 08:50:16 INFO: asyncns resolved.
+ 2015-01-03 08:50:16 ERROR: getaddrinfo: Operation now in progress
+ 2015-01-03 08:50:16 INFO: current server connection: 2
+ </pre>
+ 这就是失败的连接在服务器的日志了，只看到一行错误，搞不懂原因。</p></li>
+<li><p>在服务器端执行<code>netstat -naltp | grep 8388</code>的输出：
+ <pre>
+ tcp        0      0 111.222.231.123:8388    0.0.0.0:*               LISTEN      1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29403     ESTABLISHED 1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29406     ESTABLISHED 1738/ss-server
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29402     TIME_WAIT   -
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29400     TIME_WAIT   -
+ tcp        0      0 111.222.231.123:8388    152.42.49.117:29401     TIME_WAIT   -
+ </pre>
+ 本地可以连接服务器的端口，那为什么没有数据返回呢？</p></li>
+<li><p>在本地执行<code>netstat -naltp | grep 1080</code>的输出：
+ <pre>
+ tcp        0      0 127.0.0.1:1080          0.0.0.0:*               LISTEN      732/python
+ tcp        0      0 127.0.0.1:45312         127.0.0.1:1080          ESTABLISHED 744/firefox
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45312         ESTABLISHED 732/python
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45307         TIME_WAIT   -
+ tcp        0      0 127.0.0.1:1080          127.0.0.1:45309         TIME_WAIT   -
+ </pre>
+ 看来浏览器和本地端口之间也是通的。</p></li>
+</ol>
+
+
+<p>本地应用可以连接本地的端口，本地的端口可以连接服务器，为什么就是没有数据呢？不会调试web程序，不会抓包，这时候只能乱猜原因，一下午都没有想通问题，就在我想要发帖求助的时候，想了一下为什么用fqrouter的时候服务器端接收到的是一个ip，而本地客户端连接服务器的时候就是一个域名，也许dns出问题了，试了一下<code>ping www.google.com</code>，果然不通，问题找到了，虚拟机提供商这个机房的dns昨晚出问题了，导致解析失败，添加一个第三方的dns，问题解决。</p>
+
+<p><code>vi /etc/resolvconf/resolv.conf.d/base</code>添加下面2行</p>
+
+<pre>
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+</pre>
+
+
+<p>然后执行<code>resolvconf -u</code>刷新dns，这样就能使用google的dns了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[部署邮件服务]]></title>
+    <link href="http://blog.joxy.org/blog/2015/01/03/deploy-email-service/"/>
+    <updated>2015-01-03T08:43:43+08:00</updated>
+    <id>http://blog.joxy.org/blog/2015/01/03/deploy-email-service</id>
+    <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
+
+<h4>首先确定一下发件服务。</h4>
+
+<p>根据网上的推荐，我用的是<a href="https://mandrillapp.com/">mandril</a>，这家公司为免费帐号提供每月发12000封邮件，对于个人玩来说足够了。接下来就是注册帐号，注册完成之后会有一个向导引导着去配置发件服务。填好之后配置都会出现在<a href="https://mandrillapp.com/settings">这里</a>，这些配置包括发件服务器的域名，端口，smtp用户名，以及密码，密码是网站生成的，要好好保存。</p>
+
+<h4>然后就是配置收件服务</h4>
+
+<p>同样也是根据网上的推荐，收件服务用的是国内一家公司的，叫做<a href="https://www.zoho.com/">zoho</a>，这家公司为每个免费帐号提供一个代收域名，15个免费邮箱，每个免费邮箱提供5G存储空间，对于个人玩来说也是足够了的，因为可以把邮件下载到本地，然后删除服务器上的邮件存档，所以这5G的空间可以永远也用不完。好像这家公司就在中关村，真想去参观一下。用zoho的原因是它提供邮件代收服务，我有一个域名<code>joxy.org</code>，我想注册一些邮箱以<code>@joxy.org</code>结尾，zoho就提供这种功能。过程也是很简单，需要先去注册帐号，注册帐号的时候要验证你是否对这个域名有所有权，所以还需要去<a href="https://mya.godaddy.com/">godaddy</a>上面验证一下，我是通过cname的形式来验证的。注册完成之后还得配置一下godaddy，因为在注册域名的时候默认设置了2个收件商，现在我不想用那2个厂商的收件服务了，所以要改改dns设置，找到mx这条配置，删掉额外的2个厂商的配置，然后加上一条mx记录，Host是@,表示joxy.org自身，Points to填mx2.zohomail.com，剩下的随便填就行了。这样当有人往<code>user@joxy.org</code>发邮件的时候，发件服务器通过dns查询的时候就知道要发给zoho，zoho就可以帮忙代收。</p>
+
+<h4>发件服务和收件服务都配置好了，接下来就是测试一下是否能收发邮件了。</h4>
+
+<p>用thunderbird可以很方便的写邮件收邮件。把我刚刚创建的xiefei@joxy.org这个帐号创建了，手动配置好这个帐号发送邮件和接收邮件的设置，就可以开始测试了。在配置smtp发件的时候需要输入密码验证用户是否有权限来发邮件，所以一定要记得填smtp的密码。我测试了一下和我的gamil邮箱互发邮件，一点问题都没有，而且邮件也没有进入垃圾箱。这真是太好了，图形界面的客户端可以收发邮件，真想看看通过php,ruby脚本能不能发邮件。</p>
+
+<p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
+
+<p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[尝试hhvm]]></title>
+    <link href="http://blog.joxy.org/blog/2015/01/01/try-hhvm/"/>
+    <updated>2015-01-01T00:10:28+08:00</updated>
+    <id>http://blog.joxy.org/blog/2015/01/01/try-hhvm</id>
+    <content type="html"><![CDATA[<p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
+
+<p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
+
+<p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
+
+<p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[再来记录一次紧急情况]]></title>
+    <link href="http://blog.joxy.org/blog/2014/10/18/emergency-case-1/"/>
+    <updated>2014-10-18T19:48:41+08:00</updated>
+    <id>http://blog.joxy.org/blog/2014/10/18/emergency-case-1</id>
+    <content type="html"><![CDATA[<p>昨晚12点多的时候突然被从被窝里拉出来了，虽然不再睡觉，但是这种感觉也是很不爽的，就因为我负责的一个网站首页出现500错误，提示数据库不能连接了。
+妈呀，这么大的事，怎么还能安心玩手机，赶紧起来查找原因。</p>
+
+<p>目前我这个站是搭建在2台服务器上的，用这2台机器来做负载均衡，跑了3个多月了，一点事都没有， 怎么会突然连不上数据库呢。查看了一下配置，这个站连接着
+2个mysql，不是主从，而是业务分开的2个数据库，因为要把2块不太相关的内容整合在一起，通过vpn连接上公司的内网，ssh上服务器尝试连接数据库，第一个数据库
+连接正常，但是尝试连接第二个数据库的时候就出现连接错误了，服务器拒绝连接了。很显然，要么这个数据库所在的服务器宕机了，要么就是这个数据库的请求数太多了，
+为了避免宕机，数据库自动进入一种保护机制，拒绝所有后来的连接。</p>
+
+<p>尝试这ping了一下服务器，没有宕机，还好，看来就是一个db出问题了，这个db之前也出过问题，当时运维是更改了配置，增加了数据库的最大连接数上限，不过这么晚的时候
+找运维也不好找，人家也不愿意大半夜从床上跑起来给你改服务器配置。那么没办法了，只能改代码了。只能把所有涉及到第二个数据库的代码都删了，这样还有一线生机。</p>
+
+<p>因为我的站点结构比较简单，内容只包括视频和文章，视频来自一个数据库，文章来自另一个数据库，只要把文章都干掉就ok，还好文章也不多，而且在页面上结构挺分离的，
+还算比较好弄，在配置里面删除第二个数据库的配置，在控制器里删除调用了第二个数据库的方法，在页面上删除文章所在的div，然后刷新页面，ok好了。</p>
+
+<p>真是惊险刺激啊，要是我没有vpn的话这个站就得挂一晚上，要是文章和视频的耦合度太高的话我也束手无策，要是前端设计的页面太复杂的话也会给我的改动带来很多麻烦。还好
+这些假设都不存在。感谢Yii框架，大爱。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jsonp的一点简单看法]]></title>
+    <link href="http://blog.joxy.org/blog/2014/08/12/jsonp-some-thought/"/>
+    <updated>2014-08-12T22:28:53+08:00</updated>
+    <id>http://blog.joxy.org/blog/2014/08/12/jsonp-some-thought</id>
+    <content type="html"><![CDATA[<h3>jsonp是ajax的异域传输技术</h3>
+
+<p>因为我不懂javascript，更不用说jquery了，所以现在在做的一个需要后台请求的页面只能让前端去做。
+昨晚在公司加班和前端对接口，但是到了9点也没有解决掉bug，太失望了，不过今天来了之后和一个大牛
+说了一下，他立刻就指出了问题所在。</p>
+
+<p>先简单描述一下我做的这个项目吧。</p>
+
+<p>项目不麻烦，后端用php+yii框架处理好页面间数据流逻辑，前端使用css和js做一些特效。我这边的工作
+都做得差不多了，但是有一个分类页涉及到多级选择的问题，最初的设计是一次性从后台取几百个数据出来
+但是评估了一下发现这种方法可行性不好，一次加载太多内容对用户的体验不好，而且不能充分读取数据库
+的内容。后面和前端商量了一下采用ajax请求的方式，打开一个页面之后只加载进当前页面的内容，剩下
+的内容等用户点击相应的链接触发相应的js事件之后以jsonp的方式给服务器发请求，然后服务器把要显示的
+内容取出来。</p>
+
+<p>在我看来jsonp就是一个站给出接口，另一个站通过js获得这个接口给的数据。这样就是异域了，最大的好处就是
+后端的压力减轻了，之前如果所有的页面都在一个站上，那么所有相关的信息都得后端开发人员想办法从数据库
+中取，也就是俗话说的套页面。我是很反感套页面这种工作的，没有一点技术含量，枯燥无聊，但是不可否认，
+在phpweb开发中很大一部分时间花在这里了。现在如果php程序员只要给出接口，前端写js获得这个接口的数据，
+他们来渲染页面，这样真是大大减轻了后端的压力，节省下来的时间可以上g+上看看新闻，在博客上发发文章，
+怎么说前端对于html要比后端熟悉。</p>
+
+<p>前端给出的接口也有要求，最主要的内容就是回调。
+<code>
+echo $callback . “(“ . $data . “)”;
+</code>
+在php的代码里加上这个语句，<code>$callback</code>是jquery的回调函数，<code>$data</code>是要传出去的接口数据，一般是一个
+json数组的形式。我这个站的$data是由4个参数共同生成的，前端访问接口的时候是通过<code>http://www.example.com/api/?callback=Jquery_function&amp;arg1=1&amp;arg2=2&amp;arg3=3&amp;arg4=4</code>
+既然明白请求的形式了，那么很好知道这个接口文件的写法了。</p>
+
+<pre>
+$callback = $_GET[‘callback’]; //获得回调函数
+$arg1     = $_GET[‘arg1’];
+$arg2     = $_GET[‘arg2’];
+$arg3     = $_GET[‘arg3’];
+$arg4     = $_GET[‘arg4’]; //获得剩下的4个参数
+$data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要返回的数据
+</pre>
+
+
+<p>很神奇吧，当你点击一个网页的时候，这个页面不是立刻向后台请求数据，而是通过js从另一个接口文件里拿数据。</p>
+
+<p>我的经验还是很不丰富啊，以后要多学习，不然遇到一点比较新的技术就搞半天太丢脸了。</p>
+]]></content>
+  </entry>
+  
+</feed>
