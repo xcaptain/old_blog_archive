@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Shell | Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/blog/categories/shell/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/blog/categories/shell/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用fish]]></title>
-    <link href="http://blog.joxy.org/blog/2014/08/31/use-fish-shell/"/>
+    <link href="http://blog.iyue.club/blog/2014/08/31/use-fish-shell/"/>
     <updated>2014-08-31T22:43:17+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/08/31/use-fish-shell</id>
+    <id>http://blog.iyue.club/blog/2014/08/31/use-fish-shell</id>
     <content type="html"><![CDATA[<p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
 从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
 这不是鱼，全名叫做(friendly interactive shell)，用户友好的shell，语法高亮功能使得不容易

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Mysql基础]]></title>
-    <link href="http://blog.joxy.org/blog/2015/05/03/mysql-basics-1/"/>
+    <link href="http://blog.iyue.club/blog/2015/05/03/mysql-basics-1/"/>
     <updated>2015-05-03T02:34:28+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/05/03/mysql-basics-1</id>
+    <id>http://blog.iyue.club/blog/2015/05/03/mysql-basics-1</id>
     <content type="html"><![CDATA[<p>五一第二天泡国图看了一下午关于sql的书，小有所获，才发现以前工作中用到的只是mysql中的一个很小的子集，该好好整理一下了基础知识了，当然对于很基本，已经用得很熟练的知识就不提了。</p>
 
 <h3>什么是sql语言</h3>
@@ -109,9 +109,9 @@ right outer join &lt;=> right join
   
   <entry>
     <title type="html"><![CDATA[一个简单的元编程的例子]]></title>
-    <link href="http://blog.joxy.org/blog/2015/04/17/php-meta-programming-1/"/>
+    <link href="http://blog.iyue.club/blog/2015/04/17/php-meta-programming-1/"/>
     <updated>2015-04-17T17:33:16+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/04/17/php-meta-programming-1</id>
+    <id>http://blog.iyue.club/blog/2015/04/17/php-meta-programming-1</id>
     <content type="html"><![CDATA[<p>去年在学习ruby的时候就看到了很多元编程的例子，用一个方法来生成多个类似的方法，避免制造重复的代码，ruby用的是method_missing来实现的。</p>
 
 <p>今天工作遇到一个小问题，需要写一个简单的脚本来统计某个时间段用户的发帖信息，需求很简单要实现也很简单。最初的设计见下面：</p>
@@ -175,9 +175,9 @@ public function __call($name, $args) {
   
   <entry>
     <title type="html"><![CDATA[Btrfs损坏之后的一系列麻烦]]></title>
-    <link href="http://blog.joxy.org/blog/2015/03/26/btrfs-crash/"/>
+    <link href="http://blog.iyue.club/blog/2015/03/26/btrfs-crash/"/>
     <updated>2015-03-26T23:12:37+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/03/26/btrfs-crash</id>
+    <id>http://blog.iyue.club/blog/2015/03/26/btrfs-crash</id>
     <content type="html"><![CDATA[<p>上周六晚上玩电脑的时候忘记插上电源了，直接导致笔记本意外断电关机，本来这只是一件小事，重启电脑即可，个人电脑一般没有多大的磁盘IO，数据基本都是在内存中读写的，但是等我重启电脑的时候却发现没法进系统了，一直卡在fsck那步，然后就是一直提示出现多少个<code>block error</code>，心立刻亮了半截，我用的arch没有做备份，如果硬盘损坏，里面的重要文件就都没了。于是重启进入win8下载了一个system-rescue-cd打算进入livecd修复分区，进去之后执行<code>btrfs check --repair /dev/sda3</code>，倒是检查出了一个块错误，但是没有修复，尝试重启电脑，结果出现<code>bad super block, unknown fs</code>，似乎问题加重了，上网搜了一下superblock损坏的话要找备份的superblock来替换，但是我没有定时做文件系统备份，行不通，后来尝试给<code>btrfs check</code>加上<code>--init-scum</code>参数，重启之后一大堆错误，死心，对数据不报期望了。</p>
 
 <p>上一个系统用了1年多没换，好不容易有一次机会折腾可不能放过，先尝试安装funtoo，和以前无数次一样，都是到最后驱动不了我的博通无线网卡，后面尝试sabayon这个桌面系统，自带了桌面肯定自带了所有驱动。尝试安装，这回小心了，把<code>/boot</code>单独放到一个ext2的分区中去了，然后/用的是xfs，毕竟SGI的技术还是非常可以的。安装之后果然不需要手动装驱动，这种傻瓜式操作我最喜欢了，gnome中总是配置不好fcitx，而且ghc编译的时候总是会报错，也是莫名其妙的问题，supervisor的配置都得自己手动写，一大堆反人类的事情真是头疼，被arch的KISS哲学熏陶得simple且stupid之后，实在是受不了gentoo的diy思想。用<code>btrfs restore /mnt/arch /mnt/arch_bak</code>备份大部分数据之后，继续重装arch。</p>
@@ -201,9 +201,9 @@ public function __call($name, $args) {
   
   <entry>
     <title type="html"><![CDATA[Use-orgmode]]></title>
-    <link href="http://blog.joxy.org/blog/2015/03/15/use-orgmode/"/>
+    <link href="http://blog.iyue.club/blog/2015/03/15/use-orgmode/"/>
     <updated>2015-03-15T00:58:56+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/03/15/use-orgmode</id>
+    <id>http://blog.iyue.club/blog/2015/03/15/use-orgmode</id>
     <content type="html"><![CDATA[<p>最近看书学习感觉非常没有劲，究其原因感觉是缺少一个做笔记的工具，原来那支跟随我4年的钢笔放家里没有带过来，
 京东上预订的lamy也还没有到货，看书不动笔我是什么都记不住的，所以感觉学习效率低了很多。印象笔记确实不错，
 配合浏览器的markdown-here扩展就能支持markdown语法了，但是缺少一个所见即所得的笔记客户端，用markdown写完
@@ -231,9 +231,9 @@ public function __call($name, $args) {
   
   <entry>
     <title type="html"><![CDATA[Emacs自定义grep-find的模板]]></title>
-    <link href="http://blog.joxy.org/blog/2015/03/07/emacs-grep-find/"/>
+    <link href="http://blog.iyue.club/blog/2015/03/07/emacs-grep-find/"/>
     <updated>2015-03-07T22:40:19+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/03/07/emacs-grep-find</id>
+    <id>http://blog.iyue.club/blog/2015/03/07/emacs-grep-find</id>
     <content type="html"><![CDATA[<p>被emacs的搜索功能纠结好久了，今天下定决心来解决一下。以前执行<code>grep-find</code>命令的时候查找的模板都是<code>find . -type f -exec grep -nH -e {} +</code>，但是这条命令在fish下没法用，找了一下发现在<a href="https://github.com/fish-shell/fish-shell/issues/95">这个issue</a>里面作者提到了为什么fish里面没法用find，因为在fish里面<code>{}</code>是有意义的，所以就会提示exec缺少参数，所以如果写成<code>find . -type f -exec grep -nH -e '{}' +</code>就可以了，接下来的任务就是修改emacs的配置，把默认的<code>grep-find</code>的行为改掉。</p>
 
 <p>因为查找功能是emacs默认就有的，所以我直接就去源代码目录找了，在<code>/usr/share/emacs/24.4/</code>下执行<code>grep 'grep-find' -R *</code>，然后在<code>lisp/ldefs-boot.el</code>和<code>lisp/loaddefs.el</code>找到了相关的代码，然后试着修改第12669行，这行看起来像是相关的代码，结果改完了半天不生效，无奈之下去<a href="http://stackoverflow.com/questions/28915372/change-the-default-find-grep-command-in-emacs/">stackoverflow</a>提问，这个网站效率真的不是一般的高，很快就拿到答案了，有人说我找到的代码只不过是docstring而已，要修改的话得改<code>grep-find-template</code>,通过<code>C-h v</code>查看了一下这个变量的值，默认的是<code>"find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; {} +"</code>，修改它就行了，编辑<code>~/.emacs.d/personal/custom.el</code>，在最底下加上<code>(setq grep-find-template "find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; \'{}\' +")</code>，然后<code>eval-buffer</code>，问题完美解决，不得不说emacs真是灵活，不用改源代码就能实现自定义功能。</p>
@@ -244,9 +244,9 @@ public function __call($name, $args) {
   
   <entry>
     <title type="html"><![CDATA[学习emacs-eww]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/28/emacs-eww/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/28/emacs-eww/"/>
     <updated>2015-01-28T22:50:06+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/28/emacs-eww</id>
+    <id>http://blog.iyue.club/blog/2015/01/28/emacs-eww</id>
     <content type="html"><![CDATA[<p>最近一段时间比较无聊，<a href="http://www.iyue.club">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。
 而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
 
@@ -276,9 +276,9 @@ public function __call($name, $args) {
   
   <entry>
     <title type="html"><![CDATA[使用btsync]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/20/use-btsync/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/20/use-btsync/"/>
     <updated>2015-01-20T18:18:25+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/20/use-btsync</id>
+    <id>http://blog.iyue.club/blog/2015/01/20/use-btsync</id>
     <content type="html"><![CDATA[<p><meta charset="UTF-8"/>
 昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
 
@@ -298,9 +298,9 @@ public function __call($name, $args) {
   
   <entry>
     <title type="html"><![CDATA[Python2编码问题]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/13/python-encoding/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/13/python-encoding/"/>
     <updated>2015-01-13T08:06:21+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/13/python-encoding</id>
+    <id>http://blog.iyue.club/blog/2015/01/13/python-encoding</id>
     <content type="html"><![CDATA[<p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
 
 <p>在执行rake new_post的时候，突然提示</p>
@@ -375,9 +375,9 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
   
   <entry>
     <title type="html"><![CDATA[玩弄git]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/06/play-with-git/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/06/play-with-git/"/>
     <updated>2015-01-06T06:54:11+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/06/play-with-git</id>
+    <id>http://blog.iyue.club/blog/2015/01/06/play-with-git</id>
     <content type="html"><![CDATA[<p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
 
 <p>今晚就稍微熟悉了一下discourse的结构。</p>
@@ -413,9 +413,9 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
   
   <entry>
     <title type="html"><![CDATA[调试shadowsocks]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/04/debug-shadowsocks/"/>
     <updated>2015-01-04T07:16:58+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks</id>
+    <id>http://blog.iyue.club/blog/2015/01/04/debug-shadowsocks</id>
     <content type="html"><![CDATA[<p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
 
 <p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
@@ -480,9 +480,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[部署邮件服务]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/03/deploy-email-service/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/03/deploy-email-service/"/>
     <updated>2015-01-03T08:43:43+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/03/deploy-email-service</id>
+    <id>http://blog.iyue.club/blog/2015/01/03/deploy-email-service</id>
     <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
 
 <h4>首先确定一下发件服务。</h4>
@@ -505,9 +505,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/01/arch-pacman-broken/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/01/arch-pacman-broken/"/>
     <updated>2015-01-01T19:35:23+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/01/arch-pacman-broken</id>
+    <id>http://blog.iyue.club/blog/2015/01/01/arch-pacman-broken</id>
     <content type="html"><![CDATA[<p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
 
 <pre>
@@ -550,9 +550,9 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
   
   <entry>
     <title type="html"><![CDATA[尝试hhvm]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/01/try-hhvm/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/01/try-hhvm/"/>
     <updated>2015-01-01T00:10:28+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/01/try-hhvm</id>
+    <id>http://blog.iyue.club/blog/2015/01/01/try-hhvm</id>
     <content type="html"><![CDATA[<p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
 
 <p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
@@ -565,9 +565,9 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
   
   <entry>
     <title type="html"><![CDATA[采集一个论坛的帖子来进行数据分析]]></title>
-    <link href="http://blog.joxy.org/blog/2014/12/31/web-crawl-again/"/>
+    <link href="http://blog.iyue.club/blog/2014/12/31/web-crawl-again/"/>
     <updated>2014-12-31T07:49:40+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/12/31/web-crawl-again</id>
+    <id>http://blog.iyue.club/blog/2014/12/31/web-crawl-again</id>
     <content type="html"><![CDATA[<p>今天接到一个小小的需求，又是和采集相关的，我都要烦死了，采集这东西写得都要腻了。</p>
 
 <p>不过和以前的那些采集有点区别，不再是采集文章了，而是开始采集论坛的帖子。说实话我觉得采集论坛比较简单，因为论坛都是php的页面，页面组织布局一般不会怎么变，而新闻站基本都是cms系统生成的html静态页，静态的页面就有太多可能性了，而且不排除有的编辑太敬业把每个页面都做得不一样。</p>
@@ -607,9 +607,9 @@ category: 帖子所属分类，用来来分析哪些大类的话题比较火
   
   <entry>
     <title type="html"><![CDATA[通过vagrant安装coreos]]></title>
-    <link href="http://blog.joxy.org/blog/2014/12/27/install-coreos-with-vagrant/"/>
+    <link href="http://blog.iyue.club/blog/2014/12/27/install-coreos-with-vagrant/"/>
     <updated>2014-12-27T05:54:57+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/12/27/install-coreos-with-vagrant</id>
+    <id>http://blog.iyue.club/blog/2014/12/27/install-coreos-with-vagrant</id>
     <content type="html"><![CDATA[<p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
 
 <p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
@@ -744,9 +744,9 @@ coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
   
   <entry>
     <title type="html"><![CDATA[第一次接触虚拟化]]></title>
-    <link href="http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1/"/>
+    <link href="http://blog.iyue.club/blog/2014/12/26/learn-virtualization-1/"/>
     <updated>2014-12-26T04:27:01+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/12/26/learn-virtualization-1</id>
+    <id>http://blog.iyue.club/blog/2014/12/26/learn-virtualization-1</id>
     <content type="html"><![CDATA[<p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
 
 <p>按照原来部署<a href="http://f.joxy.org">http://f.joxy.org</a>的模式打算先在本地部署好环境，然后提交到git server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
@@ -790,9 +790,9 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[如何使用emacs]]></title>
-    <link href="http://blog.joxy.org/blog/2014/12/20/how-to-use-emacs/"/>
+    <link href="http://blog.iyue.club/blog/2014/12/20/how-to-use-emacs/"/>
     <updated>2014-12-20T19:44:35+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/12/20/how-to-use-emacs</id>
+    <id>http://blog.iyue.club/blog/2014/12/20/how-to-use-emacs</id>
     <content type="html"><![CDATA[<p>今天闲着没事，又上我们的<a href="https://github.com/ncuopen">ncuopen</a>上面看了一下，发现小组现在活动极其不频繁，首页和wiki都没有怎么更新，然后上irc上看了一下，发现也没有人在线。</p>
 
 <blockquote><p>一个开源社区最大的悲哀就是没有活跃的用户，没有一个持续贡献的志愿者团队。</p></blockquote>
@@ -820,9 +820,9 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[又是一个采集]]></title>
-    <link href="http://blog.joxy.org/blog/2014/12/08/learn-beautifulsoup/"/>
+    <link href="http://blog.iyue.club/blog/2014/12/08/learn-beautifulsoup/"/>
     <updated>2014-12-08T06:25:45+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/12/08/learn-beautifulsoup</id>
+    <id>http://blog.iyue.club/blog/2014/12/08/learn-beautifulsoup</id>
     <content type="html"><![CDATA[<p>前几天看到有个同事在采集<a href="https://yande.re">这个</a>站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。</p>
 
 <p>之前采集过多玩和178的一些文章，需求还比较复杂，需要把ajax的接口也给搞定掉，还得把所有图片都本地化，那时候用的是urllib2+beautifulsoup这个东西采集的。</p>
@@ -840,9 +840,9 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[入手一台二手PC]]></title>
-    <link href="http://blog.joxy.org/blog/2014/11/24/got-an-old-pc/"/>
+    <link href="http://blog.iyue.club/blog/2014/11/24/got-an-old-pc/"/>
     <updated>2014-11-24T05:09:30+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/11/24/got-an-old-pc</id>
+    <id>http://blog.iyue.club/blog/2014/11/24/got-an-old-pc</id>
     <content type="html"><![CDATA[<p>今天下午在58上面看到一条消息，说的是190出售双核电脑，立即就心动了。作为一个linux，总是忍不住手痒想重装系统，或者是自定义系统，但是因为现在自己手头上只有一台笔记本，实在是不敢轻举妄动，不然把这电脑弄崩溃了，或者是丢失数据了那就损失惨重了。如果有一台空闲的机器那就好了，我可以随便在那台机器上面装系统，可以随意定制。而且有一台局域网内部的PC当作服务器，拿来当测试机很不错，在这里测试过代码之后再上传到线上vps上去。</p>
 
 <p>说干就干，反正190也不贵，现在出去随便找个饭店吃个稍微好点的饭都不止190.给卖家打了电话先问了一下基本的情况，大致确定了消息的真实性，然后就是出发去验货了。那个卖家在东城区，好远啊，看了一下时间都已经3点半了，赶紧出发。又是转公交又是转地铁，终于到了东四北大街，来到了卖家的家里。太震惊了，卖家竟然是一个50多岁的老头，家里很简陋，胡同里很老的房子，但是里面堆满了电脑主机，估计有2,3百台。我要买的那台电脑正开着呢，装着win7系统，正在通过pptv看视频呢。cpu是amd的，1.9GHZ，ddr2内存1G大，网卡是100M的螃蟹卡，这种网卡对于*unix来说几乎都是免驱动的了，使用的太广泛了。剩下的就没什么说了，反正是打算拿来当服务器的，对于显卡没什么要求。</p>
@@ -881,9 +881,9 @@ dd: writing `/EMPTY': No space left on device
   
   <entry>
     <title type="html"><![CDATA[我的第一块机械键盘]]></title>
-    <link href="http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard/"/>
+    <link href="http://blog.iyue.club/blog/2014/11/10/my-first-machanical-keyboard/"/>
     <updated>2014-11-10T01:25:52+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard</id>
+    <id>http://blog.iyue.club/blog/2014/11/10/my-first-machanical-keyboard</id>
     <content type="html"><![CDATA[<p>考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。</p>
 
 <h3>在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。</h3>

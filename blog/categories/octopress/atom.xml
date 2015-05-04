@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Octopress | Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/blog/categories/octopress/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[First Eye on Octopress]]></title>
-    <link href="http://blog.joxy.org/blog/2014/08/11/first-eye-on-octopress/"/>
+    <link href="http://blog.iyue.club/blog/2014/08/11/first-eye-on-octopress/"/>
     <updated>2014-08-11T23:43:02+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/08/11/first-eye-on-octopress</id>
+    <id>http://blog.iyue.club/blog/2014/08/11/first-eye-on-octopress</id>
     <content type="html"><![CDATA[<h3>第一次使用octopress体验</h3>
 
 <p>这几天突然发现php功能很弱，而python又总是拿来写脚本，没有真正用来开发过什么大型的项目。

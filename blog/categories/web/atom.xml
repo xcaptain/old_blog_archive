@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Web | Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/blog/categories/web/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[调试shadowsocks]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/04/debug-shadowsocks/"/>
     <updated>2015-01-04T07:16:58+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks</id>
+    <id>http://blog.iyue.club/blog/2015/01/04/debug-shadowsocks</id>
     <content type="html"><![CDATA[<p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
 
 <p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
@@ -82,9 +82,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[部署邮件服务]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/03/deploy-email-service/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/03/deploy-email-service/"/>
     <updated>2015-01-03T08:43:43+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/03/deploy-email-service</id>
+    <id>http://blog.iyue.club/blog/2015/01/03/deploy-email-service</id>
     <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
 
 <h4>首先确定一下发件服务。</h4>
@@ -107,9 +107,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[尝试hhvm]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/01/try-hhvm/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/01/try-hhvm/"/>
     <updated>2015-01-01T00:10:28+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/01/try-hhvm</id>
+    <id>http://blog.iyue.club/blog/2015/01/01/try-hhvm</id>
     <content type="html"><![CDATA[<p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
 
 <p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
@@ -122,9 +122,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[再来记录一次紧急情况]]></title>
-    <link href="http://blog.joxy.org/blog/2014/10/18/emergency-case-1/"/>
+    <link href="http://blog.iyue.club/blog/2014/10/18/emergency-case-1/"/>
     <updated>2014-10-18T19:48:41+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/10/18/emergency-case-1</id>
+    <id>http://blog.iyue.club/blog/2014/10/18/emergency-case-1</id>
     <content type="html"><![CDATA[<p>昨晚12点多的时候突然被从被窝里拉出来了，虽然不再睡觉，但是这种感觉也是很不爽的，就因为我负责的一个网站首页出现500错误，提示数据库不能连接了。
 妈呀，这么大的事，怎么还能安心玩手机，赶紧起来查找原因。</p>
 
@@ -146,9 +146,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[Jsonp的一点简单看法]]></title>
-    <link href="http://blog.joxy.org/blog/2014/08/12/jsonp-some-thought/"/>
+    <link href="http://blog.iyue.club/blog/2014/08/12/jsonp-some-thought/"/>
     <updated>2014-08-12T22:28:53+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/08/12/jsonp-some-thought</id>
+    <id>http://blog.iyue.club/blog/2014/08/12/jsonp-some-thought</id>
     <content type="html"><![CDATA[<h3>jsonp是ajax的异域传输技术</h3>
 
 <p>因为我不懂javascript，更不用说jquery了，所以现在在做的一个需要后台请求的页面只能让前端去做。

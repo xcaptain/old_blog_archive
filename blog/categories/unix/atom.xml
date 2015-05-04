@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Unix | Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/blog/categories/unix/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/blog/categories/unix/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Freebsd-basic-operations]]></title>
-    <link href="http://blog.joxy.org/blog/2014/08/16/freebsd-basic-operations/"/>
+    <link href="http://blog.iyue.club/blog/2014/08/16/freebsd-basic-operations/"/>
     <updated>2014-08-16T22:04:13+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/08/16/freebsd-basic-operations</id>
+    <id>http://blog.iyue.club/blog/2014/08/16/freebsd-basic-operations</id>
     <content type="html"><![CDATA[<p>上周买了一年的vps，一直没怎么折腾，今天环境稍微配置了一下，其实基本的软件安装都是
 很简单的，每个成熟的系统都有它自己的包管理器。我用类unix系统也不久，接触过的包管理
 方式有debian/ubuntu系的dpkg和apt-get, opensuse的zypper, redhat的yum和arch的pacman

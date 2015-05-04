@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Tips | Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/blog/categories/tips/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/blog/categories/tips/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Python2编码问题]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/13/python-encoding/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/13/python-encoding/"/>
     <updated>2015-01-13T08:06:21+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/13/python-encoding</id>
+    <id>http://blog.iyue.club/blog/2015/01/13/python-encoding</id>
     <content type="html"><![CDATA[<p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
 
 <p>在执行rake new_post的时候，突然提示</p>

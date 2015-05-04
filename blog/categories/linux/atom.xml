@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Linux | Joey's Blog]]></title>
-  <link href="http://blog.joxy.org/blog/categories/linux/atom.xml" rel="self"/>
-  <link href="http://blog.joxy.org/"/>
-  <updated>2015-05-04T13:05:40+08:00</updated>
-  <id>http://blog.joxy.org/</id>
+  <link href="http://blog.iyue.club/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-04T13:18:39+08:00</updated>
+  <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Btrfs损坏之后的一系列麻烦]]></title>
-    <link href="http://blog.joxy.org/blog/2015/03/26/btrfs-crash/"/>
+    <link href="http://blog.iyue.club/blog/2015/03/26/btrfs-crash/"/>
     <updated>2015-03-26T23:12:37+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/03/26/btrfs-crash</id>
+    <id>http://blog.iyue.club/blog/2015/03/26/btrfs-crash</id>
     <content type="html"><![CDATA[<p>上周六晚上玩电脑的时候忘记插上电源了，直接导致笔记本意外断电关机，本来这只是一件小事，重启电脑即可，个人电脑一般没有多大的磁盘IO，数据基本都是在内存中读写的，但是等我重启电脑的时候却发现没法进系统了，一直卡在fsck那步，然后就是一直提示出现多少个<code>block error</code>，心立刻亮了半截，我用的arch没有做备份，如果硬盘损坏，里面的重要文件就都没了。于是重启进入win8下载了一个system-rescue-cd打算进入livecd修复分区，进去之后执行<code>btrfs check --repair /dev/sda3</code>，倒是检查出了一个块错误，但是没有修复，尝试重启电脑，结果出现<code>bad super block, unknown fs</code>，似乎问题加重了，上网搜了一下superblock损坏的话要找备份的superblock来替换，但是我没有定时做文件系统备份，行不通，后来尝试给<code>btrfs check</code>加上<code>--init-scum</code>参数，重启之后一大堆错误，死心，对数据不报期望了。</p>
 
 <p>上一个系统用了1年多没换，好不容易有一次机会折腾可不能放过，先尝试安装funtoo，和以前无数次一样，都是到最后驱动不了我的博通无线网卡，后面尝试sabayon这个桌面系统，自带了桌面肯定自带了所有驱动。尝试安装，这回小心了，把<code>/boot</code>单独放到一个ext2的分区中去了，然后/用的是xfs，毕竟SGI的技术还是非常可以的。安装之后果然不需要手动装驱动，这种傻瓜式操作我最喜欢了，gnome中总是配置不好fcitx，而且ghc编译的时候总是会报错，也是莫名其妙的问题，supervisor的配置都得自己手动写，一大堆反人类的事情真是头疼，被arch的KISS哲学熏陶得simple且stupid之后，实在是受不了gentoo的diy思想。用<code>btrfs restore /mnt/arch /mnt/arch_bak</code>备份大部分数据之后，继续重装arch。</p>
@@ -41,9 +41,9 @@
   
   <entry>
     <title type="html"><![CDATA[使用btsync]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/20/use-btsync/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/20/use-btsync/"/>
     <updated>2015-01-20T18:18:25+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/20/use-btsync</id>
+    <id>http://blog.iyue.club/blog/2015/01/20/use-btsync</id>
     <content type="html"><![CDATA[<p><meta charset="UTF-8"/>
 昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
 
@@ -63,9 +63,9 @@
   
   <entry>
     <title type="html"><![CDATA[调试shadowsocks]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/04/debug-shadowsocks/"/>
     <updated>2015-01-04T07:16:58+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/04/debug-shadowsocks</id>
+    <id>http://blog.iyue.club/blog/2015/01/04/debug-shadowsocks</id>
     <content type="html"><![CDATA[<p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
 
 <p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
@@ -130,9 +130,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[部署邮件服务]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/03/deploy-email-service/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/03/deploy-email-service/"/>
     <updated>2015-01-03T08:43:43+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/03/deploy-email-service</id>
+    <id>http://blog.iyue.club/blog/2015/01/03/deploy-email-service</id>
     <content type="html"><![CDATA[<p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
 
 <h4>首先确定一下发件服务。</h4>
@@ -155,9 +155,9 @@ nameserver 8.8.4.4
   
   <entry>
     <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
-    <link href="http://blog.joxy.org/blog/2015/01/01/arch-pacman-broken/"/>
+    <link href="http://blog.iyue.club/blog/2015/01/01/arch-pacman-broken/"/>
     <updated>2015-01-01T19:35:23+08:00</updated>
-    <id>http://blog.joxy.org/blog/2015/01/01/arch-pacman-broken</id>
+    <id>http://blog.iyue.club/blog/2015/01/01/arch-pacman-broken</id>
     <content type="html"><![CDATA[<p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
 
 <pre>
