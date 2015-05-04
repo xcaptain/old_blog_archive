@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://blog.joxy.org/atom.xml" rel="self"/>
   <link href="http://blog.joxy.org/"/>
-  <updated>2015-04-17T17:54:55+08:00</updated>
+  <updated>2015-05-04T13:03:01+08:00</updated>
   <id>http://blog.joxy.org/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,109 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mysql基础]]></title>
+    <link href="http://blog.joxy.org/blog/2015/05/03/mysql-basics-1/"/>
+    <updated>2015-05-03T02:34:28+08:00</updated>
+    <id>http://blog.joxy.org/blog/2015/05/03/mysql-basics-1</id>
+    <content type="html"><![CDATA[<p>五一第二天泡国图看了一下午关于sql的书，小有所获，才发现以前工作中用到的只是mysql中的一个很小的子集，该好好整理一下了基础知识了，当然对于很基本，已经用得很熟练的知识就不提了。</p>
+
+<h3>什么是sql语言</h3>
+
+<p>sql语言包括：
+    DDL（数据定义语言）：创建数据库，创建表，创建视图，创建索引等。
+    DML（数据操作语言）：也就是增删改查操作。
+    DCL（数据控制语言）：COMMIT，ROLLBACK，GRANT等。</p>
+
+<h3>聚合查询</h3>
+
+<p>聚合查询指的是把一张表的内容分组，相关操作包括<code>count</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>avg</code>, <code>group by</code>, <code>having</code>，前面5个是聚合函数，从一大串结果中取出我们要的属性。
+后面2个是分组的。<code>group by</code>的语法为:</p>
+
+<pre><code class="sql">select &lt;col1&gt;, &lt;col2&gt;, &lt;col3&gt;
+    from &lt;table_name&gt;
+[where ...]
+group by &lt;col1&gt;, &lt;col2&gt;, &lt;col3&gt;
+[having ...]
+</code></pre>
+
+<p>有一条限制说的是select子句中的每一个字段都必须出现在group by的子句中，但是我在mysql和postgresql中执行的时候结果确不一样，pgsql有这个限制，而mysql则松散得多。在我看来必须得严格才行，不然在有1对多关系的表中，group by之后的结果可能会让人莫名其妙，难怪很多人都说postgresql比mysql要严谨。</p>
+
+<h3>事务</h3>
+
+<p>事务指的是把一系列操作封装在一起来执行，要么同时执行这一些列操作，要么一个都不执行。这个以前工作也用到的不多，可能公司是以前写代码的人对于这个也不看中吧，基本上都是直接update，insert了。记得以前用python的<code>MySQLdb</code>的时候，如果有插入操作必须手动调用一下commit方法才能把数据写进数据库，那时候还不理解，感觉多了一步操作实在是太麻烦了，现在看来把所有操作都看作事务来执行，手动提交事务对于数据来说还是很安全的。</p>
+
+<p>事务有4个特性：（ACID）</p>
+
+<ol>
+<li>原子性（Atomic）：事务是一个整体。</li>
+<li>一致性（Consistency）：每个操作都必须满足对应列的约束条件。</li>
+<li>隔离性（Isolation）：没一个事务中的数据对另一个事务都是不可见的，在提交操作之前，数据不在表里面。</li>
+<li>持久性（Duration）：每个事务完成之后会有日志记录，方便从日志恢复数据。</li>
+</ol>
+
+
+<p>创建事务：</p>
+
+<pre><code class="sql">start | begin transaction
+sql1;
+sql2;
+...
+commit
+</code></pre>
+
+<p>现在仔细想想原来看过好多同时更新多张表的代码没有走事务，那些业务真是太危险了，一张表的结构出错可能就导致整个业务逻辑崩溃。</p>
+
+<h3>视图</h3>
+
+<p>视图类似与一张表，但是区别是表里面存放着数据，但是视图里面没有数据。可以用</p>
+
+<pre><code class="sql">create view &lt;视图名&gt; [&lt;col1&gt;, &lt;col2&gt;]
+as
+select &lt;col1&gt;, &lt;col2&gt; ...
+    from
+&lt;表名&gt;
+</code></pre>
+
+<p>来创建一个视图。视图主要是为调用很频繁的sql做的，省得每次都得写一大段sql，视图还可以层叠，也就是cascade，不过这功能又太偏了，单用view就已经很少了。不过不知道在view中执行查询有没有比直接在表中查询快，如果仅仅是为了sql简洁就发明视图这个概念出来那也太浪费了吧。</p>
+
+<p>视图是子查询的基础，子查询可以看作是一个视图。</p>
+
+<h3>表的集合操作</h3>
+
+<p>表在关系代数中其实就是集合，所以可以交集，并集，查集。</p>
+
+<h3>表连结</h3>
+
+<p>以前大学的时候学离散数学，数据库原理都讲了关系代数，但是才刚刚毕业一年就几乎忘光了，到目前只知道内联接外联接，连用形式化语言来描述连接都做不到，实在是辜负大学四年了，不过现在做应用开发，基本的理论知识看起来又有点鸡肋。</p>
+
+<p>连接分为内联接，外联接。
+inner join &lt;=> join
+left outer join &lt;=> left join
+right outer join &lt;=> right join
+尽量避免直接写outer join，这样会使语义模糊。</p>
+
+<h3>基本查询惯例</h3>
+
+<ol>
+<li>建表的时候用<code>primary key(id)</code>来创建主键，以前我都是喜欢写在一个列的限制性约束条件后面。</li>
+<li>在表明不相等关系的时候使用<code>&lt;&gt;</code>而不是<code>!=</code>，前者才是标准写法。</li>
+<li><code>char</code>类型是按照字典顺序来排序的，一直以来我都以为是按照ascii的顺序来排的。</li>
+<li>在建表的时候尽量避免使用NULL这个变量，因为在查询中空值比较不好处理，不好比较大小，不好做运算，不好count，我也不打算去研究NULL在各种情况下的意义。判断一个字段是否为NULL用<code>IS NULL</code>来判断。</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Develop-on-docker]]></title>
+    <link href="http://blog.joxy.org/blog/2015/04/21/develop-on-docker/"/>
+    <updated>2015-04-21T14:02:48+08:00</updated>
+    <id>http://blog.joxy.org/blog/2015/04/21/develop-on-docker</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[一个简单的元编程的例子]]></title>
@@ -782,59 +885,6 @@ dd: writing `/EMPTY': No space left on device
 
 
 <p>之前我直接在服务器上写代码，提交代码的时候真是落后，得通过命令行来提交代码，magit没法判断远程服务器上的代码的版本。现在这样就好了，我可以用magit随时commit,随时push，然后只要到<code>/srv/http/online_code/</code>下面<code>git pull</code>就行了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[我的第一块机械键盘]]></title>
-    <link href="http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard/"/>
-    <updated>2014-11-10T01:25:52+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/11/10/my-first-machanical-keyboard</id>
-    <content type="html"><![CDATA[<p>考虑良久，今天终于入手了一块机械键盘。对机械键盘发烧得从上周开始说起，看到一个同事用机械键盘，感觉太爽了，顿时自己也想买一个，然后就是在网上搜相关的信息。</p>
-
-<h3>在网上了解到了很多机械键盘相关的信息，突然发现小小的键盘里面竟然有这么多内幕。</h3>
-
-<ul>
-<li><p>对于程序员来说HHKB当然是首选，但是高昂的价格让人望而生畏。</p></li>
-<li><p>然后就是传说中的<a href="http://codekeyboards.com/">codekeyboard</a>，不过，这款键盘国内没得卖，而且在国外估计也是小众，还是以后再考虑吧。</p></li>
-<li><p>还有一个很牛的键盘叫做<a href="http://www.daskeyboard.com/">daskeyboard</a>，这款键盘的创造者也是一个程序员大牛，具体的来源可以参考一下<a href="http://en.wikipedia.org/wiki/Das_Keyboard">wikipedia</a>，不过我不喜欢104键的键盘，而且价格也不便宜。</p></li>
-<li><p>接下来就是一些很普通的键盘了，网上说机械键盘最重要的就是轴(switch)，最好的轴当然是德国樱桃(cherry)的原厂轴了。现在主要的樱桃轴是按照颜色来分的，有红轴(red switch)，黑轴(black switch)，青轴(blue switch)，茶轴(brown switch)，以及一些不太起眼的轴。在这四大主力轴中，黑轴公认的玩游戏最爽，红轴声音小，直上直下，青轴最吵，不过打字最爽。茶轴介于青轴和红轴之间，是新出的一款轴。</p></li>
-</ul>
-
-
-<p>我的这款poker 2是kbc产的，一个国产品牌，但是不得不说做工很不错，小巧紧凑，该有的功能都有了，以后估计可以纯键盘办公了。87和104一个很大的区别就是没有小键盘，所以要按方向键，翻页键都得通过FN组合来实现。对我来说有点不方便，因为我的urxvt的设定是<code>shift+downarrow</code>来实现新建标签的，已经习惯这种快捷键了。现在得按<code>shift+fn+s</code>才能打开一个新的urxvt标签，在考虑是改改urxvt的设置还是改改键盘映射。</p>
-
-<p>底下的win键倒是很符合我的需要。现在用的是xmonad的窗口管理器，我之前设置的快捷键是<code>mod1mask+[1..9]</code>来切换窗口的，现在不需要怎么改就能直接用win键。</p>
-
-<p>打开火狐浏览器的时候突然发现没有上下方向键不好滚动页面了，而且没有了左方向键回到前一页也不方便了。不过发现了一个解决办法。要滚动页面可以考虑<code>fn+[s,w]</code>，或者是<code>[fn+space]然后[w,s]</code>。因为[fn+space]会把asdw变成方向键。要回到前一个页面就不太方便了，我想了一下可以把<code>[backspace]</code>设置为回到前一页的快捷键。不过这个得改firefox的快捷键设置。在地址栏输入<code>about:config</code>，然后找到<code>browser.backspace_action</code>，我这里默认的是2,也就是说shift加左箭头可以回到前一页，不过我想把这个值设置为0,这样就是<code>backspace</code>来回到前一页了。</p>
-
-<p>几个大按键不太好，声音和普通按键不同，有点滞胀感。问了卖家，他说这是正常情况，因为大的shift用了一个平衡杆来感应按键，虽然很不爽，但是还是忍忍吧，以后有钱了买个好的键盘，现在这个就先拿来练练手。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Redis崩溃]]></title>
-    <link href="http://blog.joxy.org/blog/2014/11/02/redis-crash/"/>
-    <updated>2014-11-02T08:36:37+08:00</updated>
-    <id>http://blog.joxy.org/blog/2014/11/02/redis-crash</id>
-    <content type="html"><![CDATA[<p>星期五上班的时候运维报告说有一台redis服务器的流量出现异常，接收到的流量非常高，主要是来自另外一台服务器的。然后又给出了这台服务器上<code>netstat -nt | grep -i 'time_wait'</code>的结果，发现1000多个time_wait的进程，太恐怖了，连接的丢包率这么高，是不是说明redis性能很低了呢？</p>
-
-<p>telnet上redis服务器去查看了一下，也就10万+的key，按理来说不应该这么慢。后来事故达到高峰期了，好几个站出现502了，这时候运维报告redis服务器网卡io达到峰值，太恐怖了，服务器使用的是1000Mbps的网卡，每秒钟redis读写超过1G了，怎么会这样？这时候看来就好理解之前netstat的结果了，既然网卡达到上限了，肯定服务器就不能即使返回请求。</p>
-
-<p>redis读写过高我们分析可能原因是写入了很巨大的key，在redis里面monitor了一下最近的读写状况，发现大部分都是get一些很小的key，一般都是一些比较小的数组，既没有缓存文件，也没有缓存大段的页面，那么为什么会出现流量过高呢？我觉得很大的原因是redis真的出现性能问题了，如果性能下降了的话，而请求数又没变，也是会导致time_wait的。其实我早就发现我们现在编码很不规范，redis有5种数据结构，但是在大部分业务中都只用到了1种数据结构，也就是字符串。不得不说这是一个很傻的设计。在10几万的key中get一个key得有多慢，如果设计一些hash表，把不同的key存到hash里面，那么可以大大的提高redis的性能，毕竟redis的key大大的减少了，而在hash表里面查询某个key的值还是比较快的。肯定比在redis库里查询快。不过知道问题所在不意味着我们会去改，现在开发人员本来就少，但是新的项目一个接一个。目前简单测试了一下没问题就上线了，根本没有考虑过代码的性能问题，没有人审核代码，没有人压力测试代码，在开发的时候怎么省事怎么来，之前别人写的方法copy过来直接用，也不管之前的代码和现在的代码处理的问题有多不同，只要能用那就可以。</p>
-
-<p>这也是没办法的办法，可以做的不多，后来他们把一些代码的缓存时间缩短了，这样就不会有太多的key留在内存中，减少key的数量之后大概能加快一点查询效率。而且他们还审查了一部分代码，我看了他们找的一个文件，有个程序会一次性请求7个接口获得一大堆数据，但是真正有用的只是其中一部分，后来他们优化了一下，在取数据之前加了一些判断来觉得到底去取哪个数据。看起来效果挺明显的，至少这个文件的请求就少了7倍。</p>
-
-<p>顺便再来总结一下netstat(network statistics)的用法吧，用它来监控网络状况挺好的。
-1. 直接执行<code>netstat</code>，会输出当前所有的连接。
-2. <code>netstat -a</code>，输出所有的连接，和<code>netstat</code>的结果一样。
-3. <code>netstat -t</code>，列出所有的tcp连接。
-4. <code>netstat -i</code>，列出当前所有的网络接口，比如说我的笔记本有3个接口，一块以太网卡，一块无线网卡，一个回环接口。
-5. <code>netstat -s</code>，列出当前所有协议的统计状态，包括tcp, ip, udp, icmp等。
-6. <code>netstat -p</code>，列出进程名以及对应的pid。
-7. <code>netstat -r</code>，列出当前的路由表。</p>
-
-<p>主要得分析一下<code>netstat -a</code>的输出，这个连接状态太多了，得好好研究一下。</p>
 ]]></content>
   </entry>
   

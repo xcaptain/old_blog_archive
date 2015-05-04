@@ -119,6 +119,165 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-05-03T02:34:28+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-05-03</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/05/03/mysql-basics-1/" itemprop="url">Mysql基础</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>五一第二天泡国图看了一下午关于sql的书，小有所获，才发现以前工作中用到的只是mysql中的一个很小的子集，该好好整理一下了基础知识了，当然对于很基本，已经用得很熟练的知识就不提了。</p>
+
+<h3>什么是sql语言</h3>
+
+<p>sql语言包括：
+    DDL（数据定义语言）：创建数据库，创建表，创建视图，创建索引等。
+    DML（数据操作语言）：也就是增删改查操作。
+    DCL（数据控制语言）：COMMIT，ROLLBACK，GRANT等。</p>
+
+<h3>聚合查询</h3>
+
+<p>聚合查询指的是把一张表的内容分组，相关操作包括<code>count</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>avg</code>, <code>group by</code>, <code>having</code>，前面5个是聚合函数，从一大串结果中取出我们要的属性。
+后面2个是分组的。<code>group by</code>的语法为:</p>
+
+<pre><code class="sql">select &lt;col1&gt;, &lt;col2&gt;, &lt;col3&gt;
+    from &lt;table_name&gt;
+[where ...]
+group by &lt;col1&gt;, &lt;col2&gt;, &lt;col3&gt;
+[having ...]
+</code></pre>
+
+<p>有一条限制说的是select子句中的每一个字段都必须出现在group by的子句中，但是我在mysql和postgresql中执行的时候结果确不一样，pgsql有这个限制，而mysql则松散得多。在我看来必须得严格才行，不然在有1对多关系的表中，group by之后的结果可能会让人莫名其妙，难怪很多人都说postgresql比mysql要严谨。</p>
+
+<h3>事务</h3>
+
+<p>事务指的是把一系列操作封装在一起来执行，要么同时执行这一些列操作，要么一个都不执行。这个以前工作也用到的不多，可能公司是以前写代码的人对于这个也不看中吧，基本上都是直接update，insert了。记得以前用python的<code>MySQLdb</code>的时候，如果有插入操作必须手动调用一下commit方法才能把数据写进数据库，那时候还不理解，感觉多了一步操作实在是太麻烦了，现在看来把所有操作都看作事务来执行，手动提交事务对于数据来说还是很安全的。</p>
+
+<p>事务有4个特性：（ACID）</p>
+
+<ol>
+<li>原子性（Atomic）：事务是一个整体。</li>
+<li>一致性（Consistency）：每个操作都必须满足对应列的约束条件。</li>
+<li>隔离性（Isolation）：没一个事务中的数据对另一个事务都是不可见的，在提交操作之前，数据不在表里面。</li>
+<li>持久性（Duration）：每个事务完成之后会有日志记录，方便从日志恢复数据。</li>
+</ol>
+
+
+<p>创建事务：</p>
+
+<pre><code class="sql">start | begin transaction
+sql1;
+sql2;
+...
+commit
+</code></pre>
+
+<p>现在仔细想想原来看过好多同时更新多张表的代码没有走事务，那些业务真是太危险了，一张表的结构出错可能就导致整个业务逻辑崩溃。</p>
+
+<h3>视图</h3>
+
+<p>视图类似与一张表，但是区别是表里面存放着数据，但是视图里面没有数据。可以用</p>
+
+<pre><code class="sql">create view &lt;视图名&gt; [&lt;col1&gt;, &lt;col2&gt;]
+as
+select &lt;col1&gt;, &lt;col2&gt; ...
+    from
+&lt;表名&gt;
+</code></pre>
+
+<p>来创建一个视图。视图主要是为调用很频繁的sql做的，省得每次都得写一大段sql，视图还可以层叠，也就是cascade，不过这功能又太偏了，单用view就已经很少了。不过不知道在view中执行查询有没有比直接在表中查询快，如果仅仅是为了sql简洁就发明视图这个概念出来那也太浪费了吧。</p>
+
+<p>视图是子查询的基础，子查询可以看作是一个视图。</p>
+
+<h3>表的集合操作</h3>
+
+<p>表在关系代数中其实就是集合，所以可以交集，并集，查集。</p>
+
+<h3>表连结</h3>
+
+<p>以前大学的时候学离散数学，数据库原理都讲了关系代数，但是才刚刚毕业一年就几乎忘光了，到目前只知道内联接外联接，连用形式化语言来描述连接都做不到，实在是辜负大学四年了，不过现在做应用开发，基本的理论知识看起来又有点鸡肋。</p>
+
+<p>连接分为内联接，外联接。
+inner join &lt;=> join
+left outer join &lt;=> left join
+right outer join &lt;=> right join
+尽量避免直接写outer join，这样会使语义模糊。</p>
+
+<h3>基本查询惯例</h3>
+
+<ol>
+<li>建表的时候用<code>primary key(id)</code>来创建主键，以前我都是喜欢写在一个列的限制性约束条件后面。</li>
+<li>在表明不相等关系的时候使用<code>&lt;&gt;</code>而不是<code>!=</code>，前者才是标准写法。</li>
+<li><code>char</code>类型是按照字典顺序来排序的，一直以来我都以为是按照ascii的顺序来排的。</li>
+<li>在建表的时候尽量避免使用NULL这个变量，因为在查询中空值比较不好处理，不好比较大小，不好做运算，不好count，我也不打算去研究NULL在各种情况下的意义。判断一个字段是否为NULL用<code>IS NULL</code>来判断。</li>
+</ol>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-04-21T14:02:48+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-04-21</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/04/21/develop-on-docker/" itemprop="url">Develop-on-docker</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description">
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-04-17T17:33:16+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-04-17</time>
         
       </p>
@@ -628,154 +787,6 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-04T07:16:58+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-04</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/04/debug-shadowsocks/" itemprop="url">调试shadowsocks</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。</p>
-
-<p>系统安装完之后肯定是要部署shadowsocks的，操作很简单就不多说了，一点问题都没有，但是今天早上起床开机就发现没法翻墙了，这时候问题就出现了，耽误我一整天时间。</p>
-
-<p>笔记本没法翻墙是什么问题呢？试了一下手机，用fqrouter是没问题的，那就说明服务器端是没问题的，好吧，在客户端上找原因。</p>
-
-<p>之前安装的客户端是nodejs版的，一直都这么用感觉没什么问题，现在我就打算换个客户端版本，试试python的。安装也很简单，但是就是上不了网，真是郁闷。没办法了，慢慢来调试找问题吧。我在服务器端和客户端都开启了-v参数，用来详细输出日志。</p>
-
-<ol>
-<li><p>用fqrouter访问的时候，服务器端输出：
- <pre>
- 2015-01-03 08:48:07 INFO: accept a connection.
- 2015-01-03 08:48:07 INFO: connect to: 106.162.216.94:443
- 2015-01-03 08:48:07 INFO: asyncns resolved.
- 2015-01-03 08:48:07 INFO: remote connected.
- </pre>
- 看来这是正常连接，返回数据也正常。</p></li>
-<li><p>本地用firefox访问google，服务器端输出：
- <pre>
- 2015-01-03 08:49:56 INFO: accept a connection.
- 2015-01-03 08:49:56 INFO: connect to: plus.google.com:443
- 2015-01-03 08:50:16 INFO: asyncns resolved.
- 2015-01-03 08:50:16 ERROR: getaddrinfo: Operation now in progress
- 2015-01-03 08:50:16 INFO: current server connection: 2
- </pre>
- 这就是失败的连接在服务器的日志了，只看到一行错误，搞不懂原因。</p></li>
-<li><p>在服务器端执行<code>netstat -naltp | grep 8388</code>的输出：
- <pre>
- tcp        0      0 111.222.231.123:8388    0.0.0.0:*               LISTEN      1738/ss-server
- tcp        0      0 111.222.231.123:8388    152.42.49.117:29403     ESTABLISHED 1738/ss-server
- tcp        0      0 111.222.231.123:8388    152.42.49.117:29406     ESTABLISHED 1738/ss-server
- tcp        0      0 111.222.231.123:8388    152.42.49.117:29402     TIME_WAIT   -
- tcp        0      0 111.222.231.123:8388    152.42.49.117:29400     TIME_WAIT   -
- tcp        0      0 111.222.231.123:8388    152.42.49.117:29401     TIME_WAIT   -
- </pre>
- 本地可以连接服务器的端口，那为什么没有数据返回呢？</p></li>
-<li><p>在本地执行<code>netstat -naltp | grep 1080</code>的输出：
- <pre>
- tcp        0      0 127.0.0.1:1080          0.0.0.0:*               LISTEN      732/python
- tcp        0      0 127.0.0.1:45312         127.0.0.1:1080          ESTABLISHED 744/firefox
- tcp        0      0 127.0.0.1:1080          127.0.0.1:45312         ESTABLISHED 732/python
- tcp        0      0 127.0.0.1:1080          127.0.0.1:45307         TIME_WAIT   -
- tcp        0      0 127.0.0.1:1080          127.0.0.1:45309         TIME_WAIT   -
- </pre>
- 看来浏览器和本地端口之间也是通的。</p></li>
-</ol>
-
-
-<p>本地应用可以连接本地的端口，本地的端口可以连接服务器，为什么就是没有数据呢？不会调试web程序，不会抓包，这时候只能乱猜原因，一下午都没有想通问题，就在我想要发帖求助的时候，想了一下为什么用fqrouter的时候服务器端接收到的是一个ip，而本地客户端连接服务器的时候就是一个域名，也许dns出问题了，试了一下<code>ping www.google.com</code>，果然不通，问题找到了，虚拟机提供商这个机房的dns昨晚出问题了，导致解析失败，添加一个第三方的dns，问题解决。</p>
-
-<p><code>vi /etc/resolvconf/resolv.conf.d/base</code>添加下面2行</p>
-
-<pre>
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-</pre>
-
-
-<p>然后执行<code>resolvconf -u</code>刷新dns，这样就能使用google的dns了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-03T08:43:43+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-03</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/03/deploy-email-service/" itemprop="url">部署邮件服务</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。</p>
-
-<h4>首先确定一下发件服务。</h4>
-
-<p>根据网上的推荐，我用的是<a href="https://mandrillapp.com/">mandril</a>，这家公司为免费帐号提供每月发12000封邮件，对于个人玩来说足够了。接下来就是注册帐号，注册完成之后会有一个向导引导着去配置发件服务。填好之后配置都会出现在<a href="https://mandrillapp.com/settings">这里</a>，这些配置包括发件服务器的域名，端口，smtp用户名，以及密码，密码是网站生成的，要好好保存。</p>
-
-<h4>然后就是配置收件服务</h4>
-
-<p>同样也是根据网上的推荐，收件服务用的是国内一家公司的，叫做<a href="https://www.zoho.com/">zoho</a>，这家公司为每个免费帐号提供一个代收域名，15个免费邮箱，每个免费邮箱提供5G存储空间，对于个人玩来说也是足够了的，因为可以把邮件下载到本地，然后删除服务器上的邮件存档，所以这5G的空间可以永远也用不完。好像这家公司就在中关村，真想去参观一下。用zoho的原因是它提供邮件代收服务，我有一个域名<code>joxy.org</code>，我想注册一些邮箱以<code>@joxy.org</code>结尾，zoho就提供这种功能。过程也是很简单，需要先去注册帐号，注册帐号的时候要验证你是否对这个域名有所有权，所以还需要去<a href="https://mya.godaddy.com/">godaddy</a>上面验证一下，我是通过cname的形式来验证的。注册完成之后还得配置一下godaddy，因为在注册域名的时候默认设置了2个收件商，现在我不想用那2个厂商的收件服务了，所以要改改dns设置，找到mx这条配置，删掉额外的2个厂商的配置，然后加上一条mx记录，Host是@,表示joxy.org自身，Points to填mx2.zohomail.com，剩下的随便填就行了。这样当有人往<code>user@joxy.org</code>发邮件的时候，发件服务器通过dns查询的时候就知道要发给zoho，zoho就可以帮忙代收。</p>
-
-<h4>发件服务和收件服务都配置好了，接下来就是测试一下是否能收发邮件了。</h4>
-
-<p>用thunderbird可以很方便的写邮件收邮件。把我刚刚创建的xiefei@joxy.org这个帐号创建了，手动配置好这个帐号发送邮件和接收邮件的设置，就可以开始测试了。在配置smtp发件的时候需要输入密码验证用户是否有权限来发邮件，所以一定要记得填smtp的密码。我测试了一下和我的gamil邮箱互发邮件，一点问题都没有，而且邮件也没有进入垃圾箱。这真是太好了，图形界面的客户端可以收发邮件，真想看看通过php,ruby脚本能不能发邮件。</p>
-
-<p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
-
-<p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -799,15 +810,15 @@ nameserver 8.8.4.4
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/05/03/mysql-basics-1/">Mysql基础</a>
+    
+    <a class="list-group-item " href="/blog/2015/04/21/develop-on-docker/">Develop-on-docker</a>
+    
     <a class="list-group-item " href="/blog/2015/04/17/php-meta-programming-1/">一个简单的元编程的例子</a>
     
     <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
     
     <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
-    
-    <a class="list-group-item " href="/blog/2015/03/07/emacs-grep-find/">Emacs自定义grep-find的模板</a>
-    
-    <a class="list-group-item " href="/blog/2015/01/28/emacs-eww/">学习emacs-eww</a>
     
   </div>
 </section>
@@ -923,6 +934,12 @@ nameserver 8.8.4.4
     <a class="list-group-item " href="/blog/categories/orgmode/index.html">
       <span class="badge">1</span>
       orgmode
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/sql,mysql,postgresql/index.html">
+      <span class="badge">1</span>
+      sql,mysql,postgresql
     </a>
     
   </div>
