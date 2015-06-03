@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | Joey's Blog]]></title>
   <link href="http://blog.iyue.club/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://blog.iyue.club/"/>
-  <updated>2015-05-20T23:32:15+08:00</updated>
+  <updated>2015-06-03T23:44:05+08:00</updated>
   <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Php的getter方法]]></title>
+    <link href="http://blog.iyue.club/blog/2015/05/23/php-getter/"/>
+    <updated>2015-05-23T15:58:40+08:00</updated>
+    <id>http://blog.iyue.club/blog/2015/05/23/php-getter</id>
+    <content type="html"><![CDATA[<p>这几天做统计后台频繁用到一个叫做<a href="http://carbon.nesbot.com/">Carbon</a>的日期库，用多了发现这个库的接口设计得非常方便，方法非常自然，稍微用几次就知道用法了。比如说好多方法都是静态方法，省去了频繁构造对象的开销。最方便的还是里面的getter方法，<code>$dt-&gt;year</code>就返回了本年，这个year很明显是一个静态方法，因为$dt不是new出来的对象，但是我们看起来就好像是直接访问一个类的属性一样。</p>
+
+<pre><code class="php">class A {
+    public function year() {
+        return 2015;
+    }
+    public static function __get($var) {
+        return $this-&gt;$var();
+    }
+}
+a = new A;
+echo a-&gt;year;
+</code></pre>
+
+<p>是getter的一种简单写法，挺不错的。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[一个简单的元编程的例子]]></title>

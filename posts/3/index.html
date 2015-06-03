@@ -119,6 +119,255 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-26T04:27:01+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-26</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/26/learn-virtualization-1/" itemprop="url">第一次接触虚拟化</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
+
+<p>按照原来部署<a href="http://f.joxy.org">http://f.joxy.org</a>的模式打算先在本地部署好环境，然后提交到git server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
+
+<p>搜索了一下发现现在比较流行的服务器环境配置，服务器管理都是通过container也就是容器来进行的，最老土的服务器管理方式是通过ssh连接上服务器，然后手动编译或者包管理的形式安装软件。但是这种方式有很大的局限性，不易把所有的机器都统一配置，因为所有配置文件都要由手动编辑，然后手动更新，必然有的机器版本早，有的机器版本晚，对于管理一个服务器集群来说这是很不方便的。而且服务器多了软件更新就是一个麻烦事，不可能一台机器一台机器的去更新。</p>
+
+<p>目前找到了3个比较有名的虚拟化技术：</p>
+
+<ol>
+<li>docker， 更类似于chroot</li>
+<li>vagrant，用来管理virtualbox虚拟机</li>
+<li>rocket，暂时没什么太多了解</li>
+</ol>
+
+
+<p>早上出门的时候在youtube上看了一个通过docker来安装coreos的视频，但是感觉要学习yaml语法配置，比较繁琐，那就先来看看vagrant吧。</p>
+
+<p>在vagrant的<a href="http://docs.vagrantup.com/v2/getting-started/index.html">官方文档</a>上找到了简单的使用方法，其实说白了就是一个自动安装运行virtualbox的脚本。首先得安装vagrant，<code>sudo pacman -S vagrant</code>，然后得安装virtualbox，<code>sudo pacman -S virtualbox</code>，然后还得安装一大堆的依赖，<code>sudo pacman -S virtualbox-host-modules</code>是用来安装virtualbox用来和宿主机通信的模块，如果这个软件太老了就会无法正常使用vagrant，那么一个补救措施就是<code>sudo pacman -S virtualbox-host-dkms</code>，virtualbox安装好了之后还得解决一些内核的驱动，最简单的就是<code>sudo dkms autoinstall</code>，这个命令会自动搜索<code>linux-headers</code>然后编译对应的驱动，如果系统上没有装<code>linux-header</code>那么还是会报错的，那就得<code>sudo pacman -S linux-headers</code>。需要安装的软件，驱动，都装好了之后就是在内核加载virtualbox的驱动了，很简单<code>sudo modprobe vboxdrv</code>，这时候就大功告成了。</p>
+
+<p>对照着教程在自己的笔记本上一步一步的做，先<code>vagrant init hashicorp/precise32</code>，这回在当前的目录下创建一个叫作<code>Vagrantfile</code>的文件，这里面包含了一大堆虚拟机的配置信息。然后<code>vagrant up</code>就会启动虚拟机，这时候<code>ps aux | grep -i virtualbox</code>就会发现virtualbox已经自动在运行了，在家目录的<code>VirtualBox\ VMs/</code>目录下也会创建对应虚拟机的目录，但是没有启动那个讨厌的图形界面这很不错。因为vagrant主要是用来配置服务器的，所以不需要图形界面，等系统下载安装好了之后就可以执行<code>vagrant up</code>来启动虚拟机了，这个操作会检测是否有<code>Vagrantfile</code>里面写的系统，如果没有就会自动从网上下载。系统下完之后<code>vagrant ssh</code>可以远程连接上虚拟机，发现虚拟机上面有一个网卡ip是<code>10.0.2.15</code>，好奇怪的东西，联网方式是NAT还是bridge呢？有一个自动安装系统的脚本，叫作<code>postinstall.sh</code>，以root身份执行它会自动安装系统，等最后跑完的时候吓我一大跳</p>
+
+<pre><code>++ rm -f '/home/vagrant/*.iso' /home/vagrant/postinstall.sh
+++ dd if=/dev/zero of=/EMPTY bs=1M
+dd: writing `/EMPTY': No space left on device
+78697+0 records in
+78696+0 records out
+82518818816 bytes (83 GB) copied, 207.558 s, 398 MB/s
+++ rm -f /EMPTY
+++ exit
+</code></pre>
+
+<p>一下dd我83G的硬盘，这可是我整个宿主机所有的空间了，不会影响到我吧，后来<code>df -h</code>了一下才发现虚拟机没有使用多少硬盘空间，而且宿主机也没有消耗掉很多硬盘空间。这样就有了一台虚拟机了，这可比直接用virtualbox方便多了，没有预先问我分配多少颗CPU，没有问我分配多少RAM，没有问我分配多少硬盘就把系统装好了，我喜欢。</p>
+
+<p>vagrant有一个共享目录就是宿主机的<code>Vagrantfile</code>所在的那个目录，也是虚拟机的<code>/vagrant</code>目录，这个目录双方都可以读写，想想真是有点小激动，要是以后我虚拟一个windows出来在上面跑一个qq，然后今天志军通过qq传给我的《刺杀金正恩》就不用在windows上跑着vlc服务器给我的arch笔记本供源了，不知道有没有人为vagrant做windows的box。</p>
+
+<p>不过vagrant毕竟是建立在virtualbox之上的，虽然说虚拟机占用宿主机的资源少了，但是还可以做得更好，要让机器资源更加充分的利用就得学习docker了，加油。</p>
+
+<p>另外今天和小青谈了一下学习方式的问题，他说我三天打鱼两天晒网没有持之以恒的做一件事，想想也确实是这样，从工作开始学习和使用php来干活，python是原来就会的所以也就没有怎么学，但是又学了几个礼拜ruby，学了几个礼拜haskell，工作在二次开发discuz，但是业余时间却自己搭了一个esotalk的论坛，现在又在研究虚拟化技术。虽然我一直认为身为一个互联网从业者就得把握住互联网的发展方向，不断学习最新的技术，我们生活在一个很开放的社会，最新最热的技术都是开源的有详细的文档，如果不去学习不去研究而是抱着把会的东西研究透彻的话，我有种辜负了这个时代的感觉。希望时代别辜负了我。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-20T19:44:35+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-20</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/20/how-to-use-emacs/" itemprop="url">如何使用emacs</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天闲着没事，又上我们的<a href="https://github.com/ncuopen">ncuopen</a>上面看了一下，发现小组现在活动极其不频繁，首页和wiki都没有怎么更新，然后上irc上看了一下，发现也没有人在线。</p>
+
+<blockquote><p>一个开源社区最大的悲哀就是没有活跃的用户，没有一个持续贡献的志愿者团队。</p></blockquote>
+
+<p>加入小组这么久了都没有做什么贡献真是惭愧，今天想了一下我可以整理一下我对于emacs使用的一点小小的心得。以下将会简单的说说我平时使用emacs来干什么。</p>
+
+<ol>
+<li>写代码，这是最基本的功能。</li>
+<li>上网，在emacs24之前的版本必须使用一个叫做<code>emacs-w3m</code>的第三方扩展才能在emacs里面上网，但是现在emacs自己做了一个基于elisp写的文本浏览器<code>eww</code>，使用方式也很简单，直接<code>M-x eww</code>然后输入要搜索的内容或者是要打开的url就行，现在<code>eww</code>默认的搜索引擎是<code>duckduckgo</code>。</li>
+<li>聊天，今天上<code>#ncuopen</code>上看了一下，发现聊天室里面没人在，突然比较一下那些比较火的聊天室，如<code>ubuntu</code>, <code>debian</code>每天上去都会有一大堆人在线，随便说一句话就会被别人刷屏，差距真的很大。如果要在emacs里面使用irc聊天，可以使用<code>erc</code>来连接服务器。</li>
+<li>看pdf，emacs内建是可以打开pdf文件的，如果习惯了emacs的快捷键，而且不喜欢在<code>evince</code>，<code>okular</code>下面必须使用鼠标的操作，那么可以试试用emacs看pdf。</li>
+<li>写博客，我自己也在github上面搭了一个octopress的博客，在本地就是用emacs编辑的博客，因为emacs支持<code>markdown</code>语法，编辑的时候可以直接看到语法高亮，保存后可以在本地预览。</li>
+<li>执行shell命令，要么是使用<code>M-x shell</code>来打开一个shell或者是<code>M-x eshell</code>来使用emacs自带的终端模拟器，我喜欢用后者，然后就可以运行任何的shell命令了。不过我用eshell用得少，平时都是在<code>urxvt</code>里面执行命令的。</li>
+<li>执行解释器，很动语言都内建了一个elpa的解释器，如ruby, python, php, haskell，sml等，如果想尝试一下某个表达式或者是某个代码段又不想写一个测试文件，那么在解释器里运行是最方便的了，执行<code>M-x run-python</code>, <code>M-x run-haskell</code>，会打开对应语言的解释器，就像在终端执行一样。如果想获得更多语言的支持，可以去<a href="http://elpa.gnu.org/packages/">elpa</a>或者是<a href="http://melpa.org/">melpa</a>上面找找。</li>
+<li>使用git，emacs有个扩展叫做<code>magit</code>，用它来提交代码，查看差异，查看版本比在终端使用git命令方便。</li>
+<li>看图，这个功能估计很少人会用，<code>display</code>和<code>feh</code>已经做得很棒了。</li>
+</ol>
+
+
+<p>如果要使用上面的功能，最好使用<a href="https://github.com/bbatsov/prelude">prelude-emacs</a>上面的配置，省去很多配置的麻烦。</p>
+
+<p>另外我发现现在小组没有一个好的交流的地方，在github上面提issue总是不太方便，找到了一个开源项目<a href="https://github.com/esotalk/esoTalk">esotalk</a>可以很方便的用来搭建论坛，不知道有没有小伙伴愿意贡献一下。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-12-08T06:25:45+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-12-08</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/12/08/learn-beautifulsoup/" itemprop="url">又是一个采集</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>前几天看到有个同事在采集<a href="https://yande.re">这个</a>站，要把上面的图片都搞下来。看他很得意的样子，似乎采集是个什么很复杂东西，其实简单得很，没什么技术含量在里面。他用的是一个叫做scrapy的采集框架，这个框架我没用过，但是自己写采集也简单。</p>
+
+<p>之前采集过多玩和178的一些文章，需求还比较复杂，需要把ajax的接口也给搞定掉，还得把所有图片都本地化，那时候用的是urllib2+beautifulsoup这个东西采集的。</p>
+
+<p>今天闲着没事，打算再来搞个采集玩玩，<a href="https://yande.re">yande</a>上面的图片质量还是比较高的。还是使用老一套，不过这回我不打算使用urllib2了，这东西太弱了，编码问题总是会出现，搞得我莫名其妙的，实在是打算放弃urllib2了，上网搜一下，找到了一个叫做<code>requests</code>的网络库，这个东西目前开发还是蛮活跃的，而且口气比较大，直接在官网说urllib2的api很混乱，那就是它了。页面分析的库还是用回beautifulsoup，这么久了仍然是很不喜欢写正则，所以拿这个库来解析html还是比较顺手。至于信息入库，我用的是<code>MySQLdb</code>这个库来驱动mysql，似乎这个库也比较弱，反正我是遇到很多很简单的sql语句都报错的情况了，在网上搜了一下，发现别的第三方的mysql库也很多，但是还没有下定决心换。</p>
+
+<p>代码的思路很简单，和以前写的采集脚本差不多，都是先采集列表页，获得文章页的url，然后在文章页中采集想要的信息。信息采集完了就是入库，到这里采集过程就结束了。</p>
+
+<p>代码很简单，已经提交到<a href="https://github.com/xcaptain/yande">github</a>了，和之前写的脚本比起来，多增加了一些东西：
+1. 模糊匹配，比如说<code>soup.find(href=re.compile('user\/show'))</code>这样的东西。
+2. 断点续踩，程序在跑的时候如果按下<code>Ctrl-C</code>来终止它的话，会把当前采集到的页码写入到一个叫做<code>config.py</code>的文件。
+3. 异常处理，以前写的几个采集使用了很多if语句，很多嵌套的判断，就是为了人为规避异常，尽量让程序跑的时候都不遇到异常，这种写法真是太折磨人了，看到三四层嵌套判断我的头都要大了。这回尝试了一下直接在<code>try</code>里面执行代码段，如果遇到可能会有的异常就直接<code>except</code>上处理了它，真是省了很多心呀。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-24T05:09:30+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-24</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/11/24/got-an-old-pc/" itemprop="url">入手一台二手PC</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天下午在58上面看到一条消息，说的是190出售双核电脑，立即就心动了。作为一个linux，总是忍不住手痒想重装系统，或者是自定义系统，但是因为现在自己手头上只有一台笔记本，实在是不敢轻举妄动，不然把这电脑弄崩溃了，或者是丢失数据了那就损失惨重了。如果有一台空闲的机器那就好了，我可以随便在那台机器上面装系统，可以随意定制。而且有一台局域网内部的PC当作服务器，拿来当测试机很不错，在这里测试过代码之后再上传到线上vps上去。</p>
+
+<p>说干就干，反正190也不贵，现在出去随便找个饭店吃个稍微好点的饭都不止190.给卖家打了电话先问了一下基本的情况，大致确定了消息的真实性，然后就是出发去验货了。那个卖家在东城区，好远啊，看了一下时间都已经3点半了，赶紧出发。又是转公交又是转地铁，终于到了东四北大街，来到了卖家的家里。太震惊了，卖家竟然是一个50多岁的老头，家里很简陋，胡同里很老的房子，但是里面堆满了电脑主机，估计有2,3百台。我要买的那台电脑正开着呢，装着win7系统，正在通过pptv看视频呢。cpu是amd的，1.9GHZ，ddr2内存1G大，网卡是100M的螃蟹卡，这种网卡对于*unix来说几乎都是免驱动的了，使用的太广泛了。剩下的就没什么说了，反正是打算拿来当服务器的，对于显卡没什么要求。</p>
+
+<p>成交之后就抱着这主机又穿过了大半个北京回到了住的地方，累死我了。</p>
+
+<p>回来之后打算装系统，问了一下群里的几个朋友，他们都说要装系统的话必须要有显示器才行。伤心，我还以为有一键安装系统的脚本呢，看来系统是得下周拿到公司去装了。真搞不懂，如果服务器装机也像普通桌面电脑一样的话，那些大公司的运维该多惨，几百台机器得装。</p>
+
+<p>接下来就是得好好想想服务器装什么系统好了，现在vps上跑的是freebsd10,已经连续运行3个多月了，稳定性还可以。但是我自己桌面装的是archlinux，相对来说arch的用法还是比freebsd要简单得多。说到这里又想到这几天debian多位核心开发者离职，好像就是因为debian8要采用systemd的原因。arch很早就用了systemd来管理系统启动进程，导致现在用arch几乎都是傻瓜式了，开启某个软件，安装某个软件，检测某个进程运行状态，都可以通过systemctl来实现。对于*inux的哲学来说还是一个软件只干一件事，对于这种想把什么事都干掉的软件，freebsd是很抵制的。</p>
+
+<p>真搞不懂到底哪种才是对的。</p>
+
+<p>昨天在公司加班终于把zeze的代码部署到git上了。</p>
+
+<p>之前用的版本管理是svn，但是我不太喜欢svn，因为emacs不支持它。我喜欢git，因为emacs对git的支持很好，通过magit我可以很轻松的看到每个版本之间的改动，可以任意提交代码。其实我也不是很熟悉git，但是得慢慢来学，以后git肯定是会取代svn的。</p>
+
+<p>我把svn里面的代码复制到内网测试机之后，<code>git init</code>了这个目录，然后执行初始化提交，然后在本地执行<code>git clone user@host:/project/ ./project</code>把代码拷到了本地，打算在本地改了之后up到服务器上。但是后来我发现我想多了，git不是svn，用svn的这种思路是行不通的，线上的代码和本地的代码是毫无关系的2个分支，本地改了之后提交执行<code>git push</code>是会报错的。</p>
+
+<p>那么什么才是正确的git方式呢？查看了一下git的文档，发现上面说git有一个版本库，克隆这个版本库就能获得最新的版本。</p>
+
+<ol>
+<li>先把代码复制到本地，<code>scp -r online_code local_code</code></li>
+<li>把本地代码初始化成一个git仓库，<code>git init</code></li>
+<li>把本地代码都加入到git版本中，<code>git add .</code></li>
+<li>第一次提交代码，<code>git commit -m 'init commit'</code></li>
+<li>把本地仓库推送到远程服务器上，<code>git remote add gituser@gitserver:/local_code.git</code>，在执行这步的时候必须确保git服务器上面已经存在local_code.git这个目录，如果不存在的话就得<code>mkdir local_code.git</code></li>
+<li>把本地仓库保存的版本都推送到服务器上，<code>git push origin master</code></li>
+<li>ssh上git服务器看看，找到local_code.git这个目录，发现里面的文件竟然和本地代码里面<code>local_code/.git/</code>下的内容一模一样</li>
+<li>把仓库里的代码克隆到对外访问的环境，因为我是在本地做的测试，所以代码仓库和web服务器是在同一台机器上的，直接执行<code>git clone local_code.git /srv/http/online_code</code>就把版本库里面记录的代码复制出来放到服务器目录了。</li>
+</ol>
+
+
+<p>之前我直接在服务器上写代码，提交代码的时候真是落后，得通过命令行来提交代码，magit没法判断远程服务器上的代码的版本。现在这样就好了，我可以用magit随时commit,随时push，然后只要到<code>/srv/http/online_code/</code>下面<code>git pull</code>就行了。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-11-10T01:25:52+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-11-10</time>
         
       </p>
@@ -412,619 +661,6 @@
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-29T00:02:00+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-29</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/29/connect-to-vpn/" itemprop="url">Connect-to-vpn</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>今天拿到vpn了，真是兴奋啊，早在实习结束的时候就要求了vpn，结果5个月后才拿到手，真是的。
-拿到了vpn意味着以后可以早点下班，有事情在家里远程办公还是无休止的工作，休息即工作呢？
-希望我不会把工作和生活混乱了。</p>
-
-<p>拿到的vpn就3条信息，一个服务器ip，帐号，密码。也不说一下vpn服务器是用什么软件部署的，这让我怎么
-挑客户端软件来连接呢？万一服务器和客户端所用的协议不一样我不是浪费时间吗。算了，都已经这么晚了
-还是先随便试一个吧，如果有问题明天到了公司再说。</p>
-
-<p>首先试的是pptp的客户端，因为这是使用最广泛的vpn协议了，虽然之前好像看到过这种通信的加密很弱，但是
-没关系，又不发表反动言论。</p>
-
-<p>首先要安装pptp的客户端，很简单，<code>sudo pacman -S pptpclient</code>。</p>
-
-<p>然后需要配置一下vpn连接的参数，比如说服务器ip多少，帐号密码多少。最麻烦的方法莫过于手动改写配置文件了，但是
-还好pptp自带了一个setup的功能，一条命令就可以创建vpn连接。
-<code>pptpsetup --create my_tunnel --server vpn.example.com --username alice --password foo --encrypt</code>
-把my_tunnel替换成一个隧道别名，以后就可以使用这个别名来连接指定的vpn服务器了。
-在&ndash;server参数后改为需要连接的ip地址，作为公司内部访问才不会为vpn服务配置一个域名呢，又不是给外人开放使用，没必要好记。
-在&ndash;username参数后面输入分配的用户名
-然后回车执行这条命令就会提示输入密码，输入密码，ok如果没问题的话现在已经创建好了一个vpn连接，接下来需要做的就是启用这个连接。</p>
-
-<p>直接<code>pon my_tunnel</code>就可以开启这个vpn连接了，然后输入<code>ifconfig</code>查看一下，如果出现了ppp0这个接口那就说明连接建立成功。</p>
-
-<p>这时候试图访问公司内网，可是还是连接不上去，因为没有配置路由规则，默认情况下流量都走wlp3s0这个接口了，这是我的无线网卡的接口。
-稍微配置一下公司服务器网段就行了，内部测试机是192.168.10.0/24的网段，所以在命令行输入<code>ip route add 192.168.10.0/24 dev ppp0</code>
-然后就可以在本地通过ssh连接这个网段的机器了。</p>
-
-<p>昨晚遇到一个紧急情况，又用了一下vpn，不知道为什么可以连接，也可以执行一些简单的命令，比如cd，ls，svn之类的，就是不能执行vim, cat这类命令，一查看某个文件
-连接就会卡死，不得不在本地kill掉这个ssh会话，kill掉之后ppp0这个接口也自动关闭了，又得重新开一遍。不知道是什么原因。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-08T12:12:48+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-08</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/08/my-xmonad-config/" itemprop="url">我的xmonad配置</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>xmonad是用haskell写的一个窗口管理器。所谓的窗口管理器和桌面环境最大的区别大概就是轻量和重量的区别吧。
-之前用过gnome3, unity, kde4, xfce4等桌面环境，感觉功能和配置都差不多，而且额外安装了太多不必要的东西，
-而且还很耗费系统资源。上个月在tumblr看到了某个人的xmonad桌面截图，感觉特别cool，所以开始折腾xmonad，不过
-刚开始接触这种窗口管理器还是比较费劲的。</p>
-
-<p>首先得安装xmonad，我现在用的是archlinux64位版本。可以用<code>sudo pacman -S xmonad</code>，安装好了可以执行<code>xmonad --version</code>
-看看版本，我的事0.11的版本。每次启动xmonad的时候都会从<code>~/.xmonad/</code>里面读取配置，所以安装完了之后还得检查一下
-是否自动生成了这个目录，一般安装成功之后都会出现的。</p>
-
-<p>然后就是配置桌面管理器了，因为我之前用的是gnome3的桌面环境，所以默认使用的桌面管理器是gdm，我如果要在登陆的时候
-选择进入那个桌面环境就得把这个地方配置好。首先增加一条xmonad的入口配置：</p>
-
-<pre>
-[Desktop Entry]
-Encoding=UTF-8
-Type=Application
-Name=Xmonad
-Comment=Lightweight X11 tiled window manager written in Haskell
-Exec=xmonad
-Icon=xmonad
-Terminal=false
-StartupNotify=false
-Categories=Application;
-</pre>
-
-
-<p>登出系统，然后在登陆界面就会出现xmonad的选项了。默认登陆进去应该是黑乎乎一片，因为就开启了一个wm，什么应用都没有
-开。这时候可以输入<code>Alt Shift Return</code>，如果一切正常的话这个快捷键会打开一个终端。ok，有了终端一切都ok了，可以想做任何
-在linux都可以执行的操作，比如说打开pidgin聊天，firefox上网，thunderbird读邮件啊。</p>
-
-<p>不过默认的配置确实不好用，还是得上网搜点优化了的配置，</p>
-
-<pre>
---
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
-
-import XMonad
-import XMonad.Util.Run(spawnPipe)
-import Data.Monoid
-import System.Exit
-
-import qualified XMonad.StackSet as W
-import qualified Data.Map        as M
-
--- The preferred terminal program, which is used in a binding below and by
--- certain contrib modules.
---
-myTerminal      = "urxvt"
---myTerminal      = "gnome-terminal"
-
--- Whether focus follows the mouse pointer.
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
-
--- Whether clicking on a window to focus also passes the click to the window
-myClickJustFocuses :: Bool
-myClickJustFocuses = False
-
--- Width of the window border in pixels.
---
-myBorderWidth   = 1
-
--- modMask lets you specify which modkey you want to use. The default
--- is mod1Mask ("left alt").  You may also consider using mod3Mask
--- ("right alt"), which does not conflict with emacs keybindings. The
--- "windows key" is usually mod4Mask.
---
-myModMask       = mod4Mask
-
--- The default number of workspaces (virtual screens) and their names.
--- By default we use numeric strings, but any string may be used as a
--- workspace name. The number of workspaces is determined by the length
--- of this list.
---
--- A tagging example:
---
--- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
---
-myWorkspaces = ["1:term","2:code","3:web","4:media"] ++ map show [5..9]
-
--- Border colors for unfocused and focused windows, respectively.
---
-myNormalBorderColor  = "#7c7c7c"
-myFocusedBorderColor = "#ffb6b0"
-
-------------------------------------------------------------------------
--- Key bindings. Add, modify or remove key bindings here.
---
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-
-    -- launch a terminal
-    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
-
-    -- launch dmenu
-    --, ((modm               ,xK_p     ), spawn "dmenu-with-yeganesh")
-    , ((modm                ,xK_p     ), spawn "dmenu_run -nb black")
-
-    -- launch firefox
-    , ((modm                ,xK_f     ), spawn "firefox")
-
-    -- launch chromium
-    , ((modm                ,xK_h     ), spawn "chromium")
-
-    -- launch thunderbird
-    , ((modm                ,xK_t     ), spawn "thunderbird")
-
-    -- lock screen
-    , ((modm .|. controlMask, xK_l), spawn "xscreensaver-command -lock")
-
-    -- screenshoot
-    , ((modm, xK_s), spawn "select-screenshoot")
-
-    -- grab the whole screen
-    , ((modm .|. controlMask, xK_p), spawn "screenshoot")
-
-    -- Mute volume
-    , ((modm .|. controlMask, xK_m), spawn "amixer -q set Master toggle")
-
-    -- Decrease volume
-    , ((modm .|. controlMask, xK_j), spawn "amixer -q set Master 10%-")
-
-    -- Increase volume
-    , ((modm .|. controlMask, xK_k), spawn "amixer -q set Master 10%+")
-
-    -- close focused window
-    , ((modm .|. shiftMask, xK_c     ), kill)
-
-     -- Rotate through the available layout algorithms
-    , ((modm,               xK_space ), sendMessage NextLayout)
-
-    --  Reset the layouts on the current workspace to default
-    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
-
-    -- Resize viewed windows to the correct size
-    , ((modm,               xK_n     ), refresh)
-
-    -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
-
-    -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
-
-    -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
-
-    -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
-
-    -- Swap the focused window and the master window
-    , ((modm,               xK_Return), windows W.swapMaster)
-
-    -- Swap the focused window with the next window
-    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
-
-    -- Swap the focused window with the previous window
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
-
-    -- Shrink the master area
-    , ((modm,               xK_h     ), sendMessage Shrink)
-
-    -- Expand the master area
-    , ((modm,               xK_l     ), sendMessage Expand)
-
-    -- Push window back into tiling
-    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
-
-    -- Increment the number of windows in the master area
-    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
-
-    -- Deincrement the number of windows in the master area
-    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
-
-    -- Toggle the status bar gap
-    -- Use this binding with avoidStruts from Hooks.ManageDocks.
-    -- See also the statusBar function from Hooks.DynamicLog.
-    --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
-
-    -- Quit xmonad
-    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
-
-    -- Restart xmonad
-    , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
-
-    -- Run xmessage with a summary of the default keybindings (useful for beginners)
---    , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
-    ]
-    ++
-
-    --
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    --
-    [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
-
-    --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
-
-------------------------------------------------------------------------
--- Mouse bindings: default actions bound to mouse events
---
-myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-
-    -- mod-button1, Set the window to floating mode and move by dragging
-    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
-                                       >> windows W.shiftMaster))
-
-    -- mod-button2, Raise the window to the top of the stack
-    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
-
-    -- mod-button3, Set the window to floating mode and resize by dragging
-    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
-                                       >> windows W.shiftMaster))
-
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
-    ]
-
-------------------------------------------------------------------------
--- Layouts:
-
--- You can specify and transform your layouts by modifying these values.
--- If you change layout bindings be sure to use 'mod-shift-space' after
--- restarting (with 'mod-q') to reset your layout state to the new
--- defaults, as xmonad preserves your old layout settings by default.
---
--- The available layouts.  Note that each layout is separated by |||,
--- which denotes layout choice.
---
-myLayout = tiled ||| Mirror tiled ||| Full
-  where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
-
-     -- The default number of windows in the master pane
-     nmaster = 1
-
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
-
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
-
-
-------------------------------------------------------------------------
--- Window rules:
-
--- Execute arbitrary actions and WindowSet manipulations when managing
--- a new window. You can use this to, for example, always float a
--- particular program, or have a client always appear on a particular
--- workspace.
---
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
---
-myManageHook = composeAll
-    [ className =? "Urxvt"          --> doShift "1:term"
-    , className =? "Chromium"       --> doShift "3:web"
-    , className =? "Google-chrome"  --> doShift "3:web"
-    , className =? "Firefox"        --> doShift "3:web"
-    , className =? "Emacs"          --> doShift "2:code"
-    , className =? "Gvim"           --> doShift "2:code"
-    , className =? "Vlc"            --> doShift "4:media"
-    , className =? "Weechat"        --> doShift "4:media"
-    , className =? "Pidgin"         --> doShift "4:media"
-    , className =? "ThunderBird"    --> doShift "4:media"
-    , resource  =? "desktop_window" --> doIgnore
-    , className =? "Galculator"     --> doFloat
-    , className =? "Steam"          --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "gpicview"       --> doFloat
-    , className =? "MPlayer"        --> doFloat
-    , className =? "Xchat"          --> doShift "4:media"
-    , className =? "stalonetray"    --> doIgnore]
-
-
-
-------------------------------------------------------------------------
--- Event handling
-
--- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
--- Defines a custom handler function for X Events. The function should
--- return (All True) if the default handler is to be run afterwards. To
--- combine event hooks use mappend or mconcat from Data.Monoid.
---
-myEventHook = mempty
-
-------------------------------------------------------------------------
--- Status bars and logging
-
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
-myLogHook = return ()
-
-------------------------------------------------------------------------
--- Startup hook
-
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices.
---
--- By default, do nothing.
-myStartupHook = return ()
-
-------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
-
--- Run xmonad with the settings you specify. No need to modify this.
---
-main = do
-     xmproc <- spawnPipe "xmobar ~/.xmonad/xmobar.hs"
-     xmproc <- spawnPipe "feh --bg-fill ~/.xmonad/colorNana.png"
-     xmonad $ defaults
-
--- A structure containing your configuration settings, overriding
--- fields in the default config. Any you don't override, will
--- use the defaults defined in xmonad/XMonad/Config.hs
---
--- No need to modify this.
---
-defaults = defaultConfig {
-      -- simple stuff
-        terminal           = myTerminal,
-        focusFollowsMouse  = myFocusFollowsMouse,
-        clickJustFocuses   = myClickJustFocuses,
-        borderWidth        = myBorderWidth,
-        modMask            = myModMask,
-        workspaces         = myWorkspaces,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
-
-      -- key bindings
-        keys               = myKeys,
-        mouseBindings      = myMouseBindings,
-
-      -- hooks, layouts
-        layoutHook         = myLayout,
-        manageHook         = myManageHook,
-        handleEventHook    = myEventHook,
-        logHook            = myLogHook,
-        startupHook        = myStartupHook
-    }
-</pre>
-
-
-<p>今天(2014年10月26日)，修改了一下xmonad的配置，加入了快捷键控制音量，自定义了几个快捷键来截图，加入了背景图，加入了xmonar的配置。以前一直没设置背景图导致每次开机之后都是一片黑的背景，现在漂亮多了。xmobar是从arckwiki上面找来的配置，很不错的一个状态栏，包含了cpu使用率，内存使用率，网络使用率等。</p>
-
-<p>不过还是有点缺陷的，不能给每个桌面分配一个背景图真是遗憾，不然这样就漂亮了，用图片来标识各个桌面的作用。haskell还在学习中，将来还有得改的。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-02T22:21:55+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-02</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/09/02/php-array-splice/" itemprop="url">Php-array-splice</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨天下午接到一个任务是从一堆数据中去掉指定的数据。需求很简单，本来很快就能做完，但是到后来发现了
-一个bug让我百思不得其解，今天早上来上班之后突然头脑清醒了把问题发现了。</p>
-
-<p>我的思路是把要过滤的数据都放到一个叫做<code>$filterGames</code>的数组里面，所有的数据存放在<code>$arr</code>这个数组里。
-因为要用php实现，没有现成的方法，随便写了一个线性复杂度的算法，挨个检测<code>in_array</code>，然后用<code>array_splice</code>这个
-函数来删除元素。本来思路是很简单的，但是就是得不到我要的结果。具体代码如下：
-<code>
-foreach($arr as $k => $v) {
-    if(in_array($v, $filterGames)) {
-        array_splice($arr, $k, 1)
-    }
-}
-return $arr;
-</code>
-结果总是过滤了部分数据但是还有部分不能过滤。</p>
-
-<p>今天发现问题之后我改了一下，用的是<code>unset</code>这个方法。
-<code>
-foreach($arr as $k => $v) {
-    if(in_array($v, $filterGames)) {
-        unset($arr[$k]);
-    }
-}
-</code>
-本来我应该用array_splice来删除数组元素的，因为这个方法不会在数组中留下一个洞，而unset把元素删了之后会留下一个洞，导致
-没法通过数组的key来遍历。至于为什么array_splice只能过滤部分数据而unset可以全部过滤掉也是因为当使用array_splice的时候
-删了一个元素后面的元素会往前面挤，导致错过了被删的机会。而unset则是删了一个元素之后就留出了一个洞，整个数组的结构不变。
-我觉得php的数组应该是用链表来实现的，在每个节点中有一个字段记录了当前节点相对于首节点的位置，如果用array_splice来删除
-节点，会重写每个节点的这个相对位置，而用unset来删除则不会。</p>
-
-<p>不过作为上层应用开发者对于语言的具体实现不必要去研究，只要形象的知道这2种方法的不同就够了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-31T22:43:17+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-31</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/31/use-fish-shell/" itemprop="url">使用fish</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>从最初安装ubuntu到现在细细数来已经用过很多个Unix like system了，也经历过很多种shell
-从linux下标准的bash，到freebsd的tcsh，到补全功能非常强大的zsh，现在尝试了一个新的fish。
-这不是鱼，全名叫做(friendly interactive shell)，用户友好的shell，语法高亮功能使得不容易
-输错命令，自动补全功能比zsh还强大，能够根据man page里的关键字来补全，也能根据~/.ssh/config来
-补全ssh命令，历史记录功能也比bash之类的友好。</p>
-
-<p>fish的项目主页在<a href="https://github.com/fish-shell/fish-shell">这里</a>，可以看到这个项目的还是比较
-活跃的。因为我用的是archlinux，所以就没有去从build源代码，而是直接<code>pacman -S fish</code>安装的。</p>
-
-<p>默认的fish已经很强大了:
-    1. 内建了命令行语法高亮功能。输入不同的命令会用不同的颜色来显示。
-    2. 要查找一个命令的历史记录不要用ctrl-R来找，直接输入这个命令的开头几个字母fish会自动用阴影
-    显示上一次执行的这条命令，然后按下ctrl-E或者是右方向键就能全部补齐了，这个功能对于很长的命令
-    来说真是太赞了，而且感觉比bash的ctrl-R强大多了。
-    3. 自动补全功能非常强大。我在编辑这篇博客的时候不是输入<code>vim 20140-08-31-use-fish-shell.markdown</code>来
-    编辑的，而是直接<code>vim fish&lt;Tab&gt;</code>来找到这个文件的，真是强大的功能，这是我目前发现的唯一支持任意
-    位置补齐的shell，就算是也很不错的zsh也只支持从头补齐。
-    4. 自动命令行纠错。比如说你要执行<code>cd ~/Documents</code>但是输成了<code>cd ~/documents</code>也没有关系，直接就自动
-    纠错了。有了它真是方便。</p>
-
-<p>虽然默认的fish很不错，但是我还是从github上clone了<a href="https://github.com/bpinto/oh-my-fish">oh-my-fish</a>这个项目,
-这个项目和<a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a>的结构很像，里面的配置都很有用，而且有多种
-主题，当对目前这个主题审美疲劳了，换一个主题还是很不错的。使用oh-my-fish来作为fish的配置也很简单，按照github
-上面的操作一步一步做就是了。</p>
-
-<p>接下来就是根据自己的喜好自定义fish的theme了，要加载哪个theme只要改<code>~/.config/fish/config.fish</code>就ok，找到
-<code>set fish_theme</code>这一行，填入你要的theme就行了，我用的是<code>set fish_theme zish</code>，这个主题挺漂亮的。</p>
-
-<p>然后就是自定义一些别名了，fish没有alias这个命令，但是可以用函数来实现自定义别名。既然使用了oh-my-fish的配置
-就得按照它的结构来修改。在<code>~/.oh-my-fish/functions/</code>里面放的都是自定义的函数。我先给vi起了个别名vim，因为
-有了vim谁还用vi啊。在这个目录下建一个文件vi.fish。
-<code>
-function vi &ndash;description ‘alias of vim’
-    vim
-end
-</code>
-保存退出，然后在命令行输入vi，这时候打开的就是vim了，连重新打开一个shell都不用就生效了，真是好快啊。</p>
-
-<p>接下来就是一些关于fish的shell编程方面的问题了。不过这块没有怎么认真去看。工作中用的都是bash，谁会为了执行
-一个脚本而额外安装fish。不过我还是很喜欢fish的语法的，感觉和python和ruby很像，相比之下bash的语法就有点
-另类和老古董了。等以后要用到fish script的时候再去认真研究一下fish syntax。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1048,15 +684,15 @@ end
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/06/03/use-powerline/">上powerline</a>
+    
+    <a class="list-group-item " href="/blog/2015/06/01/learn-rails/">学习rails</a>
+    
+    <a class="list-group-item " href="/blog/2015/06/01/learn-git/">学习git</a>
+    
+    <a class="list-group-item " href="/blog/2015/05/23/php-getter/">Php的getter方法</a>
+    
     <a class="list-group-item " href="/blog/2015/05/20/learn-laravel-1/">简单使用laravel</a>
-    
-    <a class="list-group-item " href="/blog/2015/05/03/mysql-basics-1/">Mysql基础</a>
-    
-    <a class="list-group-item " href="/blog/2015/04/17/php-meta-programming-1/">一个简单的元编程的例子</a>
-    
-    <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
-    
-    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
     
   </div>
 </section>
@@ -1080,7 +716,7 @@ end
     
     
     <a class="list-group-item " href="/blog/categories/php/index.html">
-      <span class="badge">4</span>
+      <span class="badge">5</span>
       php
     </a>
     
@@ -1092,7 +728,7 @@ end
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">11</span>
+      <span class="badge">12</span>
       linux
     </a>
     
@@ -1184,6 +820,18 @@ end
     <a class="list-group-item " href="/blog/categories/php,laravel,web/index.html">
       <span class="badge">1</span>
       php,laravel,web
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/git,linux/index.html">
+      <span class="badge">1</span>
+      git,linux
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/ruby,rails/index.html">
+      <span class="badge">1</span>
+      ruby,rails
     </a>
     
   </div>

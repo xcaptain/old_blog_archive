@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Joey's Blog]]></title>
   <link href="http://blog.iyue.club/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://blog.iyue.club/"/>
-  <updated>2015-05-20T23:32:15+08:00</updated>
+  <updated>2015-06-03T23:44:05+08:00</updated>
   <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[上powerline]]></title>
+    <link href="http://blog.iyue.club/blog/2015/06/03/use-powerline/"/>
+    <updated>2015-06-03T23:27:17+08:00</updated>
+    <id>http://blog.iyue.club/blog/2015/06/03/use-powerline</id>
+    <content type="html"><![CDATA[<p>看到身边的同事好多都切换到zsh+powerline这样的组合了，总是在我面前炫耀操作git如何方便，用了很久一直没有更新<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a>之后，今晚总算是完全更新了一下配置，向更加高大上的方向进发。</p>
+
+<p>首先是安装<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a>，这步还是很简单的，有一键安装脚本执行。</p>
+
+<p>然后是安装<a href="https://github.com/powerline/powerline">powerline</a>，这是一个用python写的状态插件，以前我就在vim和emacs上用过，在我的urxvt上面还没有配置过，照着<a href="https://powerline.readthedocs.org/en/latest/">文档</a>简单配置了一下，也是很简单的，但是最后我发现我的urxvt终端模拟器没法使用默认的powerline字体，后来从<a href="https://github.com/powerline/fonts">这里</a>找到了几个字体补丁，把我的.Xresources文件修改一下之后就能使用powerline字体了，真是不错。</p>
+
+<p>然后是配置fish，我选择的主题是<a href="https://github.com/oh-my-fish/theme-bobthefish">bobthefish</a>，默认的powerline主题，对于git的支持也很大众化，不过好歹是上了，以后使用终端会不会比较引人注目呢？</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Btrfs损坏之后的一系列麻烦]]></title>
@@ -150,51 +165,6 @@ nameserver 8.8.4.4
 <p>以上的配置参考了youtube上的<a href="https://www.youtube.com/watch?v=ndIflJOGSww">一个视频</a>，真感谢作者分享这么好的东西，省去了我翻资料学习的过程。</p>
 
 <p>刚刚测试discourse的时候已经把邮件功能加上了，可以发送，真是神奇啊。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[解决pacman依赖关系破裂问题]]></title>
-    <link href="http://blog.iyue.club/blog/2015/01/01/arch-pacman-broken/"/>
-    <updated>2015-01-01T19:35:23+08:00</updated>
-    <id>http://blog.iyue.club/blog/2015/01/01/arch-pacman-broken</id>
-    <content type="html"><![CDATA[<p>今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。</p>
-
-<pre>
-packagekit: requires pacman<4.2.0
-package-query: requires pacman<4.2.0
-</pre>
-
-
-<p>但是我查看了一下pacman的版本,<code>pacman --version</code>发现是4.1的满足需求啊，为什么会有这样的提示呢？我想用<code>sudo pacman -S pacman</code>重装pacman也不行，真是费解，这么重要的软件可千万不能出错啊。后来上网搜了一下，发现有人也遇到这种情况，都是直接<code>sudo pacman -R packagekit python-packagekit yaourt package-query</code>，然后再<code>sudo pacman-db-upgrade</code>升级一下数据库，然后再<code>sudo pacman -Syu</code>，ok问题解决。</p>
-
-<p>还有一点是关于virtualbox的，今天我又用了一下vagrant，发现每次<code>vagrant up</code>都会提示：</p>
-
-<pre>
-VirtualBox is complaining that the kernel module is not loaded. Please
-run `VBoxManage --version` or open the VirtualBox GUI to see the error
-message which should contain instructions on how to fix this error.
-</pre>
-
-
-<p>用最简单的方法<code>sudo modprobe vboxdrv</code>然后<code>lsmod | grep vbox</code>发现加载进了</p>
-
-<pre>
-vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci`
-</pre>
-
-
-<p>但是这时候还是会报错说找不到网卡驱动，后来我执行<code>sudo vboxreload</code>显示：</p>
-
-<pre>
-vboxpci                23139  0
-vboxnetflt             27412  0
-vboxnetadp             25443  0
-vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
-</pre>
-
-
-<p>这时候才算是真正的把所有的驱动都加进来了。</p>
 ]]></content>
   </entry>
   

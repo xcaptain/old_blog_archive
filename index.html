@@ -119,6 +119,215 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-03T23:27:17+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-06-03</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/06/03/use-powerline/" itemprop="url">上powerline</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>看到身边的同事好多都切换到zsh+powerline这样的组合了，总是在我面前炫耀操作git如何方便，用了很久一直没有更新<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a>之后，今晚总算是完全更新了一下配置，向更加高大上的方向进发。</p>
+
+<p>首先是安装<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a>，这步还是很简单的，有一键安装脚本执行。</p>
+
+<p>然后是安装<a href="https://github.com/powerline/powerline">powerline</a>，这是一个用python写的状态插件，以前我就在vim和emacs上用过，在我的urxvt上面还没有配置过，照着<a href="https://powerline.readthedocs.org/en/latest/">文档</a>简单配置了一下，也是很简单的，但是最后我发现我的urxvt终端模拟器没法使用默认的powerline字体，后来从<a href="https://github.com/powerline/fonts">这里</a>找到了几个字体补丁，把我的.Xresources文件修改一下之后就能使用powerline字体了，真是不错。</p>
+
+<p>然后是配置fish，我选择的主题是<a href="https://github.com/oh-my-fish/theme-bobthefish">bobthefish</a>，默认的powerline主题，对于git的支持也很大众化，不过好歹是上了，以后使用终端会不会比较引人注目呢？</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-01T23:44:13+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-06-01</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/06/01/learn-rails/" itemprop="url">学习rails</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>学习rails，自己做一个简单的rails项目。</p>
+
+<ol>
+<li><p><a href="https://github.com/plataformatec/devise">devise</a>验证权限</p></li>
+<li><p><a href="http://www.postgresql.org/">postgresql</a>来持久化数据</p></li>
+<li><p><a href="https://github.com/mperham/sidekiq">sidekiq</a>用来做队列</p></li>
+<li><p><a href="https://github.com/sj26/mailcatcher">mailcatcher</a>用来捕获测试环境发放的邮件</p></li>
+</ol>
+
+
+<p>每个功能都有对应的gem，web开发真是简化了很多。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-01T14:34:01+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-06-01</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/06/01/learn-git/" itemprop="url">学习git</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>继续学习git，把统计后台的代码从内部git服务器迁移到github上面了，用的是自己的私有仓库。</p>
+
+<p>目前主要用到的功能有：</p>
+
+<ol>
+<li><p>添加远程仓库
+<code>git remote add origin https://github.com/xcaptain/simple-admin.git</code>
+这样就能添加一个远程仓库了，等以后把代码push上去就行了，访问远程仓库的方式有2种，一种是ssh，一种是https，上面这种是https的仓库，也是github默认的访问仓库的方法，
+因为ssh太不安全了，对于我们这种生活在封锁国度的老百姓来说，很容易被屏蔽。</p></li>
+<li><p>往远程仓库里面提交代码
+<code>git commit -m 'some comment'</code>
+这样就可以提交代码，返回一个hash值标识的版本号，提交之后代码版本还在本地，如果要多方合作开发，那就得把改动保存到一个大家都可以访问的远程仓库，
+<code>git push origin master</code>，把本地版本推送到远程的master分支。</p></li>
+<li><p>建立本地分支
+<code>git branch dev</code>
+这样就在本地创建了一个叫做dev的分支，并且会自动切换到这个dev分支，如果建了好多个分支，想查看当前自己在哪个分支，直接<code>git branch</code>就会列出，当然如果使用的是zsh或者是
+fish这样的shell，一般都会有git的插件，可以显示当前所在分支。</p></li>
+<li><p>把本地分支添加到远程仓库
+<code>git checkout dev</code>切换到dev分支，然后<code>git push origin dev</code>就可以把代码推送到远程仓库的dev分支了。</p></li>
+<li><p>打标签
+<code>git tag</code>可以查看当前版本库的所有标签信息，如果要添加标签，那么就是<code>git tag -a v0.2 -m '优化流量统计代码，统一风格'</code>添加一个叫作v0.2的标签，并且提交。如果要把
+本地的标签信息提交到远程仓库，那么就是<code>git push --tags</code>，然后去github上查看就能看到对应的v0.2版本了。</p></li>
+<li><p>查看提交版本
+<code>git log</code>, <code>git diff</code>，我一般喜欢用emacs的magit插件来查看diff和版本。</p></li>
+<li><p>把未暂存的文件回滚
+<code>git checkout file1</code>，这样会从版本库中检出上一个提交的file1的版本，覆盖掉当前这个未提交的版本。</p></li>
+<li><p>回滚版本库
+这个操作目前做得比较少，都是<code>git reset --hard HEAD~1</code>，来回到上一个版本的，对于这个操作还不熟悉，至少svn回滚已经是很熟悉的了。</p></li>
+</ol>
+
+
+<p>git的功能很强大也很复杂，但是一定是要掌握的，这样才能成为一个合格的项目经理，以后慢慢积累，有新的体会再来更新这篇博客。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-05-23T15:58:40+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-05-23</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/05/23/php-getter/" itemprop="url">Php的getter方法</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>这几天做统计后台频繁用到一个叫做<a href="http://carbon.nesbot.com/">Carbon</a>的日期库，用多了发现这个库的接口设计得非常方便，方法非常自然，稍微用几次就知道用法了。比如说好多方法都是静态方法，省去了频繁构造对象的开销。最方便的还是里面的getter方法，<code>$dt-&gt;year</code>就返回了本年，这个year很明显是一个静态方法，因为$dt不是new出来的对象，但是我们看起来就好像是直接访问一个类的属性一样。</p>
+
+<pre><code class="php">class A {
+    public function year() {
+        return 2015;
+    }
+    public static function __get($var) {
+        return $this-&gt;$var();
+    }
+}
+a = new A;
+echo a-&gt;year;
+</code></pre>
+
+<p>是getter的一种简单写法，挺不错的。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-05-20T23:11:20+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-05-20</time>
         
       </p>
@@ -143,7 +352,25 @@
 
 <p>登录注册好办，直接使用laravel自带的Auth库就行，自带的示例就内置了一个简单的登录注册页面。权限管理稍微有点麻烦，不过在github上搜了一下也找到好多个基于角色的权限控制的第三方库，我这里用的是<a href="http://github.com">entrust</a> 脚本自动化指的是后台的数据都来自脚本统计，所以必须要确保脚本能够正确的执行，使用laravel的schedule功能就很方便，可以在代码里面实现定时任务。渲染页面就更加简单了，简单的mvc模式，利用blade模板引擎可以写出很规范的模板。</p>
 
-<p>在这个简单项目中，前端使用的是google开发的<a href="http://materialcss.com">materialcss</a>，类似与<a href="http://getbootstrap.com">bootstrap</a>，也是基于网格的设计，很方便初学者使用。</p>
+<p>在这个简单项目中，前端使用的是google开发的<a href="http://materialcss.com">materialcss</a>，类似与<a href="http://getbootstrap.com">bootstrap</a>，也是基于网格的设计，很方便初学者使用。前端数据可视化用到的是百度的<a href="http://www.baidu.com/">echart</a>库。</p>
+
+<p>了解了基本的laravel就能很快上手了，比如说:</p>
+
+<p><code>php artisan make:controller ExampleController</code>可以创建一个控制器。</p>
+
+<p><code>php artisan make:model 'Models\Example'</code>可以创建一个模型，另外还会自动创建一个migrate，因为一个model总是对应着一张表的。</p>
+
+<p><code>php artisan make:console UpdateData --command=update:data</code>会创建一条命令，执行<code>php artisan list</code>就能看到这条命令的介绍，去<code>App\Console\Commands\</code>下面就能找到对应的类了，要实现什么功能往这个类里面加方法就行了。</p>
+
+<p><code>php artisan make:migration create_post_table</code>会自动在<code>database/migrations</code>目录下建立迁移文件，这个文件就是用来建表的，可以很方便的修改模式，而且还能记录开发过程中对表的修改。</p>
+
+<p><code>php artisan migrate</code>会自动查找迁移文件，执行有必要的改动。</p>
+
+<p><code>php artisan db:seed</code>可以自动给测试表填充内容，当然具体的实施得靠人来确定，框架是不可能知道要填入什么数据到哪张表的，对应的文件在<code>database/seeds/</code>下。</p>
+
+<p>剩下的一些都是比较简单的，比如使用<a href="">Carbon</a>来操作时间，使用<a href="">Request</a>来获得http参数，用query builder来构造查询，用Eloquent来提交/读取model。还有一个比较强大的是laravel的路由功能，但是目前用到的还比较简单。</p>
+
+<p>另外今天看到一篇文章，讲的是为什么laravel要放弃models目录，主要原因说的是对于现代web开发来说，MVC有点不够用了，除了model可以操作数据库，读写数据，但是对于别的业务，比如说发送邮件，请求第三方接口，记录日志等等，如果还是按照mvc来这些文件就不知道放哪里了，将决定权交给用户，真是很方便。</p>
 
 <p>未来要做的事情主要包括：</p>
 
@@ -528,287 +755,6 @@ public function __call($name, $args) {
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-28T22:50:06+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-28</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/28/emacs-eww/" itemprop="url">学习emacs-eww</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>最近一段时间比较无聊，<a href="http://www.iyue.club">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。
-而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
-
-<p>目前的计划还是慢慢来学习ruby on rails，所以空闲时间就做点有意思的事情了。现在来记录一下eww的用法，以后便于查阅，熟能生巧。eww的文档可以通过emacs自身来查看，现在就来总结一下emacs文档里对eww的介绍，我都是通过<code>C-h r</code>来打开emacs自带的info然后查找到eww的章节然后开始看的。</p>
-
-<p>基本操作：</p>
-
-<ol>
-<li><code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。</li>
-<li><code>l</code> 回到上一个页面，回退。</li>
-<li><code>r</code> 回到下一个页面，回进。</li>
-<li><code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。</li>
-<li><code>g</code> 刷新当前页面。</li>
-<li><code>w</code> 复制当前url到剪切板。</li>
-<li><code>H</code> 查看历史记录。</li>
-<li><code>b</code> 添加书签。</li>
-<li><code>B</code> 查看书签。</li>
-<li><code>&amp;</code> 调用外部浏览器打开当前url。</li>
-<li><code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。</li>
-<li><code>C</code> 查看所有存在的cookie</li>
-</ol>
-
-
-<p>上面这些东西都可以查看文档得到，比较没有营养，还是学习新东西有意思。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-20T18:18:25+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-20</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/20/use-btsync/" itemprop="url">使用btsync</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p><meta charset="UTF-8"/>
-昨天从<a href="http://program-think.blogspot.com/">编程随想</a>的博客上知道了<a href="https://www.getsync.com/">btsync</a>这个东西，用来p2p分享文件很是方便，所以我也尝试了一下，配置很简单，我在自己的笔记本和公司电脑都装好了，这样上班的时候2台电脑同步文件就方便了。</p>
-
-<p>但是遇到了一个有点麻烦的问题，在最初我能够脸上p2p网络，并且找到了供源的机器，但是就是没法和他们同步，总是提示和另一方时间偏差太大无法同步，搜了一下发现是系统时间设置的问题，通过<a href="https://wiki.archlinux.org/index.php/Time">wiki</a>又好好了解了一下linux的时间机制。</p>
-
-<p>linux上的时间包括2种，一是硬件时间，另一个是系统时间。</p>
-
-<ol>
-<li><p>硬件时间：(Real Time Clock, RTC)是由机器硬件记录的时间，根据<a href="http://www.tldp.org/LDP/sag/html/hw-sw-clocks.html">tldp</a>的说法，个人电脑都内建了一块独立的电池，来给一个时钟供电，这个时钟可以通过BIOS来设置，或者开机之后通过操作系统来设置。</p></li>
-<li><p>系统时间:(software clock)，这个时间是由linux内核来设置的。在系统中存放着一个叫做<code>/etc/adjtime</code>的配置文件，我本机这个文件是7月份创建的，也就是我上次重装系统的时间，是linux的初始系统时间，之后linux估计用了某种还不清楚的手段，每次开机都会更新最新的系统时间。</p></li>
-</ol>
-
-
-<p>我的问题就是系统时间和硬件时间不一致，估计是因为双系统和windows共存导致的，解决方法就是通过执行<code>sudo hwclock --systz</code>来把系统时间和硬件时间都和本地时区的时间对齐。时区配置文件是<code>/etc/localtime</code>这个文件可以通过<code>timedatectl</code>命令来设置，也可以手动建立到<code>/usr/share/zoneinfo/Asia/Hong_Kong</code>的软链接，或者是直接复制<code>/usr/share/zoneinfo/Hong_Kong</code>到<code>/etc/localtime</code>来设置。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-13T08:06:21+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-13</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/13/python-encoding/" itemprop="url">Python2编码问题</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>这篇文章是要记录今天写一个采集是遇到的编码问题的，但是因为在写博客时遇到了一些问题，所以也就顺便记录一下。</p>
-
-<p>在执行rake new_post的时候，突然提示</p>
-
-<pre>
-rake aborted!
-LoadError: cannot load such file -- bundler/setup
-/home/joey/octopress/Rakefile:2:in `<top (required)>'
-(See full trace by running task with --trace)
-</pre>
-
-
-<p>突然感觉很奇怪，前几天更新博客的时候都没有遇到这种情况，后来执行<code>rake --trace</code>的时候发现</p>
-
-<pre>
-/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-/usr/lib/ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-/home/joey/octopress/Rakefile:2:in `<top (required)>'
-/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load'
-/usr/lib/ruby/2.2.0/rake/rake_module.rb:28:in `load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:689:in `raw_load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:94:in `block in load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
-/usr/lib/ruby/2.2.0/rake/application.rb:93:in `load_rakefile'
-/usr/lib/ruby/2.2.0/rake/application.rb:77:in `block in run'
-/usr/lib/ruby/2.2.0/rake/application.rb:176:in `standard_exception_handling'
-/usr/lib/ruby/2.2.0/rake/application.rb:75:in `run'
-/usr/bin/rake:33:in `<main>'
-</pre>
-
-
-<p>原来是系统ruby的版本更新到2.2了，以前是2.1的，octopress用的是2.1的gem，也许是和2.2的ruby不兼容吧，所以要重装2.2的gem套系，执行<code>proxychains gem install bundle</code>，有经验了必须要通过代理才能访问rubygem网站，下载完之后需要把<code>/home/joey/.gem/ruby/2.2.0/bin</code> 添加到环境变量中，因为我用的是fish，所以编辑<code>~/.config/fish/config.fish</code>就行了。然后用bundle安装完必要的依赖<code>proxychains bundle install</code>，下载一大堆gem，最后发现系统用的rake已经是10.4.2版的了，而配置文件中需要的还是10.4.0,手动编辑一下<code>Gemfile.lock</code>，把版本号改过来就行了，后来又重装了一下<code>safe_yaml</code>和<code>liquid</code>，把对应的版本号也都改过来了，一个小版本升级搞得这么麻烦，真是郁闷。</p>
-
-<p>接下来就是说说今天写代码遇到的问题了。</p>
-
-<p>需求很简单（话说写采集需求都很明确），这回需要的是采集明星的信息，第一个方案用的是采集baidu整理的明星信息，过程很简单，写了一个简单的脚本采了900条数据，但是后来发现图片做了防盗链，采集过来的图片不是图片的绝对路径，而是通过一台服务器生成的图片，也许是做了cookie的限制或者是做了ip的限制，导致每次刷新页面的时候都会返回一个403错误，链接在<a href="http://www.baidu.com/s?wd=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8&amp;rsv_spt=1&amp;issp=1&amp;f=8&amp;rsv_bp=0&amp;rsv_idx=2&amp;ie=utf-8&amp;tn=baiduhome_pg&amp;rsv_enter=1&amp;rsv_sug3=4&amp;rsv_sug4=83&amp;rsv_sug1=3&amp;rsv_pq=d5fdf7cd00002ac7&amp;rsv_t=975c0jUWTeYgIUYA%2FfdqSJ75f%2BipUP9QR9v8Qgqb2jzy3rnHgTU3k4rBD%2B5moP73i00p&amp;rsv_sug2=0&amp;inputT=5564">这里</a>，以后有时间也许会去看看这个防盗链的实现，但是现在我可懒得花时间去研究怎么破解这个限制，那就换别的站采集吧。</p>
-
-<p>和产品沟通了一下，他也觉得如果死扣baidu是不明智的选择，后来换成360整理的资源了，链接在<a href="http://www.haosou.com/s?ie=utf-8&amp;shb=1&amp;src=360sou_newhome&amp;q=%E6%98%8E%E6%98%9F%E5%A4%A7%E5%85%A8">这里</a>，数据也比较明确，分成3栏：领域，地域，性别，这个分类还是比较好的，以后我们拿来查询也方便。通过chrome开发工具，找到了js的接口，简单分析了一下就知道要获取那块数据，接下来就是敲代码了，最后的代码在<a href="https://gist.github.com/xcaptain/cbf9980f1b30b2467d8a">这里</a>，本来是打算试试octopress对于gist的支持的，但是因为gist在国内被墙了，会影响整篇文章的阅读，所以就换个链接在这里，有兴趣的朋友就去看看。</p>
-
-<p>在写代码过程中遇到一个编码问题，困扰我很久，不过最终还是解决了。</p>
-
-<p>在使用python2的时候，要自己手动设置编码，python默认的字符串编码是ascii，这就导致如果在python2程序中出现了中文都会提示一个语法错误，但是如果在python2文件中强制加上一句<code># -*- coding: utf-8 -*-</code> 这样python在执行程序的时候就知道使用utf-8来编码里面的字符串了。也许是我本地locale的设置，在打开python解释器的时候总是会自动帮我使用utf-8编码。
-首先说说ascii编码，ascii只能编码代码点从0到127的字符，也就是英文字符，如果遇到代码点很高的字符，比如说中文，就没法争取的编码了，就会报错。下面来举几个例子：</p>
-
-<pre><code class="python2">s1 = '你好，world' #这里如果指定了文件的编码为utf-8，会自动把这个字符串编码成utf-8
-s1 =&gt; '\xe4\xbd\xa0\xe5\xa5\xbd\xef\xbc\x8cworld'
-s2 = u'你好，world' #这里前面加了一个u来表明这个字符串是一个unicode字符串
-s2 =&gt; u'\u4f60\u597d\uff0cworld'
-u2 = s2.encode('utf-8')
-u2 =&gt; '\xe4\xbd\xa0\xe5\xa5\xbd\xef\xbc\x8cworld'
-</code></pre>
-
-<p>字符串在内存中应该是用类似utf-8的形式存储的，这样比较节省内存空间，而且也不会出现太多的0导致字符串在大尾和小尾机器上的不兼容。所以对于一个python字符串的旅程可以大致归结为：</p>
-
-<ol>
-<li>在编辑器里写下<code>s1 = '你好，world'</code>然后保存为一个python文件的时候，编辑器会自动选择某种编码来保存这个文件，一般来说都是用的utf-8。</li>
-<li>python把这个程序加载进解释器的时候，会根据文件头来判断使用什么编码来解码这个文件，也就是<code># -*-coding: utf-8 -*-</code>这行，如果没有这行就会用默认的<code>ascii</code>来解码。</li>
-<li>这时候程序里的字符串都是utf8的。
-写到这里突然发现昨晚的问题实在不算问题，看来之前是没有静下心来研究，写博客还是有好处的。</li>
-</ol>
-
-
-<p>接下来再看看python3,python3的默认编码是unicode，而实际存在内存中的就是字节码，bytecode。也就是说一个字符串只有2种状态，unicode和byte，这样就节省很多事情了，没有各种编码解码的麻烦。
-<code>python3
-s = '你好，world' #这是一个str类型的字符串
-b1 = s.encode('utf-8') #这是把s编码为utf-8后的字节码
-b2 = s.encode('gbk') #把s编码为gbk后的字节码
-</code>
-相对于2来说，3最大的进步就是不需要手动encode，decode，对于处理未知编码的文件最方便了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-01-06T06:54:11+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-01-06</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/01/06/play-with-git/" itemprop="url">玩弄git</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
-
-<p>今晚就稍微熟悉了一下discourse的结构。</p>
-
-<ol>
-<li>我本地的开发环境，这个没什么多说的，就是用vagrant跑了一个虚拟机，上面运行着discourse需要的环境。</li>
-<li>线上的环境是用docker运行的，这是官方推荐的安装方式，说实话最初我竟然没有明白discourse的架构。</li>
-</ol>
-
-
-<p>其实也是很简单的，在我的vps上跑着一个docker，docker类似于一个虚拟机，创建了一个容器，里面跑着discourse需要的环境。代码存放在<code>/var/www/discourse</code>下，但是因为是用官方的安装方法安装的，只能等官方的更新，如果我们要自定义怎么办呢？那就需要改git的配置了。</p>
-
-<p>我在github上面fork了官方的仓库，把这个自己的仓库拷贝到本地，改了一些简单的文件，提交，这时候我去官方仓库看，发现他们竟然领先我好多个版本，那就 把他们的改动也拿过来吧，这里需要添加官方仓库的配置，使用<code>git remote add upstream git://github.com/discourse/discourse.git</code>，这时候会发现在<code>.git/config</code>里面多了一个remote的配置，如果需要把这个upstream的改动也合并到自己的仓库，就要<code>git fetch upstream</code>，等改动都更新下来了之后会存放在<code>.git</code>目录下，这时候代码还没有变化。如果执行<code>git pull upstream master</code>，就能把版本库中的版本检出到主分支了。然后执行<code>git push origin master</code>就能把本地的版本更新到github了。</p>
-
-<p>我想把改动也更新到vps上，那就需要改vps上git仓库的配置了。</p>
-
-<ol>
-<li><p><code>cd /var/discourse/</code>
-切换到docker配置所在的目录</p></li>
-<li><p><code>./launcher ssh app</code>
-因为我当初初始化配置的时候用的是app来作为container的名字，所以要加上app参数</p></li>
-<li><p><code>cd /var/www/discourse/</code></p></li>
-<li><p><code>git remote add develop git://github.com/xcaptain/discourse.git</code>
-这样就把我的github仓库中的版本作为开发版加入到线上的配置了。</p></li>
-<li><p><code>git pull develop master</code>
- 就能把我的版本拿下来了，因为我的这个版本都会现在本地开发环境测试过之后再上，所以是很安全的</p></li>
-</ol>
-
-
-<p>这样应该也算是和一大伙志愿者协同开发吧，虽然我没有提交pull request，但是我一直在用别人的免费的代码，真是惭愧。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -832,15 +778,15 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/06/03/use-powerline/">上powerline</a>
+    
+    <a class="list-group-item " href="/blog/2015/06/01/learn-rails/">学习rails</a>
+    
+    <a class="list-group-item " href="/blog/2015/06/01/learn-git/">学习git</a>
+    
+    <a class="list-group-item " href="/blog/2015/05/23/php-getter/">Php的getter方法</a>
+    
     <a class="list-group-item " href="/blog/2015/05/20/learn-laravel-1/">简单使用laravel</a>
-    
-    <a class="list-group-item " href="/blog/2015/05/03/mysql-basics-1/">Mysql基础</a>
-    
-    <a class="list-group-item " href="/blog/2015/04/17/php-meta-programming-1/">一个简单的元编程的例子</a>
-    
-    <a class="list-group-item " href="/blog/2015/03/26/btrfs-crash/">Btrfs损坏之后的一系列麻烦</a>
-    
-    <a class="list-group-item " href="/blog/2015/03/15/use-orgmode/">Use-orgmode</a>
     
   </div>
 </section>
@@ -864,7 +810,7 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
     
     
     <a class="list-group-item " href="/blog/categories/php/index.html">
-      <span class="badge">4</span>
+      <span class="badge">5</span>
       php
     </a>
     
@@ -876,7 +822,7 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
     
     
     <a class="list-group-item " href="/blog/categories/linux/index.html">
-      <span class="badge">11</span>
+      <span class="badge">12</span>
       linux
     </a>
     
@@ -968,6 +914,18 @@ b2 = s.encode('gbk') #把s编码为gbk后的字节码
     <a class="list-group-item " href="/blog/categories/php,laravel,web/index.html">
       <span class="badge">1</span>
       php,laravel,web
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/git,linux/index.html">
+      <span class="badge">1</span>
+      git,linux
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/ruby,rails/index.html">
+      <span class="badge">1</span>
+      ruby,rails
     </a>
     
   </div>
