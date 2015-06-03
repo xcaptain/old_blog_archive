@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Php,laravel,web | Joey's Blog]]></title>
+  <link href="http://blog.iyue.club/blog/categories/php-laravel-web/atom.xml" rel="self"/>
+  <link href="http://blog.iyue.club/"/>
+  <updated>2015-05-20T23:32:15+08:00</updated>
+  <id>http://blog.iyue.club/</id>
+  <author>
+    <name><![CDATA[joey]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[简单使用laravel]]></title>
+    <link href="http://blog.iyue.club/blog/2015/05/20/learn-laravel-1/"/>
+    <updated>2015-05-20T23:11:20+08:00</updated>
+    <id>http://blog.iyue.club/blog/2015/05/20/learn-laravel-1</id>
+    <content type="html"><![CDATA[<p>去年的时候就留意过<a href="http://laravel.com">laravel</a>这个框架了，对于这种类似rails风格的框架很是有好感，但是一直缺少一个实战操作的机会，让我在个人项目上用laravel是不可能的，追求的就是geek，个人项目暂时不考虑php这门语言。</p>
+
+<p>公司有个简单的项目是做一个简单的统计后台，这个需求使用laravel就很简单了，可以省很多事。具体的代码我托管在<a href="https://github.com/xcaptain/simple-admin.git">github</a>了，想了一下主要的功能包括：</p>
+
+<ol>
+<li>登录注册</li>
+<li>权限管理</li>
+<li>脚本自动化</li>
+<li>渲染页面</li>
+</ol>
+
+
+<p>登录注册好办，直接使用laravel自带的Auth库就行，自带的示例就内置了一个简单的登录注册页面。权限管理稍微有点麻烦，不过在github上搜了一下也找到好多个基于角色的权限控制的第三方库，我这里用的是<a href="http://github.com">entrust</a> 脚本自动化指的是后台的数据都来自脚本统计，所以必须要确保脚本能够正确的执行，使用laravel的schedule功能就很方便，可以在代码里面实现定时任务。渲染页面就更加简单了，简单的mvc模式，利用blade模板引擎可以写出很规范的模板。</p>
+
+<p>在这个简单项目中，前端使用的是google开发的<a href="http://materialcss.com">materialcss</a>，类似与<a href="http://getbootstrap.com">bootstrap</a>，也是基于网格的设计，很方便初学者使用。</p>
+
+<p>未来要做的事情主要包括：</p>
+
+<ol>
+<li>完善权限管理，目前只做了很简单的权限判断，还没有给admin帐号分配创建用户，创建角色的功能</li>
+<li>整理路由配置，目前只做了2个简单的功能，但是路由就有点混乱了，得把页面分得清晰，构造优雅的url规则</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>
