@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://blog.iyue.club/atom.xml" rel="self"/>
   <link href="http://blog.iyue.club/"/>
-  <updated>2015-06-03T23:44:05+08:00</updated>
+  <updated>2015-06-24T10:01:45+08:00</updated>
   <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[迁移一个discuz站点]]></title>
+    <link href="http://blog.iyue.club/blog/2015/06/23/migrate-a-discuz-site/"/>
+    <updated>2015-06-23T15:09:46+08:00</updated>
+    <id>http://blog.iyue.club/blog/2015/06/23/migrate-a-discuz-site</id>
+    <content type="html"><![CDATA[<p>周五晚上帮同事迁移了一个网站，原来的<a href="http://www.huizu100.com">网站</a>是搭建在windows2003服务器上的，使用的是apache2 + php5.3 + mysql5.1 的架构，使用的是一个叫作PHPnow的一键安装包来管理服务器的，这种架构对于个人站长来说很方便，只要设置好了配置就可以自己搭建网站，但是扩展性特别差，简直就是没法维护，win2003本来就是老掉牙的技术了，这种服务器长期跑肯定是会有内存问题的，而用PHPnow搭建的网站，数据库，代码，数据都在一个目录里面，这样潜在的问题太大了，首先就是安全性问题，没有数据库本来应该单独放到一个专门的服务器上的。而且所有数据放在一起对于业务分离，备份也很不方便，一下备份一个几十G大的目录是很浪费资源的。</p>
+
+<p>所以在我的建议下，周五晚上对这个网站做了一个迁移，新的架构是LNMP，ubuntu 15.04 server + nginx 1.6 + hhvm 3.7 + mariadb 10.0.20 + redis 3.0，当然因为服务器只有一台，所以没有做负载均衡，没有做数据库读写分离，也没有做hhvm的均衡，因为等我把环境搭建完的时候就已经很稳定了，所以暂时不打算那么做，下面简单的来说说迁移过程。</p>
+
+<ol>
+<li><p>服务器安装
+我给的建议是装ubuntu，因为将来环境稳定下来之后要把权限分给站长，让他自己上去查看管理一些进程，而ubuntu的桌面又是比较简单易用的。本来他们是打算安装ubuntu 15.04 desktop版的，但是因为这个版本没法驱动DELL r710服务器自带的硬Raid，所以最后换成server版了。</p></li>
+<li><p>nginx，mariadb，hhvm，redis这些软件的安装都很简单，唯一一个比较特殊的功能就是用了hhvm来替换php，不过暂时没有感到太大的性能提升。LNMP环境搭建是很简单的，很快就完成了。</p></li>
+<li><p>接下来是服务器配置
+最大的问题就是调整分区结构，服务器上有一块300G的自带硬盘，这款盘其实是由2块一样的硬盘搭建的raid0，自带了数据备份功能，所以这块盘理论上来说是不该保存太多系统以外的东西的。然后是1块1T的绿盘，这块盘的年头比较老了，以前的网站就部署在这块盘上，我打算把这个盘拿来当备份盘，还有一块2T的黑盘，这块盘是一块最新最好的数据盘，所以我打算把网站和数据库都放在这块盘上。首先要把这块2T的盘里面的数据备份了，很重要的资料一定得保存，但是里面用PHPNow的工具全量备份了站点，一个备份40G，备份一周的数据，复制这些内容浪费了好多时间。数据备份完了之后就是给硬盘分区，先分区那块2T的盘，准备分4个区，按照300+300+600+600来分，虽然暂时没有想好具体怎么使用，用<code>fdisk /dev/sdb</code>开始分区，分区之后就是创建文件系统，只用ext4，所以<code>mkfs.ext4 /dev/sdbn</code>。</p></li>
+<li><p>部署网站
+这步就很简单了，直接复制代码，修改配置，修改权限，有一个比较大的问题是discuz的图片是存放在一个叫做<code>data/attachment</code>的目录下的，这些图片完全可以和代码分离，所以拿一块额外的分区来装就行，我是挂载的那个600G的分区到这个目录的。<code>mount /dev/sdb6 /pathtodata/attachment</code>。</p></li>
+</ol>
+
+
+<p>部署完成之后调试了一下网站就跑起来了，但是还有很多要做的事，discuz的代码结构比较混乱，不好改动，而且原来他的网站语言设置是GBK的，涉及到编码问题又更加复杂了，反正直到周日晚上才把问题全部解决，目前就是陆陆续续做一些服务器的小性能调优。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[学习gulp]]></title>
+    <link href="http://blog.iyue.club/blog/2015/06/07/learn-gulp/"/>
+    <updated>2015-06-07T23:56:19+08:00</updated>
+    <id>http://blog.iyue.club/blog/2015/06/07/learn-gulp</id>
+    <content type="html"><![CDATA[<p>学习使用gulp来进行前端开发</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[上powerline]]></title>
@@ -24,7 +57,9 @@
 
 <p>然后是安装<a href="https://github.com/powerline/powerline">powerline</a>，这是一个用python写的状态插件，以前我就在vim和emacs上用过，在我的urxvt上面还没有配置过，照着<a href="https://powerline.readthedocs.org/en/latest/">文档</a>简单配置了一下，也是很简单的，但是最后我发现我的urxvt终端模拟器没法使用默认的powerline字体，后来从<a href="https://github.com/powerline/fonts">这里</a>找到了几个字体补丁，把我的.Xresources文件修改一下之后就能使用powerline字体了，真是不错。</p>
 
-<p>然后是配置fish，我选择的主题是<a href="https://github.com/oh-my-fish/theme-bobthefish">bobthefish</a>，默认的powerline主题，对于git的支持也很大众化，不过好歹是上了，以后使用终端会不会比较引人注目呢？</p>
+<p>现在使用的主题是<a href="https://github.com/oh-my-fish/theme-agnoster">agnoster</a>，功能和配色都挺符合我的胃口的，默认支持powerline，git的状态显示也很不错。</p>
+
+<p>顺便重新配置了一下tmux，以前多任务都是通过urxvt的新建tab来实现的，如果到了别的终端环境如何复用终端呢？还是使用tmux吧，而且也可以配置tmux使得它支持powerline，很不错的setup</p>
 ]]></content>
   </entry>
   
@@ -706,185 +741,6 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
 <p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
 
 <p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[采集一个论坛的帖子来进行数据分析]]></title>
-    <link href="http://blog.iyue.club/blog/2014/12/31/web-crawl-again/"/>
-    <updated>2014-12-31T07:49:40+08:00</updated>
-    <id>http://blog.iyue.club/blog/2014/12/31/web-crawl-again</id>
-    <content type="html"><![CDATA[<p>今天接到一个小小的需求，又是和采集相关的，我都要烦死了，采集这东西写得都要腻了。</p>
-
-<p>不过和以前的那些采集有点区别，不再是采集文章了，而是开始采集论坛的帖子。说实话我觉得采集论坛比较简单，因为论坛都是php的页面，页面组织布局一般不会怎么变，而新闻站基本都是cms系统生成的html静态页，静态的页面就有太多可能性了，而且不排除有的编辑太敬业把每个页面都做得不一样。</p>
-
-<p>采集源站是<a href="http://qq.100bt.com">http://qq.100bt.com</a>，和我最近做的<a href="http://www.zeze.com">zeze</a>是同一类型的东西，而且突然发现zeze竟然借鉴了很多这个网站的元素。废话不多说，这次采集主要是为了了解哪些资讯比较受欢迎，然后我们就可以有针对性的来推广我们的内容，看起来像是在收集竞争对手的信息而实现知己知彼百战不殆，这样的活我喜欢。这个叫作百田圈圈的网站似乎运营得不错，里面积累了差不多百万的帖子，用户似乎也很活跃。</p>
-
-<p>其实要获得的信息不多，在我设计的数据库结构中包含以下字段：</p>
-
-<pre>
-tid: 帖子的id，用来作为表的主键
-url: 帖子的url，便于访问
-subject: 帖子标题
-author_name: 楼主名，有这个东西可以用来分析哪些用户比较活跃
-replies: 帖子的回复数，这个字段是用来衡量一个帖子的受欢迎程度的最重要指标
-view: 帖子被查看的次数
-pubdate: 发帖时间
-maxpage: 帖子页数，因为有的帖子是回复楼层的，所以如果一个帖子分了很多页说明这个帖子内容丰富
-category: 帖子所属分类，用来来分析哪些大类的话题比较火
-</pre>
-
-
-<p>没有数据库直接操作真是麻烦，上面这些数据都得分析网页去获取，而且不是在同一个页面，需求挺麻烦的但是不难。</p>
-
-<p>代码传到<a href="https://github.com/xcaptain/BeautifulSoup_Instance/tree/master/btqq">github</a>上面了，以前写的那些采集都是用脚本的形式来实现的，这回尝试了一下自己构造一个采集类，这时候才发现对于python的面向对象特性用的太少了，在设计类的结构，接口上面都很不熟练，现在的代码设计在python大牛严重肯定是很小儿科的，以后要多学习OOP的编程思想，不能总是一个函数一个函数这样顺序的执行下来。</p>
-
-<p>写这么一个简单的任务竟然还花了我一天的时间，看来编码能力还是有待加强，经过总结之后发现问题主要存在三方面：</p>
-
-<ol>
-<li>对mysql的查询语句不熟悉，因为我把tid设置为了主键，所以不能重复插入，我想要实现<code>insert into on duplicate key continue</code>的功能，找了半天只看到了<code>insert into on duplicate key update</code>的语法，但是后者不是我想要的，因为使用的是python的<code>MySQLdb</code>来驱动mysql的，这东西对于原生的sql语句支持不是很好，不过幸好最后我找到了<code>insert ignore into</code>这种语句，一下解决了问题，虽然<code>MySQLdb</code>在<code>execute</code>的时候会有警告，但是毕竟实现了功能。</li>
-<li><code>MySQLdb</code>这个库的使用不熟悉，在用它来执行sql语句的时候出现了很多问题，看来有时间得专门总结一下python驱动mysql的方法。</li>
-</ol>
-
-
-<p>今晚下班回的路上突然发现代码少写了很多异常检测，比如说没有判断网络链接失败，页面匹配为空等，真希望程序能够按照我设想的执行，等明天早上到了公司6张表都给我装得满满的，明天到了公司 再去修改代码了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[通过vagrant安装coreos]]></title>
-    <link href="http://blog.iyue.club/blog/2014/12/27/install-coreos-with-vagrant/"/>
-    <updated>2014-12-27T05:54:57+08:00</updated>
-    <id>http://blog.iyue.club/blog/2014/12/27/install-coreos-with-vagrant</id>
-    <content type="html"><![CDATA[<p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
-
-<p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
-
-<ol>
-<li><code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。</li>
-<li><p>更改配置。vagrant的配置文件就是<code>Vagrantfile</code>，这是一个ruby的文件，里面定义了2个配置文件</p>
-
-<p> CLOUD_CONFIG_PATH = File.join(File.dirname(<strong>FILE</strong>), &ldquo;user-data&rdquo;)
- CONFIG = File.join(File.dirname(<strong>FILE</strong>), &ldquo;config.rb&rdquo;)</p></li>
-</ol>
-
-
-<p>一个是当前目录下的<code>user-data</code>文件，一个是当前目录下的<code>config.rb</code>文件</p>
-
-<pre>
-VirtualBox is complaining that the kernel module is not loaded. Please
-run `VBoxManage --version` or open the VirtualBox GUI to see the error
-message which should contain instructions on how to fix this error.
-</pre>
-
-
-<p>根据Vagrantfile里面 提供的url下载系统的时候，可能是url被屏蔽了，所以需要使用点小手段<code>proxychains vagrant up</code></p>
-
-<p>但是等下载都完成之后却出现下面这段错误信息</p>
-
-<pre>
-Command: ["hostonlyif", "create"]
-
-Stderr: 0%...
-Progress state: NS_ERROR_FAILURE
-VBoxManage: error: Failed to create the host-only adapter
-VBoxManage: error: VBoxNetAdpCtl: Error while adding new interface: failed to open /dev/vboxnetctl: No such file or directory
-VBoxManage: error: Details: code NS_ERROR_FAILURE (0x80004005), component HostNetworkInterface, interface IHostNetworkInterface
-VBoxManage: error: Context: "int handleCreate(HandlerArg*, int, int*)" at line 66 of file VBoxManageHostonly.cpp
-</pre>
-
-
-<p>听起来是virtualbox的网卡驱动没有加载进来，在网上搜到一个很简单的方法，<code>sudo vboxreload</code></p>
-
-<p>virtualbox的驱动问题解决之后，还是执行<code>proxychains vagrant up</code>但是这回却报错了</p>
-
-<pre>
-Bringing machine 'core-01' up with 'virtualbox' provider...
-Bringing machine 'core-02' up with 'virtualbox' provider...
-Bringing machine 'core-03' up with 'virtualbox' provider...
-==> core-01: Checking if box 'coreos-stable' is up to date...
-==> core-01: Fixed port collision for 22 => 2222. Now on port 2250.
-==> core-01: Clearing any previously set network interfaces...
-==> core-01: Preparing network interfaces based on configuration...
-    core-01: Adapter 1: nat
-    core-01: Adapter 2: hostonly
-==> core-01: Forwarding ports...
-    core-01: 22 => 2250 (adapter 1)
-==> core-01: Running 'pre-boot' VM customizations...
-==> core-01: Booting VM...
-==> core-01: Waiting for machine to boot. This may take a few minutes...
-    core-01: SSH address: 127.0.0.1:2250
-    core-01: SSH username: core
-    core-01: SSH auth method: private key
-    core-01: Warning: Remote connection disconnect. Retrying...
-    core-01: Warning: Remote connection disconnect. Retrying...
-</pre>
-
-
-<p>翻墙之后127.0.0.1是vps的内部loop地址，不是本机的，所以怎么也ssh不上去，既然东西都下载完了那就不需要代理了，直接<code>vagrant up</code>就有了下面的信息，太好了，这是在自动装系统呢。</p>
-
-<pre>
-Bringing machine 'core-01' up with 'virtualbox' provider...
-Bringing machine 'core-02' up with 'virtualbox' provider...
-Bringing machine 'core-03' up with 'virtualbox' provider...
-==> core-01: Checking if box 'coreos-stable' is up to date...
-==> core-01: There was a problem while downloading the metadata for your box
-==> core-01: to check for updates. This is not an error, since it is usually due
-==> core-01: to temporary network problems. This is just a warning. The problem
-==> core-01: encountered was:
-==> core-01:
-==> core-01: Failed to connect to 2404:6800:4008:c00::80: Network is unreachable
-==> core-01:
-==> core-01: If you want to check for box updates, verify your network connection
-==> core-01: is valid and try again.
-==> core-01: VirtualBox VM is already running.
-==> core-02: Importing base box 'coreos-stable'...
-==> core-02: Matching MAC address for NAT networking...
-==> core-02: Checking if box 'coreos-stable' is up to date...
-</pre>
-
-
-<p>3台虚拟机全部安装ok，我有一个集群了，哈哈哈哈。查看一下集群的运行状态。</p>
-
-<pre>
-Current machine states:
-
-core-01                   running (virtualbox)
-core-02                   running (virtualbox)
-core-03                   running (virtualbox)
-
-This environment represents multiple VMs. The VMs are all listed
-above with their current state. For more information about a specific
-VM, run `vagrant status NAME`.
-</pre>
-
-
-<p>查看一下virtualbox的运行状态，有3个进程分别运行着3个虚拟机。</p>
-
-<pre>
-joey     10033  1.1  0.2 163232  9492 ?        Sl   22:33   0:08 /usr/lib/virtualbox/VBoxXPCOMIPCD
-joey     10040  2.6  0.4 707156 19324 ?        Sl   22:33   0:20 /usr/lib/virtualbox/VBoxSVC --auto-shutdown
-joey     11184  3.8  1.9 1497696 74992 ?       Sl   22:33   0:28 /usr/lib/virtualbox/VBoxHeadless --comment coreos-vagrant_core-01_1419632903871_39166 --startvm 29a5b99b-dfa8-48e6-b18f-d63b01696df2 --vrde config
-joey     11204  0.0  0.2 154828  9228 ?        S    22:33   0:00 /usr/lib/virtualbox/VBoxNetDHCP --ip-address 192.168.56.100 --lower-ip 192.168.56.101 --mac-address 08:00:27:AA:0D:77 --netmask 255.255.255.0 --network HostInterfaceNetworking-vboxnet0 --trunk-name vboxnet0 --trunk-type netflt --upper-ip 192.168.56.254
-joey     27124 10.2  1.9 1527828 76788 ?       Sl   22:40   0:32 /usr/lib/virtualbox/VBoxHeadless --comment coreos-vagrant_core-02_1419633622663_70678 --startvm 07c05704-61e7-4e61-bebd-723978180348 --vrde config
-joey     28280 17.8  2.0 1523732 81576 ?       Sl   22:43   0:28 /usr/lib/virtualbox/VBoxHeadless --comment coreos-vagrant_core-03_1419633784764_52573 --startvm f614df63-7556-45ac-a4ca-3654d6039d3d --vrde config
-joey     29297  0.0  0.0  12384  2400 pts/2    R+   22:45   0:00 grep --color=auto -i virtualbox
-</pre>
-
-
-<p>再看一下我的<code>VirtualBox VMs</code>目录：</p>
-
-<pre>
-coreos-vagrant_core-01_1419632903871_39166/  coreos-vagrant_core-03_1419633784764_52573/
-coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
-</pre>
-
-
-<p>昨天还只有<code>Public_default_1419540157403_62624/</code>一个目录，今天就多了3个了，算上昨天的那个ubuntu12.04，我是不是有4个虚拟系统了？</p>
-
-<p>进入到我的<code>Vagrantfile</code>所在的目录，执行<code>vagrant ssh core-01</code>，就登陆进我的第一个虚拟机了。</p>
-
-<p>剩下的就是学习如何使用coreos在上面部署开发环境了，有vagrant这么方便的工具来管理虚拟机，我都不想去研究docker了，我这样一个菜鸟竟然也能管理4台机器，科技真是使人懒惰。</p>
 ]]></content>
   </entry>
   

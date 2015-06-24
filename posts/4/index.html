@@ -119,6 +119,117 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-26T06:15:29+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-26</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/10/26/learn-haskell-1/" itemprop="url">学习haskell（一）</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>上周去国图还书的时候无意中看到了一本讲haskell的书，就顺手借回来了。想想第一次听说haskell这个名字还是从王垠的博客里看到的，那时候听他在博客里讲惰性求值，列表解析，lambda函数啊，什么的，根本听不懂。不过到现在为止，深入学习了python，对于列表解析，lambda函数还算是有一个浅浅的了解。而且已经学习过scheme和sml了，虽然都没有花太多时间去学习它们，但是至少对函数式编程了解了一个大概。</p>
+
+<p>以我目前对于函数式编程的理解来说，主要就是一切都是函数，数据是函数，函数也是函数。一个变量只有一个值，不能通过赋值来改变一个变量的值，只能让它重新绑定到另外一个值，所以变量的状态不会改变，不会出现副作用。这些都是一些很粗浅的理解，毕竟没有正儿八经的研究过函数式编程。主要有一个原因就是现在用函数式语言来开发的项目不多，我们学习编程主要还是用来解决实际问题，如果这门语言现实中没什么人用，或者是没法用到，那么学习它的激情就不会太高，虽然说学习过之后可能会提升编程思维。目前我了解的比较有名的函数式语言开发的项目有emacs，这个是用elisp语言来开发的一个编辑器，很强大。texmacs，一个所见即所得的tex编辑器，用的是scheme开发的。guile，gnu世界中的一个lisp编译器，能把lisp代码编译为c语言代码。chicken scheme，又一个scheme的编译器，按照官网说的它编译机器码的效率也是很高的，而且好像第三方库也比较多。lisp族就这些了，而sml族就没有听说过什么大的项目，不得不说很令人沮丧。相比现在流行的c/c++,java,perl/python/php等语言，函数式语言处于一个很小众的地位。为什么这种语言这么强大但是却没什么发展呢？真是搞不懂。</p>
+
+<p>后面开始去搜索haskell的相关信息，发现在80年代的时候一伙科学家发现函数式语言类别太多了，各种lisp变种太多，都有自己的优点，于是这伙人就想要一统函数式语言的天下，他们组建了一个小团体来研究未来的函数式语言。不得不说，开发这事就是得有很多人参与，没什么人参与的项目肯定不会发展的太好，linux的发展是这样，python是这样，都是有一个很大的志愿者团体来维护的，而像freebsd和scheme这样的东西则是在各个很牛逼的大学小范围流传。</p>
+
+<p>haskell算是一个严格类型的语言，也就是说每个变量都有一个类型，数字和字符串之间不能直接操作。目前python和php代码写多了导致我不是很喜欢这个特性，每个变量都有一个类型，多麻烦，数字和字符串之间不能强制转换，不能比较，不能拼接，诸多不便。即使是scheme也不是强类型的，把一个数字添加到一个列表后面在scheme里面是很正常的。sml在这点和haskell差不多，不过sml比haskell更加严格，在定义函数的时候得写明函数接收哪些类型的参数。</p>
+
+<p>不过强类型语言也有一个优点就是执行效率高，在编译过程中执行类型检测，发现问题直接报告异常然后退出，而不是在运行时报告异常。而且强类型语言生成的代码跑起来的时候需要更少的内存。</p>
+
+<p>haskell有自己的编译器，似乎种类有好几种，我在archlinux上用的是ghc，这个编辑器自带了一个解释器叫做ghci，安装好之后在终端输入ghci就能进入解释器，一行一行的执行输入的表达式了。python，php，ruby，scheme，sml都有自己的解释器，能够对每一个表达式求值，真方便。我最讨厌要编译机器码的语言了。</p>
+
+<p>haskell有多种内置的类型，我现在接触了数字，字符串，列表，元组这4个类型。要定义一个变量也很简单，直接<code>let a = 1</code>这样就定义了一个变量a，它绑定了一个数字1,当然我们也可以理解为这行代码定义了一个函数，当执行这个函数的时候会返回一个数字1,在这里函数也变成普通变量了。</p>
+
+<p>字符串是用双引号引起来的，<code>let s = "hello"</code> 就生成了一个字符串变量s，是把它当作函数还是当作普通变量就看个人喜好了。如果要获得某个字符串中间的一个字符，可以使用<code>!!</code>操作符，比如说<code>"hello" !! 2</code> 会返回一个'l'，看惯了c数组风格的字符串索引再来看haskell的形式，真是不习惯。</p>
+
+<p>列表是函数式语言的最重要的数据结构，从50年代麦卡锡发明的表处理语言开始，在各个函数式语言里都可以看到列表的各种表现形式。scheme的car和cdr，sml的hd和tl，而在haskell里面则是head和tail。定义一个列表<code>let l = [1,2,3,4]</code>，<code>head l</code>返回列表第一个元素，<code>tail l</code>返回列表除了第一个元素外剩下的元素，<code>init l</code>返回列表除了最后一个元素外的所有元素，<code>last l</code>返回最后一个元素。剩下的还有maximum, minimum, reverse, length, null, take, drop, sum, product, elem等方法，看得眼花缭乱啊，至于为一个这么基本的数据结构写这么多方法吗？ 对于列表还有一个很重要的特性就是可以生成一个列表范围，如果一个集合的元素是可以用很清晰的语言枚举出来的话那么这个集合可以用列表表示出来，比如说如果要生成1到100的所有整数，那么只要<code>[1 .. 100]</code>就可以了，如果要确定步长的话只要枚举前2个元素就好了<code>[1, 3 .. 100]</code>这样就生成了1到100的所有奇数。那么能不能生成[1,2,4,8 &hellip;]这样的变步长的列表呢？很遗憾，haskell没有把这种列表写入最基本的列表方法里面，也很好理解，对于变步长的列表给出了前几个元素不是很好推测下一个元素，如果不清楚它那么就不能实现它，写程序的至理名言。</p>
+
+<p>接下来就涉及到列表解析了，它对应数学里面一个很重要的概念&ndash;集合，<code>{x | x &lt; 10，x是正整数}</code>这是一个很简单的集合，在haskell里面就是<code>[1 .. 9]</code>。如果集合是<code>{x | x &lt; 10，x是偶数}</code>，在haskell里面就是<code>[x | x &lt;- [1 .. 9], x `mod` 2 == 0]</code>，这就是很简单的列表解析了。</p>
+
+<p>元组和列表差不多，不过限制比较松散，列表要求所有的元素都是同一个类型的，而元组没有这个限制<code>(1, 2, "hello")</code>这样就建立了一个三个元素的元组，</p>
+
+<p>haskell是一门很有前景的语言，得好好学学，希望能够坚持每天学点haskell，每天积累一点新知识。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-10-18T19:48:41+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-10-18</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/10/18/emergency-case-1/" itemprop="url">再来记录一次紧急情况</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>昨晚12点多的时候突然被从被窝里拉出来了，虽然不再睡觉，但是这种感觉也是很不爽的，就因为我负责的一个网站首页出现500错误，提示数据库不能连接了。
+妈呀，这么大的事，怎么还能安心玩手机，赶紧起来查找原因。</p>
+
+<p>目前我这个站是搭建在2台服务器上的，用这2台机器来做负载均衡，跑了3个多月了，一点事都没有， 怎么会突然连不上数据库呢。查看了一下配置，这个站连接着
+2个mysql，不是主从，而是业务分开的2个数据库，因为要把2块不太相关的内容整合在一起，通过vpn连接上公司的内网，ssh上服务器尝试连接数据库，第一个数据库
+连接正常，但是尝试连接第二个数据库的时候就出现连接错误了，服务器拒绝连接了。很显然，要么这个数据库所在的服务器宕机了，要么就是这个数据库的请求数太多了，
+为了避免宕机，数据库自动进入一种保护机制，拒绝所有后来的连接。</p>
+
+<p>尝试这ping了一下服务器，没有宕机，还好，看来就是一个db出问题了，这个db之前也出过问题，当时运维是更改了配置，增加了数据库的最大连接数上限，不过这么晚的时候
+找运维也不好找，人家也不愿意大半夜从床上跑起来给你改服务器配置。那么没办法了，只能改代码了。只能把所有涉及到第二个数据库的代码都删了，这样还有一线生机。</p>
+
+<p>因为我的站点结构比较简单，内容只包括视频和文章，视频来自一个数据库，文章来自另一个数据库，只要把文章都干掉就ok，还好文章也不多，而且在页面上结构挺分离的，
+还算比较好弄，在配置里面删除第二个数据库的配置，在控制器里删除调用了第二个数据库的方法，在页面上删除文章所在的div，然后刷新页面，ok好了。</p>
+
+<p>真是惊险刺激啊，要是我没有vpn的话这个站就得挂一晚上，要是文章和视频的耦合度太高的话我也束手无策，要是前端设计的页面太复杂的话也会给我的改动带来很多麻烦。还好
+这些假设都不存在。感谢Yii框架，大爱。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-09-29T00:02:00+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-09-29</time>
         
       </p>
@@ -1070,139 +1181,11 @@ class BaseFunction {
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-12T22:28:53+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-12</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/12/jsonp-some-thought/" itemprop="url">Jsonp的一点简单看法</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><h3>jsonp是ajax的异域传输技术</h3>
-
-<p>因为我不懂javascript，更不用说jquery了，所以现在在做的一个需要后台请求的页面只能让前端去做。
-昨晚在公司加班和前端对接口，但是到了9点也没有解决掉bug，太失望了，不过今天来了之后和一个大牛
-说了一下，他立刻就指出了问题所在。</p>
-
-<p>先简单描述一下我做的这个项目吧。</p>
-
-<p>项目不麻烦，后端用php+yii框架处理好页面间数据流逻辑，前端使用css和js做一些特效。我这边的工作
-都做得差不多了，但是有一个分类页涉及到多级选择的问题，最初的设计是一次性从后台取几百个数据出来
-但是评估了一下发现这种方法可行性不好，一次加载太多内容对用户的体验不好，而且不能充分读取数据库
-的内容。后面和前端商量了一下采用ajax请求的方式，打开一个页面之后只加载进当前页面的内容，剩下
-的内容等用户点击相应的链接触发相应的js事件之后以jsonp的方式给服务器发请求，然后服务器把要显示的
-内容取出来。</p>
-
-<p>在我看来jsonp就是一个站给出接口，另一个站通过js获得这个接口给的数据。这样就是异域了，最大的好处就是
-后端的压力减轻了，之前如果所有的页面都在一个站上，那么所有相关的信息都得后端开发人员想办法从数据库
-中取，也就是俗话说的套页面。我是很反感套页面这种工作的，没有一点技术含量，枯燥无聊，但是不可否认，
-在phpweb开发中很大一部分时间花在这里了。现在如果php程序员只要给出接口，前端写js获得这个接口的数据，
-他们来渲染页面，这样真是大大减轻了后端的压力，节省下来的时间可以上g+上看看新闻，在博客上发发文章，
-怎么说前端对于html要比后端熟悉。</p>
-
-<p>前端给出的接口也有要求，最主要的内容就是回调。
-<code>
-echo $callback . “(“ . $data . “)”;
-</code>
-在php的代码里加上这个语句，<code>$callback</code>是jquery的回调函数，<code>$data</code>是要传出去的接口数据，一般是一个
-json数组的形式。我这个站的$data是由4个参数共同生成的，前端访问接口的时候是通过<code>http://www.example.com/api/?callback=Jquery_function&amp;arg1=1&amp;arg2=2&amp;arg3=3&amp;arg4=4</code>
-既然明白请求的形式了，那么很好知道这个接口文件的写法了。</p>
-
-<pre>
-$callback = $_GET[‘callback’]; //获得回调函数
-$arg1     = $_GET[‘arg1’];
-$arg2     = $_GET[‘arg2’];
-$arg3     = $_GET[‘arg3’];
-$arg4     = $_GET[‘arg4’]; //获得剩下的4个参数
-$data     = some_func($arg1, $arg2, $arg3, $arg4); //通过某些函数获得要返回的数据
-</pre>
-
-
-<p>很神奇吧，当你点击一个网页的时候，这个页面不是立刻向后台请求数据，而是通过js从另一个接口文件里拿数据。</p>
-
-<p>我的经验还是很不丰富啊，以后要多学习，不然遇到一点比较新的技术就搞半天太丢脸了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-08-11T23:43:02+08:00"  data-updated="true" itemprop="datePublished dateCreated">2014-08-11</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2014/08/11/first-eye-on-octopress/" itemprop="url">First Eye on Octopress</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><h3>第一次使用octopress体验</h3>
-
-<p>这几天突然发现php功能很弱，而python又总是拿来写脚本，没有真正用来开发过什么大型的项目。
-为了早日实现全栈工程师的梦想，打算开始学习ruby。</p>
-
-<p>在网上搜了一下ruby开始学习的方法，下载了几本电子书看，然后又发现了octopress这个开源项目，
-我一直坚信学习不能单纯看书，所以很不错，看到了这个博客平台，以前在ghost blog上面用过一点
-markdown，但是后来vps到期之后就没有继续写markdown了，现在很不熟练。</p>
-
-<p>当初用ghost blog的时候是不太懂前端的东西，但是现在已经和html，js，css打了一个多月交道，
-还算熟悉，以后肯定得自己动手改改theme，加点widget等。</p>
-
-<p><a href="http://ruby-doc.org/docs/">ruby programming</a></p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
       
-        <li class="previous disabled"><a href="#">&larr;&nbsp;Older</a></li>
+        <li class="previous"><a href="/posts/5">&larr;&nbsp;Older</a></li>
       
       <li><a href="/blog/archives">Blog Archives</a></li>
       
@@ -1221,15 +1204,15 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/06/23/migrate-a-discuz-site/">迁移一个discuz站点</a>
+    
+    <a class="list-group-item " href="/blog/2015/06/07/learn-gulp/">学习gulp</a>
+    
     <a class="list-group-item " href="/blog/2015/06/03/use-powerline/">上powerline</a>
     
     <a class="list-group-item " href="/blog/2015/06/01/learn-rails/">学习rails</a>
     
     <a class="list-group-item " href="/blog/2015/06/01/learn-git/">学习git</a>
-    
-    <a class="list-group-item " href="/blog/2015/05/23/php-getter/">Php的getter方法</a>
-    
-    <a class="list-group-item " href="/blog/2015/05/20/learn-laravel-1/">简单使用laravel</a>
     
   </div>
 </section>
@@ -1247,7 +1230,7 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     
     
     <a class="list-group-item " href="/blog/categories/web/index.html">
-      <span class="badge">5</span>
+      <span class="badge">6</span>
       web
     </a>
     
@@ -1369,6 +1352,12 @@ markdown，但是后来vps到期之后就没有继续写markdown了，现在很�
     <a class="list-group-item " href="/blog/categories/ruby,rails/index.html">
       <span class="badge">1</span>
       ruby,rails
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/linux,php,web/index.html">
+      <span class="badge">1</span>
+      linux,php,web
     </a>
     
   </div>

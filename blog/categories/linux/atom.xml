@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Joey's Blog]]></title>
   <link href="http://blog.iyue.club/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://blog.iyue.club/"/>
-  <updated>2015-06-03T23:44:05+08:00</updated>
+  <updated>2015-06-24T10:01:45+08:00</updated>
   <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -24,7 +24,9 @@
 
 <p>然后是安装<a href="https://github.com/powerline/powerline">powerline</a>，这是一个用python写的状态插件，以前我就在vim和emacs上用过，在我的urxvt上面还没有配置过，照着<a href="https://powerline.readthedocs.org/en/latest/">文档</a>简单配置了一下，也是很简单的，但是最后我发现我的urxvt终端模拟器没法使用默认的powerline字体，后来从<a href="https://github.com/powerline/fonts">这里</a>找到了几个字体补丁，把我的.Xresources文件修改一下之后就能使用powerline字体了，真是不错。</p>
 
-<p>然后是配置fish，我选择的主题是<a href="https://github.com/oh-my-fish/theme-bobthefish">bobthefish</a>，默认的powerline主题，对于git的支持也很大众化，不过好歹是上了，以后使用终端会不会比较引人注目呢？</p>
+<p>现在使用的主题是<a href="https://github.com/oh-my-fish/theme-agnoster">agnoster</a>，功能和配色都挺符合我的胃口的，默认支持powerline，git的状态显示也很不错。</p>
+
+<p>顺便重新配置了一下tmux，以前多任务都是通过urxvt的新建tab来实现的，如果到了别的终端环境如何复用终端呢？还是使用tmux吧，而且也可以配置tmux使得它支持powerline，很不错的setup</p>
 ]]></content>
   </entry>
   

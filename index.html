@@ -119,6 +119,95 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-23T15:09:46+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-06-23</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/06/23/migrate-a-discuz-site/" itemprop="url">迁移一个discuz站点</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>周五晚上帮同事迁移了一个网站，原来的<a href="http://www.huizu100.com">网站</a>是搭建在windows2003服务器上的，使用的是apache2 + php5.3 + mysql5.1 的架构，使用的是一个叫作PHPnow的一键安装包来管理服务器的，这种架构对于个人站长来说很方便，只要设置好了配置就可以自己搭建网站，但是扩展性特别差，简直就是没法维护，win2003本来就是老掉牙的技术了，这种服务器长期跑肯定是会有内存问题的，而用PHPnow搭建的网站，数据库，代码，数据都在一个目录里面，这样潜在的问题太大了，首先就是安全性问题，没有数据库本来应该单独放到一个专门的服务器上的。而且所有数据放在一起对于业务分离，备份也很不方便，一下备份一个几十G大的目录是很浪费资源的。</p>
+
+<p>所以在我的建议下，周五晚上对这个网站做了一个迁移，新的架构是LNMP，ubuntu 15.04 server + nginx 1.6 + hhvm 3.7 + mariadb 10.0.20 + redis 3.0，当然因为服务器只有一台，所以没有做负载均衡，没有做数据库读写分离，也没有做hhvm的均衡，因为等我把环境搭建完的时候就已经很稳定了，所以暂时不打算那么做，下面简单的来说说迁移过程。</p>
+
+<ol>
+<li><p>服务器安装
+我给的建议是装ubuntu，因为将来环境稳定下来之后要把权限分给站长，让他自己上去查看管理一些进程，而ubuntu的桌面又是比较简单易用的。本来他们是打算安装ubuntu 15.04 desktop版的，但是因为这个版本没法驱动DELL r710服务器自带的硬Raid，所以最后换成server版了。</p></li>
+<li><p>nginx，mariadb，hhvm，redis这些软件的安装都很简单，唯一一个比较特殊的功能就是用了hhvm来替换php，不过暂时没有感到太大的性能提升。LNMP环境搭建是很简单的，很快就完成了。</p></li>
+<li><p>接下来是服务器配置
+最大的问题就是调整分区结构，服务器上有一块300G的自带硬盘，这款盘其实是由2块一样的硬盘搭建的raid0，自带了数据备份功能，所以这块盘理论上来说是不该保存太多系统以外的东西的。然后是1块1T的绿盘，这块盘的年头比较老了，以前的网站就部署在这块盘上，我打算把这个盘拿来当备份盘，还有一块2T的黑盘，这块盘是一块最新最好的数据盘，所以我打算把网站和数据库都放在这块盘上。首先要把这块2T的盘里面的数据备份了，很重要的资料一定得保存，但是里面用PHPNow的工具全量备份了站点，一个备份40G，备份一周的数据，复制这些内容浪费了好多时间。数据备份完了之后就是给硬盘分区，先分区那块2T的盘，准备分4个区，按照300+300+600+600来分，虽然暂时没有想好具体怎么使用，用<code>fdisk /dev/sdb</code>开始分区，分区之后就是创建文件系统，只用ext4，所以<code>mkfs.ext4 /dev/sdbn</code>。</p></li>
+<li><p>部署网站
+这步就很简单了，直接复制代码，修改配置，修改权限，有一个比较大的问题是discuz的图片是存放在一个叫做<code>data/attachment</code>的目录下的，这些图片完全可以和代码分离，所以拿一块额外的分区来装就行，我是挂载的那个600G的分区到这个目录的。<code>mount /dev/sdb6 /pathtodata/attachment</code>。</p></li>
+</ol>
+
+
+<p>部署完成之后调试了一下网站就跑起来了，但是还有很多要做的事，discuz的代码结构比较混乱，不好改动，而且原来他的网站语言设置是GBK的，涉及到编码问题又更加复杂了，反正直到周日晚上才把问题全部解决，目前就是陆陆续续做一些服务器的小性能调优。</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-07T23:56:19+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-06-07</time>
+        
+      </p>
+    
+    
+      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/06/07/learn-gulp/" itemprop="url">学习gulp</a></h2>
+    
+  </header>
+
+
+  <div class="entry-content clearfix" itemprop="articleBody description"><p>学习使用gulp来进行前端开发</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-03T23:27:17+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-06-03</time>
         
       </p>
@@ -135,7 +224,9 @@
 
 <p>然后是安装<a href="https://github.com/powerline/powerline">powerline</a>，这是一个用python写的状态插件，以前我就在vim和emacs上用过，在我的urxvt上面还没有配置过，照着<a href="https://powerline.readthedocs.org/en/latest/">文档</a>简单配置了一下，也是很简单的，但是最后我发现我的urxvt终端模拟器没法使用默认的powerline字体，后来从<a href="https://github.com/powerline/fonts">这里</a>找到了几个字体补丁，把我的.Xresources文件修改一下之后就能使用powerline字体了，真是不错。</p>
 
-<p>然后是配置fish，我选择的主题是<a href="https://github.com/oh-my-fish/theme-bobthefish">bobthefish</a>，默认的powerline主题，对于git的支持也很大众化，不过好歹是上了，以后使用终端会不会比较引人注目呢？</p>
+<p>现在使用的主题是<a href="https://github.com/oh-my-fish/theme-agnoster">agnoster</a>，功能和配色都挺符合我的胃口的，默认支持powerline，git的状态显示也很不错。</p>
+
+<p>顺便重新配置了一下tmux，以前多任务都是通过urxvt的新建tab来实现的，如果到了别的终端环境如何复用终端呢？还是使用tmux吧，而且也可以配置tmux使得它支持powerline，很不错的setup</p>
 </div>
   
   
@@ -656,105 +747,6 @@ public function __call($name, $args) {
 
         </article>
       
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-15T00:58:56+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-15</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/15/use-orgmode/" itemprop="url">Use-orgmode</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>最近看书学习感觉非常没有劲，究其原因感觉是缺少一个做笔记的工具，原来那支跟随我4年的钢笔放家里没有带过来，
-京东上预订的lamy也还没有到货，看书不动笔我是什么都记不住的，所以感觉学习效率低了很多。印象笔记确实不错，
-配合浏览器的markdown-here扩展就能支持markdown语法了，但是缺少一个所见即所得的笔记客户端，用markdown写完
-之后转换为html还是感觉不够方便，并且总是要有网才能看到和编辑笔记很不方便。gnome自带的tomboy我也尝试了，
-这东西更加不好用，连markdown都不支持怎么能拿来记笔记。</p>
-
-<p>今天反正周六闲着没事就拿起了orgmode的<a href="http://orgmode.org/org.html">手册</a> 来看，看了几页竟然发现org转md是这么方便，果断以后就用emacs来
-记笔记了，又学会一个新技能。</p>
-
-<ul>
-<li>下面就来讲讲org做笔记的基本用法吧:
-
-<ol>
-<li>使用星号来表明段落的层级，和md的使用#差不多的概念</li>
-<li>支持有序列表，无序列表，语法和md类似，org或自动缩进对其每个列表项，如果发现不匹配了那就肯定某个地方缩进出问题了</li>
-<li>插入链接\[[链接]\[名字]] 这样就能插入一条链接了</li>
-<li>用\\来断行，这样就不必要把一段话写在一行了</li>
-<li>C-c C-e m m 来导出markdown文件</li>
-</ol>
-</li>
-</ul>
-
-</div>
-  
-  
-
-
-        </article>
-      
-      
-        <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted text-uppercase">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-03-07T22:40:19+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-03-07</time>
-        
-      </p>
-    
-    
-      <h2 class="entry-title" itemprop="name headline"><a href="/blog/2015/03/07/emacs-grep-find/" itemprop="url">Emacs自定义grep-find的模板</a></h2>
-    
-  </header>
-
-
-  <div class="entry-content clearfix" itemprop="articleBody description"><p>被emacs的搜索功能纠结好久了，今天下定决心来解决一下。以前执行<code>grep-find</code>命令的时候查找的模板都是<code>find . -type f -exec grep -nH -e {} +</code>，但是这条命令在fish下没法用，找了一下发现在<a href="https://github.com/fish-shell/fish-shell/issues/95">这个issue</a>里面作者提到了为什么fish里面没法用find，因为在fish里面<code>{}</code>是有意义的，所以就会提示exec缺少参数，所以如果写成<code>find . -type f -exec grep -nH -e '{}' +</code>就可以了，接下来的任务就是修改emacs的配置，把默认的<code>grep-find</code>的行为改掉。</p>
-
-<p>因为查找功能是emacs默认就有的，所以我直接就去源代码目录找了，在<code>/usr/share/emacs/24.4/</code>下执行<code>grep 'grep-find' -R *</code>，然后在<code>lisp/ldefs-boot.el</code>和<code>lisp/loaddefs.el</code>找到了相关的代码，然后试着修改第12669行，这行看起来像是相关的代码，结果改完了半天不生效，无奈之下去<a href="http://stackoverflow.com/questions/28915372/change-the-default-find-grep-command-in-emacs/">stackoverflow</a>提问，这个网站效率真的不是一般的高，很快就拿到答案了，有人说我找到的代码只不过是docstring而已，要修改的话得改<code>grep-find-template</code>,通过<code>C-h v</code>查看了一下这个变量的值，默认的是<code>"find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; {} +"</code>，修改它就行了，编辑<code>~/.emacs.d/personal/custom.el</code>，在最底下加上<code>(setq grep-find-template "find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; \'{}\' +")</code>，然后<code>eval-buffer</code>，问题完美解决，不得不说emacs真是灵活，不用改源代码就能实现自定义功能。</p>
-
-<p>后面又修改了<code>find-grep-dired</code>的模板，好像这条命令没有模板，所以我直接改的代码，<code>/usr/share/emacs/24.4/lisp/find-dired.el.gz</code>编辑第278行，把{}转义了。</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -778,15 +770,15 @@ public function __call($name, $args) {
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/blog/2015/06/23/migrate-a-discuz-site/">迁移一个discuz站点</a>
+    
+    <a class="list-group-item " href="/blog/2015/06/07/learn-gulp/">学习gulp</a>
+    
     <a class="list-group-item " href="/blog/2015/06/03/use-powerline/">上powerline</a>
     
     <a class="list-group-item " href="/blog/2015/06/01/learn-rails/">学习rails</a>
     
     <a class="list-group-item " href="/blog/2015/06/01/learn-git/">学习git</a>
-    
-    <a class="list-group-item " href="/blog/2015/05/23/php-getter/">Php的getter方法</a>
-    
-    <a class="list-group-item " href="/blog/2015/05/20/learn-laravel-1/">简单使用laravel</a>
     
   </div>
 </section>
@@ -804,7 +796,7 @@ public function __call($name, $args) {
     
     
     <a class="list-group-item " href="/blog/categories/web/index.html">
-      <span class="badge">5</span>
+      <span class="badge">6</span>
       web
     </a>
     
@@ -926,6 +918,12 @@ public function __call($name, $args) {
     <a class="list-group-item " href="/blog/categories/ruby,rails/index.html">
       <span class="badge">1</span>
       ruby,rails
+    </a>
+    
+    
+    <a class="list-group-item " href="/blog/categories/linux,php,web/index.html">
+      <span class="badge">1</span>
+      linux,php,web
     </a>
     
   </div>
