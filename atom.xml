@@ -4,7 +4,7 @@
   <title><![CDATA[Joey's Blog]]></title>
   <link href="http://blog.iyue.club/atom.xml" rel="self"/>
   <link href="http://blog.iyue.club/"/>
-  <updated>2015-06-24T10:01:45+08:00</updated>
+  <updated>2015-07-14T18:28:22+08:00</updated>
   <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Php编码规范]]></title>
+    <link href="http://blog.iyue.club/blog/2015/07/14/php-coding-style/"/>
+    <updated>2015-07-14T18:05:40+08:00</updated>
+    <id>http://blog.iyue.club/blog/2015/07/14/php-coding-style</id>
+    <content type="html"><![CDATA[<p>之前写代码的时候一直不是很在意编码规范的问题，感觉只要把代码功能实现了就OK，但是看到越来越多的优秀开
+源项目都给自己的项目制定了编码规范，提交PR必须要满足规范才能合并到主干，而且自己搞php开发也已经有1
+年了，得开始走向规范化开发的道路。</p>
+
+<p>首先得介绍一下psr2，目前<a href="http://laravel.com/">laravel</a>项目使用的就是这个风格标准，具体的规定
+在<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md">这里</a>
+我以前的习惯大部分符合psr2的标准，但是因为渐渐的使用到了很多高级的php特性，比如说closure, trait, 抽象类等，
+所以还是得纠正一点小的习惯。</p>
+
+<p>除了psr2这个标准之外，各大公司也有自己内部使用的标准，比如说symfony, wordpress, squiz等，还是靠拢
+国际标准吧，目前我的emacs里面的php-mode的设置就是psr2的标准，自动格式化代码省了点心。</p>
+
+<p>代码写完了之后提交到github上却总是发现过不了持续集成(Continuous Integration)的审核，我自己目前几个个人
+项目使用的是<a href="https://styleci.io/">styleci</a>这个在线审核的工具，功能很简单但是很强大，最初几次提交
+总是会给我返回很多fail，导致严格要求自己按照编码规范来。</p>
+
+<p>为了避免提交之后被styleci给鄙视，从网上找到了<a href="https://github.com/squizlabs/PHP_CodeSniffer">PHP_CodeSniffer</a>这个
+小工具，叫做php嗅探器，它其实包括2个小部件，一个是phpcs(php coding style)，另一个是phpcbf(PHP Code Beautifier and Fixer)，
+前者只检查代码的问题，后者还会帮忙纠正代码，如果信不过机器帮忙纠正代码，那么之前一定的记得提交代码。根据官方文档上的
+说明修改配置，简单使用，效果很不错。后来我又找了一个叫做<a href="https://github.com/nishimaki10/emacs-phpcbf">emacs-phpcbf</a>的
+小工具，这个是一个emacs的插件配置好之后可以集成到php-mode里面，稍加配置就可以在保存php文件的时候自动纠正错误。</p>
+
+<p>后面发现通过phpcbf纠错的代码还是不能通过styleci，找了一下发现styleci用的是一个叫做<a href="https://github.com/FriendsOfPHP/PHP-CS-Fixer">php-cs-fixer</a>
+的引擎来审核代码的，又对照着装了一个php-cs-fixer，和phpcbf的功能差不多，但是稍微严格一点，对于额外的空行也会删掉。</p>
+
+<p>码农要往正规化方向走，现在养成一下编码规范的习惯，以后再来培养测试驱动的习惯。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[迁移一个discuz站点]]></title>
@@ -34,6 +68,9 @@
 
 
 <p>部署完成之后调试了一下网站就跑起来了，但是还有很多要做的事，discuz的代码结构比较混乱，不好改动，而且原来他的网站语言设置是GBK的，涉及到编码问题又更加复杂了，反正直到周日晚上才把问题全部解决，目前就是陆陆续续做一些服务器的小性能调优。</p>
+
+<p>6月25日更新：
+这几天陆陆续续发现了一些bug，有样式错误的，有插件报错的，有缓存不能及时清的等等，突然感觉压力好大，工作日只能下班之后有时间做自己的事，端午节3天假2天加一晚上都折腾那个网站去了，本以为是没什么事了，没想到后续的问题更多更麻烦，早知道就不轻易答应人家了，而且以后坚决不再折腾discuz，继续折腾这个东西只会浪费我更多时间。</p>
 ]]></content>
   </entry>
   
@@ -726,21 +763,6 @@ vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
 
 
 <p>这时候才算是真正的把所有的驱动都加进来了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[尝试hhvm]]></title>
-    <link href="http://blog.iyue.club/blog/2015/01/01/try-hhvm/"/>
-    <updated>2015-01-01T00:10:28+08:00</updated>
-    <id>http://blog.iyue.club/blog/2015/01/01/try-hhvm</id>
-    <content type="html"><![CDATA[<p>今天听到一个新闻说维基百科把他的php引擎由zend全面转到hhvm了，详情见<a href="https://www.mediawiki.org/wiki/HHVM">这里</a>。其实之前对于这东西是闻所未闻的，太不关注php的发展了，后来详细搜了一下，才稍微了解了一点php代码的执行过程。</p>
-
-<p>对于动态语言来说，都是首先通过代码解析来生成字节码，然后通过解释器来执行这些字节码，php用的解释器叫作zend。看来和python差不多，程序在执行的时候也会先生成字节码，然后用python解释器去执行这些字节码。不过解释器的使用也导致了程序运行缓慢。所以现在facebook就做了一个叫作hhvm的东西，当通过hhvm来执行php程序的时候，会先生成一种中间码(intermediat byte code)也叫作HHBC(hhvm byte code)，然后hhvm会通过一种即时编译(just in time)的技术，将这种中间码编译为本地可执行的x86-64机器码，最后执行代码的时候等于是本地执行一个可执行程序，效率自然比解释器高了很多。不知道有没有什么方式能够把hhvm的这些步骤分离出来分析，真想看看php的字节码长什么样，生成的二进制程序长什么样。</p>
-
-<p>我在本地立刻部署了一下HHVM的环境，很简单<code>sudo pacman -S hhvm</code>直接就安装hhvm了，测试一下效果，随便写一个php文件，然后<code>hhvm test.php</code>如果安装成功的话就可以得到像执行<code>php test.php</code>一样的效果，现在还没想好写个怎样的测试用例来比较hhvm和原生php的速度。</p>
-
-<p>hhvm装好了之后当然不能只是用它来执行脚本，最重要的还是在服务器端编程上，当nginx接收到了一个请求的文件之后，并且把这个请求交个php的fastcgi处理后，在这里就不能用原生的php来执行文件里的php了，必须通过hhvm来执行，简单，就是不要启动php-fpm嘛，我看了一下安装hhvm的时候竟然自动连systemd的配置文件也生成了，所以我只要执行<code>sudo systemctl start hhvm.service</code>就能开启hhvm的监听程序了，类似php-fpm，hhvm服务器的配置文件存在<code>/etc/hhvm/server.ini</code>，在我这里配置文件写的是监听9000端口，那么<code>netstat -naltp | grep 9000</code>真的看到了一个监听的进程。然后就是确保nginx的配置文件中<code>fastcgi_pass</code>的值是<code>127.0.0.1:9000</code>，这样所有进入9000端口的数据都会被hhvm所处理。随便写了一个简单的数据库查询示例，暂时没发现hhvm和原生php的性能区别，也许是测试代码写得不好。</p>
 ]]></content>
   </entry>
   

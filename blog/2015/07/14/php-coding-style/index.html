@@ -2,10 +2,10 @@
 <html class="no-js" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Category: Sql,mysql,postgresql - Joey's Blog</title>
+  <title>Php编码规范 - Joey's Blog</title>
   <meta name="author" content="joey">
 
-  <meta name="description" content="Category: sql,mysql,postgresql">
+  
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -14,16 +14,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://blog.iyue.club/blog/categories/sql-mysql-postgresql">
+  <link rel="canonical" href="http://blog.iyue.club/blog/2015/07/14/php-coding-style">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="/atom.xml" rel="alternate" title="Joey's Blog" type="application/atom+xml">
 
   <!-- http://opengraphprotocol.org/ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="http://blog.iyue.club/blog/categories/sql-mysql-postgresql">
-  <meta property="og:title" content="Category: Sql,mysql,postgresql - Joey's Blog">
-  <meta property="og:description" content="Category: sql,mysql,postgresql">
+  <meta property="og:url" content="http://blog.iyue.club/blog/2015/07/14/php-coding-style">
+  <meta property="og:title" content="Php编码规范 - Joey's Blog">
+  
 
   <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
 
@@ -55,10 +55,10 @@
 
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li >
+                <li class="active">
                     <a rel="index" href="/">Blog</a>
                 </li>
-                <li class="active">
+                <li >
                     <a href="/blog/archives">Archives</a>
                 </li>
                 <li >
@@ -93,81 +93,138 @@
       <div id="main" role="main" class="container">
         <div id="content">
           <div class="row">
-  <div class="page-content col-md-9">
-    <article role="article">
+  <div class="page-content col-md-9" itemscope itemtype="http://schema.org/Blog">
+    <meta itemprop="name" content="Joey's Blog" />
+    <meta itemprop="description" content="不甘平凡" />
+    <meta itemprop="url" content="http://blog.iyue.club" />
+    <article class="hentry" role="article" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
       
-        <header class="page-header">
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-07-14T18:05:40+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-07-14</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title" itemprop="name headline">
+        Php编码规范
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix" itemprop="articleBody description"><p>之前写代码的时候一直不是很在意编码规范的问题，感觉只要把代码功能实现了就OK，但是看到越来越多的优秀开
+源项目都给自己的项目制定了编码规范，提交PR必须要满足规范才能合并到主干，而且自己搞php开发也已经有1
+年了，得开始走向规范化开发的道路。</p>
+
+<p>首先得介绍一下psr2，目前<a href="http://laravel.com/">laravel</a>项目使用的就是这个风格标准，具体的规定
+在<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md">这里</a>
+我以前的习惯大部分符合psr2的标准，但是因为渐渐的使用到了很多高级的php特性，比如说closure, trait, 抽象类等，
+所以还是得纠正一点小的习惯。</p>
+
+<p>除了psr2这个标准之外，各大公司也有自己内部使用的标准，比如说symfony, wordpress, squiz等，还是靠拢
+国际标准吧，目前我的emacs里面的php-mode的设置就是psr2的标准，自动格式化代码省了点心。</p>
+
+<p>代码写完了之后提交到github上却总是发现过不了持续集成(Continuous Integration)的审核，我自己目前几个个人
+项目使用的是<a href="https://styleci.io/">styleci</a>这个在线审核的工具，功能很简单但是很强大，最初几次提交
+总是会给我返回很多fail，导致严格要求自己按照编码规范来。</p>
+
+<p>为了避免提交之后被styleci给鄙视，从网上找到了<a href="https://github.com/squizlabs/PHP_CodeSniffer">PHP_CodeSniffer</a>这个
+小工具，叫做php嗅探器，它其实包括2个小部件，一个是phpcs(php coding style)，另一个是phpcbf(PHP Code Beautifier and Fixer)，
+前者只检查代码的问题，后者还会帮忙纠正代码，如果信不过机器帮忙纠正代码，那么之前一定的记得提交代码。根据官方文档上的
+说明修改配置，简单使用，效果很不错。后来我又找了一个叫做<a href="https://github.com/nishimaki10/emacs-phpcbf">emacs-phpcbf</a>的
+小工具，这个是一个emacs的插件配置好之后可以集成到php-mode里面，稍加配置就可以在保存php文件的时候自动纠正错误。</p>
+
+<p>后面发现通过phpcbf纠错的代码还是不能通过styleci，找了一下发现styleci用的是一个叫做<a href="https://github.com/FriendsOfPHP/PHP-CS-Fixer">php-cs-fixer</a>
+的引擎来审核代码的，又对照着装了一个php-cs-fixer，和phpcbf的功能差不多，但是稍微严格一点，对于额外的空行也会删掉。</p>
+
+<p>码农要往正规化方向走，现在养成一下编码规范的习惯，以后再来培养测试驱动的习惯。</p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
           
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard" itemprop="author" itemscope itemtype="http://schema.org/Person">Posted by <span class="fn" itemprop="name">joey</span></span>
+
           
-            <h1 class="entry-title">
-              Category: Sql,mysql,postgresql
-              
-            </h1>
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-07-14T18:05:40+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-07-14</time>
           
-        </header>
-      
-      <div class="entry-content">
-        <div id="blog-archives" class="category" itemscope itemtype="http://schema.org/Blog">
-<meta itemprop="name" content="Joey's Blog" />
-<meta itemprop="description" content="不甘平凡" />
-<meta itemprop="url" content="http://blog.iyue.club" />
-
-
-
-  
-  <h2 class="year">2015</h2>
-
-<article class="page-header" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-  
-<h2 class="post-title" itemprop="name headline"><a href="/blog/2015/05/03/mysql-basics-1/" itemprop="url">Mysql基础</a></h2>
-<p class="meta text-muted">
-  
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-05-03T02:34:28+08:00"  data-updated="true" itemprop="datePublished dateCreated">2015-05-03</time>
-  
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/blog/categories/sql-mysql-postgresql/'>sql,mysql,postgresql</a>
+    <a class='category' href='/blog/categories/web-php/'>web,php</a>
   
 </span>
 
 
-</p>
-
-</article>
-
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.iyue.club/blog/2015/07/14/php-coding-style/" data-via="" data-counturl="http://blog.iyue.club/blog/2015/07/14/php-coding-style/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
 </div>
 
-      </div>
-      
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/blog/2015/06/23/migrate-a-discuz-site/" title="Previous Post: 迁移一个discuz站点">&laquo; 迁移一个discuz站点</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section class="panel panel-default">
+  <aside class="sidebar col-md-3">
+    
+      <section class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Recent Posts</h3>
   </div>
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/blog/2015/07/14/php-coding-style/">Php编码规范</a>
+    <a class="list-group-item active" href="/blog/2015/07/14/php-coding-style/">Php编码规范</a>
     
     <a class="list-group-item " href="/blog/2015/06/23/migrate-a-discuz-site/">迁移一个discuz站点</a>
     
@@ -337,8 +394,8 @@
   </div>
 </section>
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 

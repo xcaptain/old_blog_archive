@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux,php,web | Joey's Blog]]></title>
   <link href="http://blog.iyue.club/blog/categories/linux-php-web/atom.xml" rel="self"/>
   <link href="http://blog.iyue.club/"/>
-  <updated>2015-06-24T10:01:45+08:00</updated>
+  <updated>2015-07-14T18:28:22+08:00</updated>
   <id>http://blog.iyue.club/</id>
   <author>
     <name><![CDATA[joey]]></name>
@@ -34,6 +34,9 @@
 
 
 <p>部署完成之后调试了一下网站就跑起来了，但是还有很多要做的事，discuz的代码结构比较混乱，不好改动，而且原来他的网站语言设置是GBK的，涉及到编码问题又更加复杂了，反正直到周日晚上才把问题全部解决，目前就是陆陆续续做一些服务器的小性能调优。</p>
+
+<p>6月25日更新：
+这几天陆陆续续发现了一些bug，有样式错误的，有插件报错的，有缓存不能及时清的等等，突然感觉压力好大，工作日只能下班之后有时间做自己的事，端午节3天假2天加一晚上都折腾那个网站去了，本以为是没什么事了，没想到后续的问题更多更麻烦，早知道就不轻易答应人家了，而且以后坚决不再折腾discuz，继续折腾这个东西只会浪费我更多时间。</p>
 ]]></content>
   </entry>
   
