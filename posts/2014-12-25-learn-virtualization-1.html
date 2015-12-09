@@ -1,35 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>My Hakyll Blog - 第一次接触虚拟化</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
-    </head>
-    <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">My Hakyll Blog</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../about.html">About</a>
-                <a href="../contact.html">Contact</a>
-                <a href="../archive.html">Archive</a>
-            </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 第一次接触虚拟化</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../archive.html">Archives</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
         </div>
-
-        <div id="content">
-            <h1>第一次接触虚拟化</h1>
-
-            <div class="info">
-  Posted on December 25, 2014 
-</div>
-
-<div class="info">
-   Tags: <a href="../tags/virtualization.html">virtualization</a> 
-</div>
-<p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">第一次接触虚拟化</h2>
+      <p class="metadata">
+        <span class="date">December 25, 2014</span> - <span class="tags"><a href="../tags/virtualization.html">virtualization</a></span>
+      </p>
+    </header>
+    <p>之前在我的vps上部署了一个<a href="http://f.joxy.org">php论坛</a>，但是后来这个框架的<a href="https://github.com/esotalk/">创始人</a>突然在github上宣布重构了<a href="https://github.com/esotalk/esoTalk">esotalk</a>的代码做了一个新的论坛框架<a href="https://github.com/flarum/core">Flarum</a>，搞得我很伤心，后来在<a href="https://en.wikipedia.org/wiki/Comparison_of_Internet_forum_software">wiki</a>上看到介绍discourse，它的作者<a href="http://www.codinghorror.com/blog">Jeff Atwood</a>说discourse是未来十年互联网论坛发展的趋势，那就搭一个来看看呗，反正以前也学过一阵子ruby on rails.</p>
 <p>按照原来部署<a href="http://f.joxy.org" class="uri">http://f.joxy.org</a>的模式打算先在本地部署好环境，然后提交到git server然后在线上拷贝一份代码到服务器上。但是看discourse的官方安装文档的时候发现默认是不支持在实体机上安装系统的，官方的文档只支持通过docker来部署discourse，docker久仰大名了但是就是没有用过，那好，就去见识见识呗。</p>
 <p>搜索了一下发现现在比较流行的服务器环境配置，服务器管理都是通过container也就是容器来进行的，最老土的服务器管理方式是通过ssh连接上服务器，然后手动编译或者包管理的形式安装软件。但是这种方式有很大的局限性，不易把所有的机器都统一配置，因为所有配置文件都要由手动编辑，然后手动更新，必然有的机器版本早，有的机器版本晚，对于管理一个服务器集群来说这是很不方便的。而且服务器多了软件更新就是一个麻烦事，不可能一台机器一台机器的去更新。</p>
 <p>目前找到了3个比较有名的虚拟化技术：</p>
@@ -54,11 +72,30 @@ dd: writing `/EMPTY': No space left on device
 <p>vagrant有一个共享目录就是宿主机的<code>Vagrantfile</code>所在的那个目录，也是虚拟机的<code>/vagrant</code>目录，这个目录双方都可以读写，想想真是有点小激动，要是以后我虚拟一个windows出来在上面跑一个qq，然后今天志军通过qq传给我的《刺杀金正恩》就不用在windows上跑着vlc服务器给我的arch笔记本供源了，不知道有没有人为vagrant做windows的box。</p>
 <p>不过vagrant毕竟是建立在virtualbox之上的，虽然说虚拟机占用宿主机的资源少了，但是还可以做得更好，要让机器资源更加充分的利用就得学习docker了，加油。</p>
 <p>另外今天和小青谈了一下学习方式的问题，他说我三天打鱼两天晒网没有持之以恒的做一件事，想想也确实是这样，从工作开始学习和使用php来干活，python是原来就会的所以也就没有怎么学，但是又学了几个礼拜ruby，学了几个礼拜haskell，工作在二次开发discuz，但是业余时间却自己搭了一个esotalk的论坛，现在又在研究虚拟化技术。虽然我一直认为身为一个互联网从业者就得把握住互联网的发展方向，不断学习最新的技术，我们生活在一个很开放的社会，最新最热的技术都是开源的有详细的文档，如果不去学习不去研究而是抱着把会的东西研究透彻的话，我有种辜负了这个时代的感觉。希望时代别辜负了我。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/eakron/variadic.me">GitHub</a>. Content reusable under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">CC BY-SA 3.0</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
 
-        </div>
-        <div id="footer">
-            Site proudly generated by
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-        </div>
-    </body>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-16166562-4']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </body>
 </html>

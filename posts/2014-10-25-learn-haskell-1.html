@@ -1,35 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>My Hakyll Blog - 学习haskell（一）</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
-    </head>
-    <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">My Hakyll Blog</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../about.html">About</a>
-                <a href="../contact.html">Contact</a>
-                <a href="../archive.html">Archive</a>
-            </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 学习haskell（一）</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../archive.html">Archives</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
         </div>
-
-        <div id="content">
-            <h1>学习haskell（一）</h1>
-
-            <div class="info">
-  Posted on October 25, 2014 
-</div>
-
-<div class="info">
-   Tags: <a href="../tags/haskell.html">haskell</a> 
-</div>
-<p>上周去国图还书的时候无意中看到了一本讲haskell的书，就顺手借回来了。想想第一次听说haskell这个名字还是从王垠的博客里看到的，那时候听他在博客里讲惰性求值，列表解析，lambda函数啊，什么的，根本听不懂。不过到现在为止，深入学习了python，对于列表解析，lambda函数还算是有一个浅浅的了解。而且已经学习过scheme和sml了，虽然都没有花太多时间去学习它们，但是至少对函数式编程了解了一个大概。</p>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">学习haskell（一）</h2>
+      <p class="metadata">
+        <span class="date">October 25, 2014</span> - <span class="tags"><a href="../tags/haskell.html">haskell</a></span>
+      </p>
+    </header>
+    <p>上周去国图还书的时候无意中看到了一本讲haskell的书，就顺手借回来了。想想第一次听说haskell这个名字还是从王垠的博客里看到的，那时候听他在博客里讲惰性求值，列表解析，lambda函数啊，什么的，根本听不懂。不过到现在为止，深入学习了python，对于列表解析，lambda函数还算是有一个浅浅的了解。而且已经学习过scheme和sml了，虽然都没有花太多时间去学习它们，但是至少对函数式编程了解了一个大概。</p>
 <p>以我目前对于函数式编程的理解来说，主要就是一切都是函数，数据是函数，函数也是函数。一个变量只有一个值，不能通过赋值来改变一个变量的值，只能让它重新绑定到另外一个值，所以变量的状态不会改变，不会出现副作用。这些都是一些很粗浅的理解，毕竟没有正儿八经的研究过函数式编程。主要有一个原因就是现在用函数式语言来开发的项目不多，我们学习编程主要还是用来解决实际问题，如果这门语言现实中没什么人用，或者是没法用到，那么学习它的激情就不会太高，虽然说学习过之后可能会提升编程思维。目前我了解的比较有名的函数式语言开发的项目有emacs，这个是用elisp语言来开发的一个编辑器，很强大。texmacs，一个所见即所得的tex编辑器，用的是scheme开发的。guile，gnu世界中的一个lisp编译器，能把lisp代码编译为c语言代码。chicken scheme，又一个scheme的编译器，按照官网说的它编译机器码的效率也是很高的，而且好像第三方库也比较多。lisp族就这些了，而sml族就没有听说过什么大的项目，不得不说很令人沮丧。相比现在流行的c/c++,java,perl/python/php等语言，函数式语言处于一个很小众的地位。为什么这种语言这么强大但是却没什么发展呢？真是搞不懂。</p>
 <p>后面开始去搜索haskell的相关信息，发现在80年代的时候一伙科学家发现函数式语言类别太多了，各种lisp变种太多，都有自己的优点，于是这伙人就想要一统函数式语言的天下，他们组建了一个小团体来研究未来的函数式语言。不得不说，开发这事就是得有很多人参与，没什么人参与的项目肯定不会发展的太好，linux的发展是这样，python是这样，都是有一个很大的志愿者团体来维护的，而像freebsd和scheme这样的东西则是在各个很牛逼的大学小范围流传。</p>
 <p>haskell算是一个严格类型的语言，也就是说每个变量都有一个类型，数字和字符串之间不能直接操作。目前python和php代码写多了导致我不是很喜欢这个特性，每个变量都有一个类型，多麻烦，数字和字符串之间不能强制转换，不能比较，不能拼接，诸多不便。即使是scheme也不是强类型的，把一个数字添加到一个列表后面在scheme里面是很正常的。sml在这点和haskell差不多，不过sml比haskell更加严格，在定义函数的时候得写明函数接收哪些类型的参数。</p>
@@ -41,11 +59,30 @@
 <p>接下来就涉及到列表解析了，它对应数学里面一个很重要的概念–集合，<code>{x | x &lt; 10，x是正整数}</code>这是一个很简单的集合，在haskell里面就是<code>[1 .. 9]</code>。如果集合是<code>{x | x &lt; 10，x是偶数}</code>，在haskell里面就是<code>[x | x &lt;- [1 .. 9], x `mod` 2 == 0]</code>，这就是很简单的列表解析了。</p>
 <p>元组和列表差不多，不过限制比较松散，列表要求所有的元素都是同一个类型的，而元组没有这个限制<code>(1, 2, &quot;hello&quot;)</code>这样就建立了一个三个元素的元组，</p>
 <p>haskell是一门很有前景的语言，得好好学学，希望能够坚持每天学点haskell，每天积累一点新知识。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/eakron/variadic.me">GitHub</a>. Content reusable under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">CC BY-SA 3.0</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
 
-        </div>
-        <div id="footer">
-            Site proudly generated by
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-        </div>
-    </body>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-16166562-4']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </body>
 </html>

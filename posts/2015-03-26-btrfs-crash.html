@@ -1,35 +1,53 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>My Hakyll Blog - btrfs损坏之后的一系列麻烦</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
-    </head>
-    <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">My Hakyll Blog</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../about.html">About</a>
-                <a href="../contact.html">Contact</a>
-                <a href="../archive.html">Archive</a>
-            </div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - btrfs损坏之后的一系列麻烦</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../archive.html">Archives</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
         </div>
-
-        <div id="content">
-            <h1>btrfs损坏之后的一系列麻烦</h1>
-
-            <div class="info">
-  Posted on March 26, 2015 
-</div>
-
-<div class="info">
-   Tags: <a href="../tags/linux.html">linux</a> 
-</div>
-<p>上周六晚上玩电脑的时候忘记插上电源了，直接导致笔记本意外断电关机，本来这只是一件小事，重启电脑即可，个人电脑一般没有多大的磁盘IO，数据基本都是在内存中读写的，但是等我重启电脑的时候却发现没法进系统了，一直卡在fsck那步，然后就是一直提示出现多少个<code>block error</code>，心立刻亮了半截，我用的arch没有做备份，如果硬盘损坏，里面的重要文件就都没了。于是重启进入win8下载了一个system-rescue-cd打算进入livecd修复分区，进去之后执行<code>btrfs check --repair /dev/sda3</code>，倒是检查出了一个块错误，但是没有修复，尝试重启电脑，结果出现<code>bad super block, unknown fs</code>，似乎问题加重了，上网搜了一下superblock损坏的话要找备份的superblock来替换，但是我没有定时做文件系统备份，行不通，后来尝试给<code>btrfs check</code>加上<code>--init-scum</code>参数，重启之后一大堆错误，死心，对数据不报期望了。</p>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">btrfs损坏之后的一系列麻烦</h2>
+      <p class="metadata">
+        <span class="date">March 26, 2015</span> - <span class="tags"><a href="../tags/linux.html">linux</a></span>
+      </p>
+    </header>
+    <p>上周六晚上玩电脑的时候忘记插上电源了，直接导致笔记本意外断电关机，本来这只是一件小事，重启电脑即可，个人电脑一般没有多大的磁盘IO，数据基本都是在内存中读写的，但是等我重启电脑的时候却发现没法进系统了，一直卡在fsck那步，然后就是一直提示出现多少个<code>block error</code>，心立刻亮了半截，我用的arch没有做备份，如果硬盘损坏，里面的重要文件就都没了。于是重启进入win8下载了一个system-rescue-cd打算进入livecd修复分区，进去之后执行<code>btrfs check --repair /dev/sda3</code>，倒是检查出了一个块错误，但是没有修复，尝试重启电脑，结果出现<code>bad super block, unknown fs</code>，似乎问题加重了，上网搜了一下superblock损坏的话要找备份的superblock来替换，但是我没有定时做文件系统备份，行不通，后来尝试给<code>btrfs check</code>加上<code>--init-scum</code>参数，重启之后一大堆错误，死心，对数据不报期望了。</p>
 <p>上一个系统用了1年多没换，好不容易有一次机会折腾可不能放过，先尝试安装funtoo，和以前无数次一样，都是到最后驱动不了我的博通无线网卡，后面尝试sabayon这个桌面系统，自带了桌面肯定自带了所有驱动。尝试安装，这回小心了，把<code>/boot</code>单独放到一个ext2的分区中去了，然后/用的是xfs，毕竟SGI的技术还是非常可以的。安装之后果然不需要手动装驱动，这种傻瓜式操作我最喜欢了，gnome中总是配置不好fcitx，而且ghc编译的时候总是会报错，也是莫名其妙的问题，supervisor的配置都得自己手动写，一大堆反人类的事情真是头疼，被arch的KISS哲学熏陶得simple且stupid之后，实在是受不了gentoo的diy思想。用<code>btrfs restore /mnt/arch /mnt/arch_bak</code>备份大部分数据之后，继续重装arch。</p>
 <p>备份分区之后就多出了一个分区可以用来安装第三个系统，对于懒人来说肯定不愿意折腾文本安装界面，直接下载antergos的livecd开始图形化安装，一步一步做，选文件系统的时候还是不死心，不愿意放弃心爱的btrfs，又做死选了它。系统倒是很快就装好了，麻烦的地方是配置，不过默认的gnome3界面用得真心不习惯，所有应用窗口挤在一个桌面上，反复切换实在是太麻烦了。在安装fcitx输入法的时候不小心<code>systemctl stop dbus.service</code>，结果gnome桌面自动推出了，卡在一个黑乎乎的界面，对于一切操作都没有响应，强制关机之后发现又进不了硬盘了，满头黑线。</p>
 <p>反正这个新安装的系统没有什么数据，重装即可，这回发誓在也不用btrfs了，试试ext4这个根正苗红的linux传人，果然一切OK，有线无线网卡自动激活，电源管理自带，安装xmonad没问题，安装fcitx一切顺利，安装dmenu用来管理菜单，安装urxvt，复制之前的Xresources文件，安装fish，安装vim，安装emacs，安装supervisor，安装shadowsocks，安装proxychains，github上面拷贝spf13的vim配置，prelude的emacs配置，oh-my-fish，一切都是这么简单，几乎不需要自己做额外的配置。进入熟悉的xmonad界面之后内心久久不能平静，我就喜欢这种一份配置一直使用的wm。最大的遗憾就是没能找回原来用的rsa密钥对，也就是说我的服务器连接都得重新来一遍，password-store也不能用了，几十个密码没法导出来。</p>
@@ -41,11 +59,30 @@
 <li>配置文件非常重要，最好是保存在网上，之前仅仅star了一下prelude的配置导致后面很多本地的自定义都没有提交到自己的仓库，分区崩溃之后自己写的代码都没了。</li>
 <li>最后再赞美一下xmonad，这是我用过的最好的桌面了。</li>
 </ol>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/eakron/variadic.me">GitHub</a>. Content reusable under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">CC BY-SA 3.0</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
 
-        </div>
-        <div id="footer">
-            Site proudly generated by
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-        </div>
-    </body>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-16166562-4']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </body>
 </html>
