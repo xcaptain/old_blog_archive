@@ -41,6 +41,7 @@ main = hakyll $ do
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
             >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
             >>= relativizeUrls
@@ -76,6 +77,21 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
+    -- Render the 404 page, we don't relativize URLs here.
+    match "404.html" $ do
+        route idRoute
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+
+    -- Render RSS feed
+    create ["rss.xml"] $ do
+        route idRoute
+        compile $ do
+            loadAllSnapshots "posts/*" "content"
+                >>= fmap (take 10) . recentFirst
+                >>= renderAtom feedConfiguration feedCtx
+
+
 
 --------------------------------------------------------------------------------
 postCtx :: Context String
@@ -85,3 +101,19 @@ postCtx =
 
 postCtxWithTags :: Tags -> Context String
 postCtxWithTags tags = tagsField "tags" tags `mappend` postCtx
+
+
+feedCtx :: Context String
+feedCtx = mconcat
+    [ bodyField "description"
+    , defaultContext
+    ]
+
+feedConfiguration :: FeedConfiguration
+feedConfiguration = FeedConfiguration
+    { feedTitle       = "Joey's blog"
+    , feedDescription = "记录成长的点滴"
+    , feedAuthorName  = "Joey Xie"
+    , feedAuthorEmail = "joey.xf@gmail.com"
+    , feedRoot        = "http://blog.iyue.club"
+    }

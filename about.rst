@@ -1,17 +1,23 @@
 ---
 title: About
 ---
-Nullam imperdiet sodales orci vitae molestie. Nunc quam orci, pharetra a
-rhoncus vitae, eleifend id felis. Suspendisse potenti. Etiam vitae urna orci.
-Quisque pellentesque dignissim felis, egestas tempus urna luctus vitae. In hac
-habitasse platea dictumst. Morbi fringilla mattis odio, et mattis tellus
-accumsan vitae.
 
-1. Amamus Unicode 碁
-2. Interdum nex magna.
+后端开发工程师(php, python)
 
-Vivamus eget mauris sit amet nulla laoreet lobortis. Nulla in diam elementum
-risus convallis commodo. Cras vehicula varius dui vitae facilisis. Proin
-elementum libero eget leo aliquet quis euismod orci vestibulum. Duis rhoncus
-lorem consequat tellus vestibulum aliquam. Quisque orci orci, malesuada porta
-blandit et, interdum nec magna.
+编程语言爱好者(ruby, scheme, racket, haskell, ml, erlang, shell)
+
+linux爱好者(ubuntu, mint, opensuse, archlinux)
+
+emacs爱好者
+
+fish忠实用户
+
+tmux用户
+
+cmd爱好者
+
+vim轻度粉丝
+
+数学生(mathematica, julia, ipython, texmacs)
+
+伪文艺青年
