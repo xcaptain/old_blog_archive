@@ -10,13 +10,28 @@
     </author>
     <updated>2015-12-10T00:00:00Z</updated>
     <entry>
-    <title>博客迁移到hakyll上</title>
+    <title>博客从octopress迁移到hakyll</title>
     <link href="http://blog.iyue.club/posts/2015-12-10-switch-to-hakyll.html" />
     <id>http://blog.iyue.club/posts/2015-12-10-switch-to-hakyll.html</id>
     <published>2015-12-10T00:00:00Z</published>
     <updated>2015-12-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<h3 id="准备完全迁移到hakyll上面了">准备完全迁移到hakyll上面了</h3>
-<p>之前博客一直都是用octopress搭建的，然后托管在github-pages上面，虽然早就有换成hakyll的打算了，但是一直拖到现在才下定决心迁移，也是够久的了。 最重要的一点就是我是一个hacker，geeker，我喜欢自定义工具，我不想尝试别人做好的直接拿来用的工具。</p>]]></summary>
+<p>之前的博客是使用octopress搭建的，这个静态站点生成器最大的好处就是简单，不需要自己额外的hack，装好octopress，简单设置好之后就能使用，而且提交，部署都有 现成的工具，主题也有很多，所以一用就用了一年多。从7月份开始就有点厌倦octopress了，因为不喜欢这么傻瓜式的东西，咱们的目标是to be a geeker，当然不能一直 不进步。hakyll算是非常极客的一个工具了，haskell写的，使用pandoc处理文本，而且配置文件完全是haskell代码，想着能用这么geek的语言，玩这么geek的软件，就 非常激动。</p>
+<p>使用hakyll也非常简单，步骤是:</p>
+<ol style="list-style-type: decimal">
+<li><code>cabal install hakyll</code> 安装hakyll，这一步非常耗时，因为自己的笔记本CPU落伍了。</li>
+<li><code>hakyll-init blog</code> 会在当前目录下创建一个叫作blog的目录。</li>
+<li><code>cd blog</code> 进入这个目录，会发现有一系列文件，这是默认的博客站点。</li>
+<li><code>cabal build</code> 默认会build这个haskell站点，生成站点可执行文件。</li>
+<li><code>dist/build/site/site build</code> 会编译<code>posts/</code>下面的文件，生成html文件到<code>_site/posts/</code>下面。</li>
+<li><code>dist/build/site/site watch</code> 会开启一个web服务器，默认访问地址是http://127.0.0.1:4000/ 点击访问，然后就你发现默认的首页了。</li>
+<li>默认站点好了接下来就是迁移原博客的文章，从原来的git仓库中把所有的markdown文件复制到<code>posts/</code>下面。</li>
+<li>再次试着build整个站点，这时候可能会有点问题，我这里因为有的文章元数据中categories:熟悉为空报了几个错，改完就好了。</li>
+<li>配置博客站点，修改站点外观，添加rss和tag页，我用的是<a href="https://github.com/eakron/variadic.me">variadic</a>的配置，很简单，配置文件改动很小但是 却把我要的功能都实现了，真的很厉害。</li>
+<li>再次build，并且watch新的项目，顺利跑通了之后，但是看不到标签，很奇怪，原来老的文章是使用categories作为标签名的，现在使用tags了，自然要改。 <code>sed -i 's/categories\:/tags\:/g'</code> 一行sed命令，批量替换，真不错。</li>
+<li>博客在本地搭好了，并且预览过了，接下来就是部署到线上，还是用github-pages。那么我就需要2个分支，一个source分支用来存放静态站点的代码，包括站点 配置，原始markdown格式的博文，这样将来要换到别的机器上，直接clone source分支的代码下来build就行了。还有一个分支是master分支，这个分支存放build之后 的文件，也就是所有的静态文件，html, css, js, 图片等。因为我线上已经有一个博客站点了，所以只需要添加远程github仓库就行。 <code>cd blog</code>进入我的博客根目录，执行<code>git init .</code> 添加版本控制, <code>git add .</code>, <code>git commit -m 'first commit'</code>, <code>git checkout -b source</code>切换到 source分支，然后删掉master分支<code>git branch -d master</code>，因为代码只要保存在source，master只能放生成的静态文件。<code>git remote add origin git@github.com:xcaptain/xcaptain.github.io</code>添加我的远程仓库， 要注意编辑.gitignore文件，把_site, _tmp, _cache都忽略掉。然后是<code>git submodule add git@github.com:xcaptain/xcaptain.github.io.git _site/</code>把 线上的master分支作为我的一个模块，克隆到_site目录下。再执行一下<code>dist/build/site/site build</code>会生成新的静态文件写入_site/目录，当然那些老的文件不会被 删掉，比如说我之前的CNAME文件，favicon文件都还留着，这时候<code>cd _site/</code>然后再提交一下。本地所有的代码都干净之后就是推送部署了。在<code>blog/</code>目录下执行 <code>git push origin source</code>把当前分支推送到origin的source分支，然后再切换到<code>_site/</code>目录，执行<code>git push origin master</code>把生成的静态文件推送到线上的 master分支。访问<a href="http://blog.iyue.club" class="uri">http://blog.iyue.club</a>开测，真不错。</li>
+</ol>
+<p>虽然说没有了octopress那么多做好的功能，但是通过折腾hakyll学习到了很多知识，等以后优化这个部署流程的时候可以自己写脚本部署，省得总是自己多次写shell命令</p>]]></summary>
 </entry>
 <entry>
     <title>php使用rabbitmq队列处理数据推送</title>
@@ -82,41 +97,6 @@
 <p>6月25日更新： 这几天陆陆续续发现了一些bug，有样式错误的，有插件报错的，有缓存不能及时清的等等，突然感觉压力好大，工作日只能下班之后有时间做自己的事，端午节3天假2天加一晚上都折腾那个网站去了，本以为是没什么事了，没想到后续的问题更多更麻烦，早知道就不轻易答应人家了，而且以后坚决不再折腾discuz，继续折腾这个东西只会浪费我更多时间。</p>]]></summary>
 </entry>
 <entry>
-    <title>学习gulp</title>
-    <link href="http://blog.iyue.club/posts/2015-06-07-learn-gulp.html" />
-    <id>http://blog.iyue.club/posts/2015-06-07-learn-gulp.html</id>
-    <published>2015-06-07T00:00:00Z</published>
-    <updated>2015-06-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>学习使用gulp来进行前端开发</p>]]></summary>
-</entry>
-<entry>
-    <title>上powerline</title>
-    <link href="http://blog.iyue.club/posts/2015-06-03-use-powerline.html" />
-    <id>http://blog.iyue.club/posts/2015-06-03-use-powerline.html</id>
-    <published>2015-06-03T00:00:00Z</published>
-    <updated>2015-06-03T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>看到身边的同事好多都切换到zsh+powerline这样的组合了，总是在我面前炫耀操作git如何方便，用了很久一直没有更新<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a>之后，今晚总算是完全更新了一下配置，向更加高大上的方向进发。</p>
-<p>首先是安装<a href="https://github.com/oh-my-fish/oh-my-fish">oh-my-fish</a>，这步还是很简单的，有一键安装脚本执行。</p>
-<p>然后是安装<a href="https://github.com/powerline/powerline">powerline</a>，这是一个用python写的状态插件，以前我就在vim和emacs上用过，在我的urxvt上面还没有配置过，照着<a href="https://powerline.readthedocs.org/en/latest/">文档</a>简单配置了一下，也是很简单的，但是最后我发现我的urxvt终端模拟器没法使用默认的powerline字体，后来从<a href="https://github.com/powerline/fonts">这里</a>找到了几个字体补丁，把我的.Xresources文件修改一下之后就能使用powerline字体了，真是不错。</p>
-<p>现在使用的主题是<a href="https://github.com/oh-my-fish/theme-agnoster">agnoster</a>，功能和配色都挺符合我的胃口的，默认支持powerline，git的状态显示也很不错。</p>
-<p>顺便重新配置了一下tmux，以前多任务都是通过urxvt的新建tab来实现的，如果到了别的终端环境如何复用终端呢？还是使用tmux吧，而且也可以配置tmux使得它支持powerline，很不错的setup</p>]]></summary>
-</entry>
-<entry>
-    <title>学习rails</title>
-    <link href="http://blog.iyue.club/posts/2015-06-01-learn-rails.html" />
-    <id>http://blog.iyue.club/posts/2015-06-01-learn-rails.html</id>
-    <published>2015-06-01T00:00:00Z</published>
-    <updated>2015-06-01T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>学习rails，自己做一个简单的rails项目。</p>
-<ol style="list-style-type: decimal">
-<li><p><a href="https://github.com/plataformatec/devise">devise</a>验证权限</p></li>
-<li><p><a href="http://www.postgresql.org/">postgresql</a>来持久化数据</p></li>
-<li><p><a href="https://github.com/mperham/sidekiq">sidekiq</a>用来做队列</p></li>
-<li><p><a href="https://github.com/sj26/mailcatcher">mailcatcher</a>用来捕获测试环境发放的邮件</p></li>
-</ol>
-<p>每个功能都有对应的gem，web开发真是简化了很多。</p>]]></summary>
-</entry>
-<entry>
     <title>学习git</title>
     <link href="http://blog.iyue.club/posts/2015-06-01-learn-git.html" />
     <id>http://blog.iyue.club/posts/2015-06-01-learn-git.html</id>
@@ -154,6 +134,149 @@
 a = <span class="kw">new</span> <span class="kw">A</span><span class="ot">;</span>
 <span class="fu">echo</span> a-&gt;year<span class="ot">;</span></code></pre></div>
 <p>是getter的一种简单写法，挺不错的。</p>]]></summary>
+</entry>
+<entry>
+    <title>简单使用laravel</title>
+    <link href="http://blog.iyue.club/posts/2015-05-20-learn-laravel-1.html" />
+    <id>http://blog.iyue.club/posts/2015-05-20-learn-laravel-1.html</id>
+    <published>2015-05-20T00:00:00Z</published>
+    <updated>2015-05-20T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>去年的时候就留意过<a href="http://laravel.com">laravel</a>这个框架了，对于这种类似rails风格的框架很是有好感，但是一直缺少一个实战操作的机会，让我在个人项目上用laravel是不可能的，追求的就是geek，个人项目暂时不考虑php这门语言。</p>
+<p>公司有个简单的项目是做一个简单的统计后台，这个需求使用laravel就很简单了，可以省很多事。具体的代码我托管在<a href="https://github.com/xcaptain/simple-admin.git">github</a>了，想了一下主要的功能包括：</p>
+<ol style="list-style-type: decimal">
+<li>登录注册</li>
+<li>权限管理</li>
+<li>脚本自动化</li>
+<li>渲染页面</li>
+</ol>
+<p>登录注册好办，直接使用laravel自带的Auth库就行，自带的示例就内置了一个简单的登录注册页面。权限管理稍微有点麻烦，不过在github上搜了一下也找到好多个基于角色的权限控制的第三方库，我这里用的是<a href="http://github.com">entrust</a> 脚本自动化指的是后台的数据都来自脚本统计，所以必须要确保脚本能够正确的执行，使用laravel的schedule功能就很方便，可以在代码里面实现定时任务。渲染页面就更加简单了，简单的mvc模式，利用blade模板引擎可以写出很规范的模板。</p>
+<p>在这个简单项目中，前端使用的是google开发的<a href="http://materialcss.com">materialcss</a>，类似与<a href="http://getbootstrap.com">bootstrap</a>，也是基于网格的设计，很方便初学者使用。前端数据可视化用到的是百度的<a href="http://www.baidu.com/">echart</a>库。</p>
+<p>了解了基本的laravel就能很快上手了，比如说:</p>
+<p><code>php artisan make:controller ExampleController</code>可以创建一个控制器。</p>
+<p><code>php artisan make:model 'Models\Example'</code>可以创建一个模型，另外还会自动创建一个migrate，因为一个model总是对应着一张表的。</p>
+<p><code>php artisan make:console UpdateData --command=update:data</code>会创建一条命令，执行<code>php artisan list</code>就能看到这条命令的介绍，去<code>App\Console\Commands\</code>下面就能找到对应的类了，要实现什么功能往这个类里面加方法就行了。</p>
+<p><code>php artisan make:migration create_post_table</code>会自动在<code>database/migrations</code>目录下建立迁移文件，这个文件就是用来建表的，可以很方便的修改模式，而且还能记录开发过程中对表的修改。</p>
+<p><code>php artisan migrate</code>会自动查找迁移文件，执行有必要的改动。</p>
+<p><code>php artisan db:seed</code>可以自动给测试表填充内容，当然具体的实施得靠人来确定，框架是不可能知道要填入什么数据到哪张表的，对应的文件在<code>database/seeds/</code>下。</p>
+<p>剩下的一些都是比较简单的，比如使用<a href="">Carbon</a>来操作时间，使用<a href="">Request</a>来获得http参数，用query builder来构造查询，用Eloquent来提交/读取model。还有一个比较强大的是laravel的路由功能，但是目前用到的还比较简单。</p>
+<p>另外今天看到一篇文章，讲的是为什么laravel要放弃models目录，主要原因说的是对于现代web开发来说，MVC有点不够用了，除了model可以操作数据库，读写数据，但是对于别的业务，比如说发送邮件，请求第三方接口，记录日志等等，如果还是按照mvc来这些文件就不知道放哪里了，将决定权交给用户，真是很方便。</p>
+<p>未来要做的事情主要包括：</p>
+<ol style="list-style-type: decimal">
+<li>完善权限管理，目前只做了很简单的权限判断，还没有给admin帐号分配创建用户，创建角色的功能</li>
+<li>整理路由配置，目前只做了2个简单的功能，但是路由就有点混乱了，得把页面分得清晰，构造优雅的url规则</li>
+</ol>]]></summary>
+</entry>
+<entry>
+    <title>mysql基础</title>
+    <link href="http://blog.iyue.club/posts/2015-05-03-mysql-basics-1.html" />
+    <id>http://blog.iyue.club/posts/2015-05-03-mysql-basics-1.html</id>
+    <published>2015-05-03T00:00:00Z</published>
+    <updated>2015-05-03T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>五一第二天泡国图看了一下午关于sql的书，小有所获，才发现以前工作中用到的只是mysql中的一个很小的子集，该好好整理一下了基础知识了，当然对于很基本，已经用得很熟练的知识就不提了。</p>
+<h3 id="什么是sql语言">什么是sql语言</h3>
+<p>sql语言包括： DDL（数据定义语言）：创建数据库，创建表，创建视图，创建索引等。 DML（数据操作语言）：也就是增删改查操作。 DCL（数据控制语言）：COMMIT，ROLLBACK，GRANT等。</p>
+<h3 id="聚合查询">聚合查询</h3>
+<p>聚合查询指的是把一张表的内容分组，相关操作包括<code>count</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>avg</code>, <code>group by</code>, <code>having</code>，前面5个是聚合函数，从一大串结果中取出我们要的属性。 后面2个是分组的。<code>group by</code>的语法为:</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> &lt;col1&gt;, &lt;col2&gt;, &lt;col3&gt;
+    <span class="kw">from</span> &lt;table_name&gt;
+[<span class="kw">where</span> ...]
+<span class="kw">group</span> <span class="kw">by</span> &lt;col1&gt;, &lt;col2&gt;, &lt;col3&gt;
+[<span class="kw">having</span> ...]</code></pre></div>
+<p>有一条限制说的是select子句中的每一个字段都必须出现在group by的子句中，但是我在mysql和postgresql中执行的时候结果确不一样，pgsql有这个限制，而mysql则松散得多。在我看来必须得严格才行，不然在有1对多关系的表中，group by之后的结果可能会让人莫名其妙，难怪很多人都说postgresql比mysql要严谨。</p>
+<h3 id="事务">事务</h3>
+<p>事务指的是把一系列操作封装在一起来执行，要么同时执行这一些列操作，要么一个都不执行。这个以前工作也用到的不多，可能公司是以前写代码的人对于这个也不看中吧，基本上都是直接update，insert了。记得以前用python的<code>MySQLdb</code>的时候，如果有插入操作必须手动调用一下commit方法才能把数据写进数据库，那时候还不理解，感觉多了一步操作实在是太麻烦了，现在看来把所有操作都看作事务来执行，手动提交事务对于数据来说还是很安全的。</p>
+<p>事务有4个特性：（ACID）</p>
+<ol style="list-style-type: decimal">
+<li>原子性（Atomic）：事务是一个整体。</li>
+<li>一致性（Consistency）：每个操作都必须满足对应列的约束条件。</li>
+<li>隔离性（Isolation）：没一个事务中的数据对另一个事务都是不可见的，在提交操作之前，数据不在表里面。</li>
+<li>持久性（Duration）：每个事务完成之后会有日志记录，方便从日志恢复数据。</li>
+</ol>
+<p>创建事务：</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">start</span> | <span class="kw">begin</span> <span class="kw">transaction</span>
+sql1;
+sql2;
+...
+<span class="kw">commit</span></code></pre></div>
+<p>现在仔细想想原来看过好多同时更新多张表的代码没有走事务，那些业务真是太危险了，一张表的结构出错可能就导致整个业务逻辑崩溃。</p>
+<h3 id="视图">视图</h3>
+<p>视图类似与一张表，但是区别是表里面存放着数据，但是视图里面没有数据。可以用</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">create</span> <span class="kw">view</span> &lt;视图名&gt; [&lt;col1&gt;, &lt;col2&gt;]
+<span class="kw">as</span>
+<span class="kw">select</span> &lt;col1&gt;, &lt;col2&gt; ...
+    <span class="kw">from</span>
+&lt;表名&gt;</code></pre></div>
+<p>来创建一个视图。视图主要是为调用很频繁的sql做的，省得每次都得写一大段sql，视图还可以层叠，也就是cascade，不过这功能又太偏了，单用view就已经很少了。不过不知道在view中执行查询有没有比直接在表中查询快，如果仅仅是为了sql简洁就发明视图这个概念出来那也太浪费了吧。</p>
+<p>视图是子查询的基础，子查询可以看作是一个视图。</p>
+<h3 id="表的集合操作">表的集合操作</h3>
+<p>表在关系代数中其实就是集合，所以可以交集，并集，查集。</p>
+<h3 id="表连结">表连结</h3>
+<p>以前大学的时候学离散数学，数据库原理都讲了关系代数，但是才刚刚毕业一年就几乎忘光了，到目前只知道内联接外联接，连用形式化语言来描述连接都做不到，实在是辜负大学四年了，不过现在做应用开发，基本的理论知识看起来又有点鸡肋。</p>
+<p>连接分为内联接，外联接。 inner join &lt;=&gt; join left outer join &lt;=&gt; left join right outer join &lt;=&gt; right join 尽量避免直接写outer join，这样会使语义模糊。</p>
+<h3 id="基本查询惯例">基本查询惯例</h3>
+<ol style="list-style-type: decimal">
+<li>建表的时候用<code>primary key(id)</code>来创建主键，以前我都是喜欢写在一个列的限制性约束条件后面。</li>
+<li>在表明不相等关系的时候使用<code>&lt;&gt;</code>而不是<code>!=</code>，前者才是标准写法。</li>
+<li><code>char</code>类型是按照字典顺序来排序的，一直以来我都以为是按照ascii的顺序来排的。</li>
+<li>在建表的时候尽量避免使用NULL这个变量，因为在查询中空值比较不好处理，不好比较大小，不好做运算，不好count，我也不打算去研究NULL在各种情况下的意义。判断一个字段是否为NULL用<code>IS NULL</code>来判断。</li>
+</ol>]]></summary>
+</entry>
+<entry>
+    <title>一个简单的元编程的例子</title>
+    <link href="http://blog.iyue.club/posts/2015-04-17-php-meta-programming-1.html" />
+    <id>http://blog.iyue.club/posts/2015-04-17-php-meta-programming-1.html</id>
+    <published>2015-04-17T00:00:00Z</published>
+    <updated>2015-04-17T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>去年在学习ruby的时候就看到了很多元编程的例子，用一个方法来生成多个类似的方法，避免制造重复的代码，ruby用的是method_missing来实现的。</p>
+<p>今天工作遇到一个小问题，需要写一个简单的脚本来统计某个时间段用户的发帖信息，需求很简单要实现也很简单。最初的设计见下面：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> UpdateUserRank {
+<span class="kw">public</span> <span class="kw">function</span> <span class="fu">__construct</span><span class="ot">()</span> {}
+<span class="kw">public</span> <span class="kw">function</span> getDayRank<span class="ot">(</span><span class="kw">$num</span><span class="ot">)</span> {}
+<span class="kw">public</span> <span class="kw">function</span> getMonthRank<span class="ot">(</span><span class="kw">$num</span><span class="ot">)</span> {}
+<span class="kw">public</span> <span class="kw">function</span> getAllRank<span class="ot">(</span><span class="kw">$num</span><span class="ot">)</span> {}
+
+<span class="kw">public</span> <span class="kw">function</span> setDayRank<span class="ot">()</span> {}
+<span class="kw">public</span> <span class="kw">function</span> setMonthRank<span class="ot">()</span> {}
+<span class="kw">public</span> <span class="kw">function</span> setAllRank<span class="ot">()</span> {}
+}</code></pre></div>
+<p>需要写3个get方法，3个set方法，这种形式实在是太不方便维护了，每个函数的功能类似，而且函数名也类似，有没有什么办法能够不要写这么多函数呢？利用php的<code>__call</code>方法可以很简单的实现</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> UpdateUserRank {
+<span class="kw">public</span> <span class="kw">function</span> <span class="fu">__construct</span><span class="ot">()</span> {
+    <span class="kw">$this</span>-&gt;getMethods = <span class="fu">array</span><span class="ot">(</span><span class="st">&#39;getDayRank&#39;</span><span class="ot">,</span> <span class="st">&#39;getMonthRank&#39;</span><span class="ot">,</span> <span class="st">&#39;getAllRank&#39;</span><span class="ot">);</span>
+    <span class="kw">$this</span>-&gt;setMethods = <span class="fu">array</span><span class="ot">(</span><span class="st">&#39;setDayRank&#39;</span><span class="ot">,</span> <span class="st">&#39;setMonthRank&#39;</span><span class="ot">,</span> <span class="st">&#39;setAllRank&#39;</span><span class="ot">);</span>
+}
+<span class="kw">public</span> <span class="kw">function</span> <span class="fu">__call</span><span class="ot">(</span><span class="kw">$name</span><span class="ot">,</span> <span class="kw">$args</span><span class="ot">)</span> {
+    <span class="kw">if</span><span class="ot">(</span><span class="fu">in_array</span><span class="ot">(</span><span class="kw">$name</span><span class="ot">,</span> <span class="kw">$this</span>-&gt;getMethods<span class="ot">))</span> {
+        <span class="kw">$num</span> = <span class="kw">$args</span><span class="ot">[</span><span class="dv">0</span><span class="ot">];</span>
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;redis-&gt;zrevrange<span class="ot">(</span><span class="kw">$this</span>-&gt;_key<span class="ot">(</span><span class="kw">$name</span><span class="ot">),</span> <span class="dv">0</span><span class="ot">,</span> <span class="kw">$num</span><span class="ot">,</span> <span class="kw">true</span><span class="ot">);</span>
+    } <span class="kw">elseif</span><span class="ot">(</span><span class="fu">in_array</span><span class="ot">(</span><span class="kw">$name</span><span class="ot">,</span> <span class="kw">$this</span>-&gt;setMethods<span class="ot">))</span> {
+        <span class="kw">$nowtime</span> = <span class="fu">time</span><span class="ot">();</span>
+        <span class="kw">if</span><span class="ot">(</span><span class="kw">$name</span> == <span class="st">&#39;setDayRank&#39;</span><span class="ot">)</span> {
+            <span class="kw">$ago</span> = <span class="kw">$nowtime</span> - <span class="dv">24</span> * <span class="dv">3600</span><span class="ot">;</span>
+            <span class="kw">$key</span> = <span class="st">&#39;getDayRank&#39;</span><span class="ot">;</span>
+        } <span class="kw">elseif</span><span class="ot">(</span><span class="kw">$name</span> == <span class="st">&#39;setMonthRank&#39;</span><span class="ot">)</span> {
+            <span class="kw">$ago</span> = <span class="kw">$nowtime</span> - <span class="dv">24</span> * <span class="dv">3600</span> * <span class="dv">30</span><span class="ot">;</span>
+            <span class="kw">$key</span> = <span class="st">&#39;getMonthRank&#39;</span><span class="ot">;</span>
+        } <span class="kw">else</span> {
+            <span class="kw">$ago</span> = <span class="dv">0</span><span class="ot">;</span>
+            <span class="kw">$key</span> = <span class="st">&#39;getAllRank&#39;</span><span class="ot">;</span>
+        }
+        <span class="kw">$sql</span> = <span class="st">&quot;select authorid, count(authorid) as threadnum from dz_forum_thread where dateline between </span><span class="kw">$ago</span><span class="st"> and </span><span class="kw">$nowtime</span><span class="st"> group by authorid&quot;</span><span class="ot">;</span>
+        <span class="kw">$sth</span> = <span class="kw">$this</span>-&gt;<span class="kw">pdo</span>-&gt;prepare<span class="ot">(</span><span class="kw">$sql</span><span class="ot">);</span>
+        <span class="kw">$sth</span>-&gt;execute<span class="ot">();</span>
+        <span class="kw">while</span><span class="ot">(</span><span class="kw">$row</span> = <span class="kw">$sth</span>-&gt;fetch<span class="ot">(</span><span class="kw">PDO</span>::<span class="kw">FETCH_ASSOC</span><span class="ot">))</span> {
+            <span class="kw">$authorid</span> = <span class="kw">$row</span><span class="ot">[</span><span class="st">&#39;authorid&#39;</span><span class="ot">];</span>
+            <span class="kw">$threadnum</span> = <span class="kw">$row</span><span class="ot">[</span><span class="st">&#39;threadnum&#39;</span><span class="ot">];</span>
+            <span class="kw">$this</span>-&gt;redis-&gt;zAdd<span class="ot">(</span><span class="kw">$this</span>-&gt;_key<span class="ot">(</span><span class="kw">$key</span><span class="ot">),</span> <span class="kw">$threadnum</span><span class="ot">,</span> <span class="kw">$authorid</span><span class="ot">);</span>
+        }
+    } <span class="kw">else</span> {
+        <span class="fu">echo</span> <span class="st">&quot;不合法的方法: &quot;</span> . <span class="kw">$name</span> . <span class="st">&quot;</span><span class="kw">\n</span><span class="st">&quot;</span><span class="ot">;</span>
+        <span class="fu">exit</span><span class="ot">(</span><span class="dv">1</span><span class="ot">);</span>
+    }
+}
+}</code></pre></div>
+<p>调用一个类里面的方法时，如果在当前类没有找到这个方法就会逐层往父类查找，直到找到对应的方法，但是如果这个类或者是父类定义了<code>__call</code>方法，则能自动处理找不到的方法，接受2个参数，第一个是函数名，第二个是函数名传过来的参数，是一个数组。基本上可以说<code>__call</code>实现了<code>method not defined</code>这个异常的处理吧。</p>
+<p>因为php的正则没有ruby简单，所以在这里我先定义了2个数组，对象调用的方法必须在这2个数组中才能执行，否则就报不合法的方法，然后退出，也许还可以通过<code>__get</code>, <code>__set</code>来实现，谁知道呢？</p>]]></summary>
 </entry>
 
 </feed>
