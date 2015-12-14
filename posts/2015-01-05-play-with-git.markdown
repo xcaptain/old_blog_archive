@@ -3,7 +3,7 @@ layout: post
 title: 玩弄git
 date: 2015-01-05 22:54:11 +0000
 comments: true
-tags: git docker vagrant
+tags: git, docker, vagrant
 ---
 
 经过元旦几天的努力，论坛正式上线了[http://f.joxy.org](http://f.joxy.org)，目前仅仅是使用了[discourse](https://github.com/discourse/discourse)的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。

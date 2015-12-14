@@ -3,7 +3,7 @@ layout: post
 title: 部署邮件服务
 date: 2015-01-03 00:43:43 +0000
 comments: true
-tags: linux web
+tags: linux, web
 ---
 
 今天打算研究一下搭建自己的mail server用来收发邮件，不过后来发现在自己服务器上部署邮件服务太麻烦了，没有那么高性能的服务器，而且额外开放的服务可能会被黑客利用，那么就采用第三方的邮件服务吧。

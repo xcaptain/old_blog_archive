@@ -3,7 +3,7 @@ layout: post
 title: 调试shadowsocks
 date: 2015-01-03 23:16:58 +0000
 comments: true
-tags: linux web
+tags: linux, web
 ---
 
 昨天把在东京的虚拟机搬到加州去了，感觉这次搬家还是很值得的，传输稳定了很多，原来在东京的时候看个youtube经常卡，但是现在看youtube很流畅，不过每月多给2美元，让我帐号里的钱花得更快了。原来装的是freebsd10的系统，现在我把系统换成ubuntu14.04了，因为bsd的软件还是比较老的，而ubuntu就新多了，而且docker和container等都得在linux才能跑。
