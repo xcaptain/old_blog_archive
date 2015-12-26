@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 创建自己的composer包</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">创建自己的composer包</h2>
+      <p class="metadata">
+        <span class="date">December 15, 2015</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+      </p>
+    </header>
+    <p>最近在做服务重构与模块化的工作，以前的老代码太多复制粘贴的东西，需要整理一下，否则 将来项目就不可维护了</p>
+<p>涉及到的服务有：</p>
+<ol style="list-style-type: decimal">
+<li>api 主要的接口模块，大部分客户端交互由这个接口完成</li>
+<li>image 图片服务，图片上传下载压缩等操作</li>
+<li>chat 聊天服务</li>
+</ol>
+<p>目前的架构就是这样的，等将来还可以继续拆分api接口，独立出更多小功能</p>
+<p>在api和image中都会用到mq来与后端的java服务通信，原来的实现是自己封装的mq，同一个功能实现2次， 现在抽象出mq功能作为一个公共库，让这2个服务都能调用同一个mq的库。</p>
+<p>主要涉及到的工具是composer，真是一个强大的武器。</p>
+<ol style="list-style-type: decimal">
+<li>创建库</li>
+</ol>
+<ul>
+<li>新建一个目录，<code>mkdir mqpackage</code></li>
+<li>切换进目录执行<code>composer init</code> 根据提示内容创建<code>composer.json</code>文件</li>
+<li>按照要求自己编辑这个json文件，比较重要的就是require和autoload这块</li>
+<li>然后就是敲代码了</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>提交package到git仓库</li>
+</ol>
+<ul>
+<li>因为是在公司里开发的项目，不敢放到github上，推送到内部的git服务器了</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>配置项目的composer.json文件，引入刚刚新增的库</li>
+</ol>
+<ul>
+<li>在项目的<code>composer.json</code>文件中的require区域加上上面的包要注意的就是要在repository里面加上这个包的地址，因为默认会从packgist上面拉</li>
+</ul>
+<ol start="4" style="list-style-type: decimal">
+<li>重新测试一遍原有的2个服务的功能</li>
+</ol>
+<ul>
+<li>创建单元测试写测试是很重要的，尤其是写这种公共库，我也是对照这phpunit的文档一点一点的敲测试用例的</li>
+</ul>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
