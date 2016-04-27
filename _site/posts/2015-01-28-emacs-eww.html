@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 学习emacs-eww</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">学习emacs-eww</h2>
+      <p class="metadata">
+        <span class="date">January 28, 2015</span> - <span class="tags"><a href="../tags/emacs.html">emacs</a></span>
+      </p>
+    </header>
+    <p>最近一段时间比较无聊，<a href="http://www.iyue.club" class="uri">http://www.iyue.club</a>一直没有去维护了，目标不明确，不知道奋斗目标。 而且工作的事比较无聊，不断的重构原有的代码，想着怎么尽量把代码写短写优化，接触的新东西也不多，这么久没有学习新东西都让我感到深深的危机感了。</p>
+<p>目前的计划还是慢慢来学习ruby on rails，所以空闲时间就做点有意思的事情了。现在来记录一下eww的用法，以后便于查阅，熟能生巧。eww的文档可以通过emacs自身来查看，现在就来总结一下emacs文档里对eww的介绍，我都是通过<code>C-h r</code>来打开emacs自带的info然后查找到eww的章节然后开始看的。</p>
+<p>基本操作：</p>
+<ol style="list-style-type: decimal">
+<li><code>M-x eww RET</code>输入url或者关键字，就可以打开url或者用内建的dockdockgo来搜索。</li>
+<li><code>l</code> 回到上一个页面，回退。</li>
+<li><code>r</code> 回到下一个页面，回进。</li>
+<li><code>d</code> 下载当前链接，默认保存在<code>~/Downloads</code>，这个快捷键对于下载图片很方便。</li>
+<li><code>g</code> 刷新当前页面。</li>
+<li><code>w</code> 复制当前url到剪切板。</li>
+<li><code>H</code> 查看历史记录。</li>
+<li><code>b</code> 添加书签。</li>
+<li><code>B</code> 查看书签。</li>
+<li><code>&amp;</code> 调用外部浏览器打开当前url。</li>
+<li><code>v</code> 查看当前页面源码，如果安装了html-mode就会用html-mode来渲染。</li>
+<li><code>C</code> 查看所有存在的cookie</li>
+</ol>
+<p>上面这些东西都可以查看文档得到，比较没有营养，还是学习新东西有意思。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - php的getter方法</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">php的getter方法</h2>
+      <p class="metadata">
+        <span class="date">May 23, 2015</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+      </p>
+    </header>
+    <p>这几天做统计后台频繁用到一个叫做<a href="http://carbon.nesbot.com/">Carbon</a>的日期库，用多了发现这个库的接口设计得非常方便，方法非常自然，稍微用几次就知道用法了。比如说好多方法都是静态方法，省去了频繁构造对象的开销。最方便的还是里面的getter方法，<code>$dt-&gt;year</code>就返回了本年，这个year很明显是一个静态方法，因为$dt不是new出来的对象，但是我们看起来就好像是直接访问一个类的属性一样。</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> <span class="kw">A</span> {
+    <span class="kw">public</span> <span class="kw">function</span> year<span class="ot">()</span> {
+        <span class="kw">return</span> <span class="dv">2015</span><span class="ot">;</span>
+    }
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">function</span> <span class="fu">__get</span><span class="ot">(</span><span class="kw">$var</span><span class="ot">)</span> {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;<span class="kw">$var</span><span class="ot">();</span>
+    }
+}
+a = <span class="kw">new</span> <span class="kw">A</span><span class="ot">;</span>
+<span class="fu">echo</span> a-&gt;year<span class="ot">;</span></code></pre></div>
+<p>是getter的一种简单写法，挺不错的。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

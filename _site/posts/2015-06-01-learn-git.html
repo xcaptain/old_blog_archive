@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 学习git</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">学习git</h2>
+      <p class="metadata">
+        <span class="date">June  1, 2015</span> - <span class="tags"><a href="../tags/git.html">git</a>, <a href="../tags/linux.html">linux</a></span>
+      </p>
+    </header>
+    <p>继续学习git，把统计后台的代码从内部git服务器迁移到github上面了，用的是自己的私有仓库。</p>
+<p>目前主要用到的功能有：</p>
+<ol style="list-style-type: decimal">
+<li><p>添加远程仓库 <code>git remote add origin https://github.com/xcaptain/simple-admin.git</code> 这样就能添加一个远程仓库了，等以后把代码push上去就行了，访问远程仓库的方式有2种，一种是ssh，一种是https，上面这种是https的仓库，也是github默认的访问仓库的方法， 因为ssh太不安全了，对于我们这种生活在封锁国度的老百姓来说，很容易被屏蔽。</p></li>
+<li><p>往远程仓库里面提交代码 <code>git commit -m 'some comment'</code> 这样就可以提交代码，返回一个hash值标识的版本号，提交之后代码版本还在本地，如果要多方合作开发，那就得把改动保存到一个大家都可以访问的远程仓库， <code>git push origin master</code>，把本地版本推送到远程的master分支。</p></li>
+<li><p>建立本地分支 <code>git branch dev</code> 这样就在本地创建了一个叫做dev的分支，并且会自动切换到这个dev分支，如果建了好多个分支，想查看当前自己在哪个分支，直接<code>git branch</code>就会列出，当然如果使用的是zsh或者是 fish这样的shell，一般都会有git的插件，可以显示当前所在分支。</p></li>
+<li><p>把本地分支添加到远程仓库 <code>git checkout dev</code>切换到dev分支，然后<code>git push origin dev</code>就可以把代码推送到远程仓库的dev分支了。</p></li>
+<li><p>打标签 <code>git tag</code>可以查看当前版本库的所有标签信息，如果要添加标签，那么就是<code>git tag -a v0.2 -m '优化流量统计代码，统一风格'</code>添加一个叫作v0.2的标签，并且提交。如果要把 本地的标签信息提交到远程仓库，那么就是<code>git push --tags</code>，然后去github上查看就能看到对应的v0.2版本了。</p></li>
+<li><p>查看提交版本 <code>git log</code>, <code>git diff</code>，我一般喜欢用emacs的magit插件来查看diff和版本。</p></li>
+<li><p>把未暂存的文件回滚 <code>git checkout file1</code>，这样会从版本库中检出上一个提交的file1的版本，覆盖掉当前这个未提交的版本。</p></li>
+<li><p>回滚版本库 这个操作目前做得比较少，都是<code>git reset --hard HEAD~1</code>，来回到上一个版本的，对于这个操作还不熟悉，至少svn回滚已经是很熟悉的了。</p></li>
+</ol>
+<p>git的功能很强大也很复杂，但是一定是要掌握的，这样才能成为一个合格的项目经理，以后慢慢积累，有新的体会再来更新这篇博客。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
