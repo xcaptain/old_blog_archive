@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 我的chromebook</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">我的chromebook</h2>
+      <p class="metadata">
+        <span class="date">June  5, 2016</span> - <span class="tags"><a href="../tags/linux.html">linux</a>, <a href="../tags/emacs.html">emacs</a>, <a href="../tags/chromebook.html">chromebook</a></span>
+      </p>
+    </header>
+    <p>今年2月份附近入手的一台二手chromebook，到目前为止已经用了很长一段时间了，打算写一篇文章来总结一下使用体验。</p>
+<p>先来看看我的屏幕截图，目前看起来还觉得挺geek的 <img src="../images/chromebook-htop.png" alt="终端" /></p>
+<p>终端模拟器是用的chrome的一个插件叫做crosh window</p>
+<p>linux虚拟机是用crouton安装的ubuntu16.04 core,可惜是共享内核的，所以ubuntu的内核也是3.10.18的</p>
+<p>一些命令行的软件包括： 1. fish，我最喜欢的shell 2. tmux，终端复用软件，可以开启多个会话 3. ss，用来上网的，开启之后chromebook也可以共享上网，真不错 4. emacs，我最爱的编辑器，之前crouton遇到最大的问题是中文输入法，有了emacs之后我可以用自带的pyim来输入中文了，没必要使用chromebook自带的输入法 5. 开发环境，nginx, mysql, php7, python, rvm等等之类的</p>
+<p>遇到的问题：</p>
+<ol style="list-style-type: decimal">
+<li><p>cpu性能太差劲，我的lenovon21用的cpu是intel n2840的，一款低功耗的arm架构双核cpu，在打开多个浏览器标签时资源使用率总是达到100%，我在编译代码的时候就更费劲了，昨晚编译hakyll花了1个多小时，用公司的thinkpad t440s编译大概10分钟能搞定</p></li>
+<li><p>显示器太渣，现在应该没有720p的笔记本显示器了吧，看着觉得很糢糊</p></li>
+<li><p>机身是黑色塑料的，看起来很廉价，没有chromebook pixel和mac book pro那么银光闪闪</p></li>
+<li><p>还是cpu太差劲，平时敲代码打字都有明显的卡顿了</p></li>
+</ol>
+<p>总结一下：</p>
+<ol style="list-style-type: decimal">
+<li><p>google是一家非常伟大的公司，感谢他们发明了chromebook这么伟大的产品</p></li>
+<li><p>联想是美帝良心企业，在国内就买不到chromebook，国内的thinkpad价格也要比美帝高出一截</p></li>
+<li><p>n21还算是一款性价比非常好的本子，就是性能有点弱，17年再换一个16年出的二手chromebook玩玩</p></li>
+</ol>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
