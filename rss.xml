@@ -8,8 +8,26 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-06-05T00:00:00Z</updated>
+    <updated>2016-06-06T00:00:00Z</updated>
     <entry>
+    <title>点赞收藏存储设计</title>
+    <link href="http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html" />
+    <id>http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html</id>
+    <published>2016-06-06T00:00:00Z</published>
+    <updated>2016-06-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>前段时间给自己的业余项目写代码的时候遇到了一个问题就是如何设计点赞，评论，收藏的存储结构。这3个功能是社交软件必不可少的组成部份，但是设计起来确一点都不简单。</p>
+<p>先说评论</p>
+<p>之前在7k做zeze社区的时候我就发现了评论的复杂性，最大的问题是数据量大，以前做社区的时候一个楼层下可以有几万个评论，一个贴子可以有几百个楼层，一个论坛可以有好多贴子，数据增长很快。但是现在app的评论系统都比较简洁，不会像网页那么复杂，如果不支持嵌套回复的话，那就简单多了，表结构设计如下：</p>
+<pre class="plain"><code>id: 评论id，自增主键
+item_id: 被评论项目的id，int
+author_id: 作者id，int
+comment: 评论内容，varchar</code></pre>
+<p>这个模型没有解决大数据扩展的问题，但是已经算是非常简洁了，对于未来分表的设想是在中间加一张索引表，映射某一个范围的item_id,某个author_id的所有评论到一个分片中，这样按父id，和发布人id来索引评论的时候都简单。</p>
+<p>其次是点赞</p>
+<p>这个问题的难度在于用户可以反复点击，所以要求接口响应足够快，占用资源足够少，不然同时多个用户连续点赞取消赞就会给服务器带来很大的压力了。最初我的设想是把点赞设计为用户和帖子的一个关系，如果用户点赞了某一个帖子，用户就和这个贴子有关系，如果取消了点赞这个关系就断开了。那么点赞表就是一个多对多的关系表了，按帖子和用户查询都可以很快。这种实现的坏处是如果用户反复点击赞接口时，都会有一个查询去判断用户是否赞过这个帖子了，因为所有的产品都是要求用户 不能反复点赞同一个帖子，需要程序自己来维护点赞操作的幂等性，也就是每次写库之前先find一次，如果有就更新时间，如果没有就插入。毫无疑问这个接口会很慢而且占用很多资源，所以要找另一个更优化的方案。我后来决定使用redis的zset来存储点赞信息，以帖子id作为key，以点赞用户的uid作为value，score是点赞时间，由于集合自身是不允许出现重复的value的，所以每次都可以直接zadd把点赞用户更新进去，不需要人工维护数据唯一，太省事了，不过如果还要按用户索引被点赞过的帖子，那就得再新增一个key，以uid作为key，以帖子id作为value，不能支持多字段查询是redis的设计导致的，不过更新2个redis的key可比更新1行mysql快多了，最好使用multi保证原子操作。</p>
+<p>取消赞，收藏，取消收藏我都是用同样的方式做的，只要确保redis服务器不挂，不丢数据就行。</p>]]></summary>
+</entry>
+<entry>
     <title>我的chromebook</title>
     <link href="http://blog.iyue.club/posts/2016-06-05-my-chromebook.html" />
     <id>http://blog.iyue.club/posts/2016-06-05-my-chromebook.html</id>
@@ -219,25 +237,6 @@
 <li><p>回滚版本库 这个操作目前做得比较少，都是<code>git reset --hard HEAD~1</code>，来回到上一个版本的，对于这个操作还不熟悉，至少svn回滚已经是很熟悉的了。</p></li>
 </ol>
 <p>git的功能很强大也很复杂，但是一定是要掌握的，这样才能成为一个合格的项目经理，以后慢慢积累，有新的体会再来更新这篇博客。</p>]]></summary>
-</entry>
-<entry>
-    <title>php的getter方法</title>
-    <link href="http://blog.iyue.club/posts/2015-05-23-php-getter.html" />
-    <id>http://blog.iyue.club/posts/2015-05-23-php-getter.html</id>
-    <published>2015-05-23T00:00:00Z</published>
-    <updated>2015-05-23T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>这几天做统计后台频繁用到一个叫做<a href="http://carbon.nesbot.com/">Carbon</a>的日期库，用多了发现这个库的接口设计得非常方便，方法非常自然，稍微用几次就知道用法了。比如说好多方法都是静态方法，省去了频繁构造对象的开销。最方便的还是里面的getter方法，<code>$dt-&gt;year</code>就返回了本年，这个year很明显是一个静态方法，因为$dt不是new出来的对象，但是我们看起来就好像是直接访问一个类的属性一样。</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> <span class="kw">A</span> {
-    <span class="kw">public</span> <span class="kw">function</span> year<span class="ot">()</span> {
-        <span class="kw">return</span> <span class="dv">2015</span><span class="ot">;</span>
-    }
-    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">function</span> <span class="fu">__get</span><span class="ot">(</span><span class="kw">$var</span><span class="ot">)</span> {
-        <span class="kw">return</span> <span class="kw">$this</span>-&gt;<span class="kw">$var</span><span class="ot">();</span>
-    }
-}
-a = <span class="kw">new</span> <span class="kw">A</span><span class="ot">;</span>
-<span class="fu">echo</span> a-&gt;year<span class="ot">;</span></code></pre></div>
-<p>是getter的一种简单写法，挺不错的。</p>]]></summary>
 </entry>
 
 </feed>
