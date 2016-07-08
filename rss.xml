@@ -8,14 +8,106 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-04-27T00:00:00Z</updated>
+    <updated>2016-06-06T00:00:00Z</updated>
     <entry>
-    <title>emacs连接irc频道</title>
-    <link href="http://blog.iyue.club/posts/2016-04-27-emacs-connect-irc.html" />
-    <id>http://blog.iyue.club/posts/2016-04-27-emacs-connect-irc.html</id>
-    <published>2016-04-27T00:00:00Z</published>
-    <updated>2016-04-27T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h3 id="包括2种方式连接普通irc和连接gitter.im">包括2种方式，连接普通irc，和连接gitter.im</h3>]]></summary>
+    <title>点赞收藏存储设计</title>
+    <link href="http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html" />
+    <id>http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html</id>
+    <published>2016-06-06T00:00:00Z</published>
+    <updated>2016-06-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>前段时间给自己的业余项目写代码的时候遇到了一个问题就是如何设计点赞，评论，收藏的存储结构。这3个功能是社交软件必不可少的组成部份，但是设计起来确一点都不简单。</p>
+<p>先说评论</p>
+<p>之前在7k做zeze社区的时候我就发现了评论的复杂性，最大的问题是数据量大，以前做社区的时候一个楼层下可以有几万个评论，一个贴子可以有几百个楼层，一个论坛可以有好多贴子，数据增长很快。但是现在app的评论系统都比较简洁，不会像网页那么复杂，如果不支持嵌套回复的话，那就简单多了，表结构设计如下：</p>
+<pre class="plain"><code>id: 评论id，自增主键
+item_id: 被评论项目的id，int
+author_id: 作者id，int
+comment: 评论内容，varchar</code></pre>
+<p>这个模型没有解决大数据扩展的问题，但是已经算是非常简洁了，对于未来分表的设想是在中间加一张索引表，映射某一个范围的item_id,某个author_id的所有评论到一个分片中，这样按父id，和发布人id来索引评论的时候都简单。</p>
+<p>其次是点赞</p>
+<p>这个问题的难度在于用户可以反复点击，所以要求接口响应足够快，占用资源足够少，不然同时多个用户连续点赞取消赞就会给服务器带来很大的压力了。最初我的设想是把点赞设计为用户和帖子的一个关系，如果用户点赞了某一个帖子，用户就和这个贴子有关系，如果取消了点赞这个关系就断开了。那么点赞表就是一个多对多的关系表了，按帖子和用户查询都可以很快。这种实现的坏处是如果用户反复点击赞接口时，都会有一个查询去判断用户是否赞过这个帖子了，因为所有的产品都是要求用户 不能反复点赞同一个帖子，需要程序自己来维护点赞操作的幂等性，也就是每次写库之前先find一次，如果有就更新时间，如果没有就插入。毫无疑问这个接口会很慢而且占用很多资源，所以要找另一个更优化的方案。我后来决定使用redis的zset来存储点赞信息，以帖子id作为key，以点赞用户的uid作为value，score是点赞时间，由于集合自身是不允许出现重复的value的，所以每次都可以直接zadd把点赞用户更新进去，不需要人工维护数据唯一，太省事了，不过如果还要按用户索引被点赞过的帖子，那就得再新增一个key，以uid作为key，以帖子id作为value，不能支持多字段查询是redis的设计导致的，不过更新2个redis的key可比更新1行mysql快多了，最好使用multi保证原子操作。</p>
+<p>取消赞，收藏，取消收藏我都是用同样的方式做的，只要确保redis服务器不挂，不丢数据就行。</p>]]></summary>
+</entry>
+<entry>
+    <title>我的chromebook</title>
+    <link href="http://blog.iyue.club/posts/2016-06-05-my-chromebook.html" />
+    <id>http://blog.iyue.club/posts/2016-06-05-my-chromebook.html</id>
+    <published>2016-06-05T00:00:00Z</published>
+    <updated>2016-06-05T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>今年2月份附近入手的一台二手chromebook，到目前为止已经用了很长一段时间了，打算写一篇文章来总结一下使用体验。</p>
+<p>先来看看我的屏幕截图，目前看起来还觉得挺geek的 <img src="../images/chromebook-htop.png" alt="终端" /></p>
+<p>终端模拟器是用的chrome的一个插件叫做crosh window</p>
+<p>linux虚拟机是用crouton安装的ubuntu16.04 core,可惜是共享内核的，所以ubuntu的内核也是3.10.18的</p>
+<p>一些命令行的软件包括： 1. fish，我最喜欢的shell 2. tmux，终端复用软件，可以开启多个会话 3. ss，用来上网的，开启之后chromebook也可以共享上网，真不错 4. emacs，我最爱的编辑器，之前crouton遇到最大的问题是中文输入法，有了emacs之后我可以用自带的pyim来输入中文了，没必要使用chromebook自带的输入法 5. 开发环境，nginx, mysql, php7, python, rvm等等之类的</p>
+<p>遇到的问题：</p>
+<ol style="list-style-type: decimal">
+<li><p>cpu性能太差劲，我的lenovon21用的cpu是intel n2840的，一款低功耗的arm架构双核cpu，在打开多个浏览器标签时资源使用率总是达到100%，我在编译代码的时候就更费劲了，昨晚编译hakyll花了1个多小时，用公司的thinkpad t440s编译大概10分钟能搞定</p></li>
+<li><p>显示器太渣，现在应该没有720p的笔记本显示器了吧，看着觉得很糢糊</p></li>
+<li><p>机身是黑色塑料的，看起来很廉价，没有chromebook pixel和mac book pro那么银光闪闪</p></li>
+<li><p>还是cpu太差劲，平时敲代码打字都有明显的卡顿了</p></li>
+</ol>
+<p>总结一下：</p>
+<ol style="list-style-type: decimal">
+<li><p>google是一家非常伟大的公司，感谢他们发明了chromebook这么伟大的产品</p></li>
+<li><p>联想是美帝良心企业，在国内就买不到chromebook，国内的thinkpad价格也要比美帝高出一截</p></li>
+<li><p>n21还算是一款性价比非常好的本子，就是性能有点弱，17年再换一个16年出的二手chromebook玩玩</p></li>
+</ol>]]></summary>
+</entry>
+<entry>
+    <title>php使用guzzle发送http请求</title>
+    <link href="http://blog.iyue.club/posts/2016-04-28-php-guzzle-http.html" />
+    <id>http://blog.iyue.club/posts/2016-04-28-php-guzzle-http.html</id>
+    <published>2016-04-28T00:00:00Z</published>
+    <updated>2016-04-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>最原始的发送http请求的方法是调用原生的curl扩展，这就需要在php.ini中允许 <code>extension=curl.so</code>，使用方式也很简单，下面是几个发送基本GET, POST请求的例子。</p>
+<ol style="list-style-type: decimal">
+<li><p>curl 发送GET请求:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">)</span> <span class="ot">;</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_HEADER</span><span class="ot">,</span> <span class="dv">0</span><span class="ot">);</span> <span class="co">// 不返回http头</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">)</span> <span class="ot">;</span> <span class="co">// 按字符串返回而不是输出到屏幕上</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_TIMEOUT</span><span class="ot">,</span> <span class="dv">3</span><span class="ot">);</span> <span class="co">// 设置连接超时时间</span>
+<span class="kw">$result</span> = <span class="fu">curl_exec</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">)</span> <span class="ot">;</span>
+<span class="fu">curl_close</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
+<li><p>curl 发送POST请求:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POST</span><span class="ot">,</span><span class="dv">1</span><span class="ot">);</span> <span class="co">// 表明是发送post请求</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="kw">$jsonString</span><span class="ot">);</span> <span class="co">// post的数据，支持json字符串和http_build_query之后的参数</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="kw">true</span><span class="ot">);</span>
+<span class="kw">$result</span> = <span class="fu">curl_exec</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">)</span> <span class="ot">;</span>
+<span class="fu">curl_close</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
+<li><p>curl上传文件: 也是一个post请求，例子见下面</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POST</span><span class="ot">,</span><span class="dv">1</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="ot">[</span>
+<span class="st">&#39;file&#39;</span> =&gt; <span class="kw">new</span> \CurlFile<span class="ot">(</span><span class="kw">$fullFileName</span><span class="ot">,</span> <span class="kw">$mimeType</span><span class="ot">,</span> <span class="kw">$filename</span><span class="ot">);</span>
+<span class="st">&#39;param1&#39;</span> =&gt; <span class="kw">$value1</span><span class="ot">,</span>
+<span class="st">&#39;param2&#39;</span> =&gt; <span class="kw">$value2</span><span class="ot">,</span>
+<span class="ot">]);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_HTTPHEADER</span><span class="ot">,</span> <span class="ot">[</span>
+<span class="st">&#39;Content-type: multipart/form-data;&#39;</span>
+<span class="ot">]);</span>
+<span class="kw">$result</span>=<span class="fu">curl_exec</span> <span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span>
+<span class="fu">curl_close</span> <span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
+</ol>
+<p>第一次使用curl上传文件的时候还遇到了一点小问题，网上大部分写法都是用<code>'file' =&gt; @&quot;$fullFileName&quot;</code>来加载文件的，我用这种写法反复测试了很久都不能获取到真是的文件，后来才发现<a href="https://secure.php.net/manual/en/class.curlfile.php">CurlFile</a>这个类，按照文档下面评论的说法，php发送multipart请求的时候会有问题，解决办法有2个，1：允许<code>CURLOPT_SAFE_UPLOAD</code>， 2：使用CURLFile 而不是 “@”</p>
+<p>我偏好的http请求库 <a href="https://github.com/guzzle/guzzle">guzzle</a> 作为一个应用开发者而言，更多的封装往往是更好的，curl太原始了，接口太少，选项太多，如果要发一个post请求，得先去查一下如何设置数据，如何设置请求头，返回值说明什么意思，如何表示20x, 30x, 40x, 50x的状态码，但是作为一个http库选择就更少了，我们只要知道如何创建请求对象，如何发送请求，响应对象，异常是什么就够了，知道了这几个概念如果要发送一种特殊请求只需要修改请求对象就行了</p>
+<p>请求对象:</p>
+<p>一个简单的GET请求的对象</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$request</span> = <span class="kw">new</span> \GuzzleHttp\Psr7\Request<span class="ot">(</span><span class="st">&#39;GET&#39;</span><span class="ot">,</span> <span class="st">&#39;http://httpbin.org&#39;</span><span class="ot">);</span></code></pre></div>
+<p>一个简单的POST请求的对象</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$request</span> = <span class="kw">new</span> \GuzzleHttp\Psr7\Request<span class="ot">(</span><span class="st">&#39;POST&#39;</span><span class="ot">,</span> <span class="st">&#39;http://httpbin.org&#39;</span><span class="ot">);</span></code></pre></div>
+<p>一个简单的发送multipart/form-data请求上传文件的例子</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$r</span> = <span class="kw">$client</span>-&gt;request<span class="ot">(</span><span class="st">&#39;POST&#39;</span><span class="ot">,</span> <span class="kw">$url</span><span class="ot">,</span> <span class="ot">[</span>
+    <span class="st">&#39;multipart&#39;</span> =&gt; <span class="ot">[</span>
+        <span class="ot">[</span><span class="st">&#39;name&#39;</span> =&gt; <span class="st">&#39;file&#39;</span><span class="ot">,</span><span class="st">&#39;contents&#39;</span> =&gt; <span class="kw">$body</span><span class="ot">],</span>
+        <span class="ot">[</span><span class="st">&#39;name&#39;</span> =&gt; <span class="st">&#39;user_id&#39;</span><span class="ot">,</span> <span class="st">&#39;contents&#39;</span> =&gt; <span class="dv">1</span><span class="ot">],</span>
+    <span class="ot">],</span>
+<span class="ot">]);</span></code></pre></div>
+<p>发送请求： 首先要有一个客户端对象，这个对象能够发送一个请求对象，然后获得响应</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span> = <span class="kw">new</span> Client<span class="ot">();</span></code></pre></div>
+<p>发送请求：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span>-&gt;send<span class="ot">(</span><span class="kw">$request</span><span class="ot">);</span></code></pre></div>
+<p>在调试curl发请求的时候还发现了一个小技巧抓包，用<code>nc -l -p 8888</code>开启一个监听端口，然后把curl的请求地址设置为<code>http://127.0.0.1:8888</code>，这样就能抓到php发送http请求的数据了，总之guzzle比curl强大太多，能用就多用。</p>]]></summary>
 </entry>
 <entry>
     <title>从prelude切换到spacemacs</title>
@@ -182,45 +274,6 @@
 </ol>
 <p>部署完成之后调试了一下网站就跑起来了，但是还有很多要做的事，discuz的代码结构比较混乱，不好改动，而且原来他的网站语言设置是GBK的，涉及到编码问题又更加复杂了，反正直到周日晚上才把问题全部解决，目前就是陆陆续续做一些服务器的小性能调优。</p>
 <p>6月25日更新： 这几天陆陆续续发现了一些bug，有样式错误的，有插件报错的，有缓存不能及时清的等等，突然感觉压力好大，工作日只能下班之后有时间做自己的事，端午节3天假2天加一晚上都折腾那个网站去了，本以为是没什么事了，没想到后续的问题更多更麻烦，早知道就不轻易答应人家了，而且以后坚决不再折腾discuz，继续折腾这个东西只会浪费我更多时间。</p>]]></summary>
-</entry>
-<entry>
-    <title>学习git</title>
-    <link href="http://blog.iyue.club/posts/2015-06-01-learn-git.html" />
-    <id>http://blog.iyue.club/posts/2015-06-01-learn-git.html</id>
-    <published>2015-06-01T00:00:00Z</published>
-    <updated>2015-06-01T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>继续学习git，把统计后台的代码从内部git服务器迁移到github上面了，用的是自己的私有仓库。</p>
-<p>目前主要用到的功能有：</p>
-<ol style="list-style-type: decimal">
-<li><p>添加远程仓库 <code>git remote add origin https://github.com/xcaptain/simple-admin.git</code> 这样就能添加一个远程仓库了，等以后把代码push上去就行了，访问远程仓库的方式有2种，一种是ssh，一种是https，上面这种是https的仓库，也是github默认的访问仓库的方法， 因为ssh太不安全了，对于我们这种生活在封锁国度的老百姓来说，很容易被屏蔽。</p></li>
-<li><p>往远程仓库里面提交代码 <code>git commit -m 'some comment'</code> 这样就可以提交代码，返回一个hash值标识的版本号，提交之后代码版本还在本地，如果要多方合作开发，那就得把改动保存到一个大家都可以访问的远程仓库， <code>git push origin master</code>，把本地版本推送到远程的master分支。</p></li>
-<li><p>建立本地分支 <code>git branch dev</code> 这样就在本地创建了一个叫做dev的分支，并且会自动切换到这个dev分支，如果建了好多个分支，想查看当前自己在哪个分支，直接<code>git branch</code>就会列出，当然如果使用的是zsh或者是 fish这样的shell，一般都会有git的插件，可以显示当前所在分支。</p></li>
-<li><p>把本地分支添加到远程仓库 <code>git checkout dev</code>切换到dev分支，然后<code>git push origin dev</code>就可以把代码推送到远程仓库的dev分支了。</p></li>
-<li><p>打标签 <code>git tag</code>可以查看当前版本库的所有标签信息，如果要添加标签，那么就是<code>git tag -a v0.2 -m '优化流量统计代码，统一风格'</code>添加一个叫作v0.2的标签，并且提交。如果要把 本地的标签信息提交到远程仓库，那么就是<code>git push --tags</code>，然后去github上查看就能看到对应的v0.2版本了。</p></li>
-<li><p>查看提交版本 <code>git log</code>, <code>git diff</code>，我一般喜欢用emacs的magit插件来查看diff和版本。</p></li>
-<li><p>把未暂存的文件回滚 <code>git checkout file1</code>，这样会从版本库中检出上一个提交的file1的版本，覆盖掉当前这个未提交的版本。</p></li>
-<li><p>回滚版本库 这个操作目前做得比较少，都是<code>git reset --hard HEAD~1</code>，来回到上一个版本的，对于这个操作还不熟悉，至少svn回滚已经是很熟悉的了。</p></li>
-</ol>
-<p>git的功能很强大也很复杂，但是一定是要掌握的，这样才能成为一个合格的项目经理，以后慢慢积累，有新的体会再来更新这篇博客。</p>]]></summary>
-</entry>
-<entry>
-    <title>php的getter方法</title>
-    <link href="http://blog.iyue.club/posts/2015-05-23-php-getter.html" />
-    <id>http://blog.iyue.club/posts/2015-05-23-php-getter.html</id>
-    <published>2015-05-23T00:00:00Z</published>
-    <updated>2015-05-23T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>这几天做统计后台频繁用到一个叫做<a href="http://carbon.nesbot.com/">Carbon</a>的日期库，用多了发现这个库的接口设计得非常方便，方法非常自然，稍微用几次就知道用法了。比如说好多方法都是静态方法，省去了频繁构造对象的开销。最方便的还是里面的getter方法，<code>$dt-&gt;year</code>就返回了本年，这个year很明显是一个静态方法，因为$dt不是new出来的对象，但是我们看起来就好像是直接访问一个类的属性一样。</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> <span class="kw">A</span> {
-    <span class="kw">public</span> <span class="kw">function</span> year<span class="ot">()</span> {
-        <span class="kw">return</span> <span class="dv">2015</span><span class="ot">;</span>
-    }
-    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">function</span> <span class="fu">__get</span><span class="ot">(</span><span class="kw">$var</span><span class="ot">)</span> {
-        <span class="kw">return</span> <span class="kw">$this</span>-&gt;<span class="kw">$var</span><span class="ot">();</span>
-    }
-}
-a = <span class="kw">new</span> <span class="kw">A</span><span class="ot">;</span>
-<span class="fu">echo</span> a-&gt;year<span class="ot">;</span></code></pre></div>
-<p>是getter的一种简单写法，挺不错的。</p>]]></summary>
 </entry>
 
 </feed>

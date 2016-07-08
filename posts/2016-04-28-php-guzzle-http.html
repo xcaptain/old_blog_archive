@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - php使用guzzle发送http请求</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">php使用guzzle发送http请求</h2>
+      <p class="metadata">
+        <span class="date">April 28, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+      </p>
+    </header>
+    <p>最原始的发送http请求的方法是调用原生的curl扩展，这就需要在php.ini中允许 <code>extension=curl.so</code>，使用方式也很简单，下面是几个发送基本GET, POST请求的例子。</p>
+<ol style="list-style-type: decimal">
+<li><p>curl 发送GET请求:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">)</span> <span class="ot">;</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_HEADER</span><span class="ot">,</span> <span class="dv">0</span><span class="ot">);</span> <span class="co">// 不返回http头</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">)</span> <span class="ot">;</span> <span class="co">// 按字符串返回而不是输出到屏幕上</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_TIMEOUT</span><span class="ot">,</span> <span class="dv">3</span><span class="ot">);</span> <span class="co">// 设置连接超时时间</span>
+<span class="kw">$result</span> = <span class="fu">curl_exec</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">)</span> <span class="ot">;</span>
+<span class="fu">curl_close</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
+<li><p>curl 发送POST请求:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POST</span><span class="ot">,</span><span class="dv">1</span><span class="ot">);</span> <span class="co">// 表明是发送post请求</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="kw">$jsonString</span><span class="ot">);</span> <span class="co">// post的数据，支持json字符串和http_build_query之后的参数</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="kw">true</span><span class="ot">);</span>
+<span class="kw">$result</span> = <span class="fu">curl_exec</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">)</span> <span class="ot">;</span>
+<span class="fu">curl_close</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
+<li><p>curl上传文件: 也是一个post请求，例子见下面</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POST</span><span class="ot">,</span><span class="dv">1</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="ot">[</span>
+<span class="st">'file'</span> =&gt; <span class="kw">new</span> \CurlFile<span class="ot">(</span><span class="kw">$fullFileName</span><span class="ot">,</span> <span class="kw">$mimeType</span><span class="ot">,</span> <span class="kw">$filename</span><span class="ot">);</span>
+<span class="st">'param1'</span> =&gt; <span class="kw">$value1</span><span class="ot">,</span>
+<span class="st">'param2'</span> =&gt; <span class="kw">$value2</span><span class="ot">,</span>
+<span class="ot">]);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">);</span>
+<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_HTTPHEADER</span><span class="ot">,</span> <span class="ot">[</span>
+<span class="st">'Content-type: multipart/form-data;'</span>
+<span class="ot">]);</span>
+<span class="kw">$result</span>=<span class="fu">curl_exec</span> <span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span>
+<span class="fu">curl_close</span> <span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
+</ol>
+<p>第一次使用curl上传文件的时候还遇到了一点小问题，网上大部分写法都是用<code>'file' =&gt; @&quot;$fullFileName&quot;</code>来加载文件的，我用这种写法反复测试了很久都不能获取到真是的文件，后来才发现<a href="https://secure.php.net/manual/en/class.curlfile.php">CurlFile</a>这个类，按照文档下面评论的说法，php发送multipart请求的时候会有问题，解决办法有2个，1：允许<code>CURLOPT_SAFE_UPLOAD</code>， 2：使用CURLFile 而不是 “@”</p>
+<p>我偏好的http请求库 <a href="https://github.com/guzzle/guzzle">guzzle</a> 作为一个应用开发者而言，更多的封装往往是更好的，curl太原始了，接口太少，选项太多，如果要发一个post请求，得先去查一下如何设置数据，如何设置请求头，返回值说明什么意思，如何表示20x, 30x, 40x, 50x的状态码，但是作为一个http库选择就更少了，我们只要知道如何创建请求对象，如何发送请求，响应对象，异常是什么就够了，知道了这几个概念如果要发送一种特殊请求只需要修改请求对象就行了</p>
+<p>请求对象:</p>
+<p>一个简单的GET请求的对象</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$request</span> = <span class="kw">new</span> \GuzzleHttp\Psr7\Request<span class="ot">(</span><span class="st">'GET'</span><span class="ot">,</span> <span class="st">'http://httpbin.org'</span><span class="ot">);</span></code></pre></div>
+<p>一个简单的POST请求的对象</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$request</span> = <span class="kw">new</span> \GuzzleHttp\Psr7\Request<span class="ot">(</span><span class="st">'POST'</span><span class="ot">,</span> <span class="st">'http://httpbin.org'</span><span class="ot">);</span></code></pre></div>
+<p>一个简单的发送multipart/form-data请求上传文件的例子</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$r</span> = <span class="kw">$client</span>-&gt;request<span class="ot">(</span><span class="st">'POST'</span><span class="ot">,</span> <span class="kw">$url</span><span class="ot">,</span> <span class="ot">[</span>
+    <span class="st">'multipart'</span> =&gt; <span class="ot">[</span>
+        <span class="ot">[</span><span class="st">'name'</span> =&gt; <span class="st">'file'</span><span class="ot">,</span><span class="st">'contents'</span> =&gt; <span class="kw">$body</span><span class="ot">],</span>
+        <span class="ot">[</span><span class="st">'name'</span> =&gt; <span class="st">'user_id'</span><span class="ot">,</span> <span class="st">'contents'</span> =&gt; <span class="dv">1</span><span class="ot">],</span>
+    <span class="ot">],</span>
+<span class="ot">]);</span></code></pre></div>
+<p>发送请求： 首先要有一个客户端对象，这个对象能够发送一个请求对象，然后获得响应</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span> = <span class="kw">new</span> Client<span class="ot">();</span></code></pre></div>
+<p>发送请求：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span>-&gt;send<span class="ot">(</span><span class="kw">$request</span><span class="ot">);</span></code></pre></div>
+<p>在调试curl发请求的时候还发现了一个小技巧抓包，用<code>nc -l -p 8888</code>开启一个监听端口，然后把curl的请求地址设置为<code>http://127.0.0.1:8888</code>，这样就能抓到php发送http请求的数据了，总之guzzle比curl强大太多，能用就多用。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
