@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - eloquent高级用法</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">eloquent高级用法</h2>
+      <p class="metadata">
+        <span class="date">July 18, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a>, <a href="../tags/web.html">web</a></span>
+      </p>
+    </header>
+    <p>常见的关系模型有1对1,1对多，多对多，在一个model中描述这些关系用<code>hasOne</code>, <code>hasMany</code>, <code>belongsTo</code>, <code>belongsToMany</code>就够了，但是最近遇到一个新的情况要用到更复杂的关系模型，就是polymorphic relation，按照<a href="https://en.wikipedia.org/wiki/Polymorphic_association">wikipedia</a> 的说法，这个概念是在ORM开发中提出来的，<a href="https://laravel.com/docs/5.2/eloquent-relationships">laravel</a>和<a href="http://guides.rubyonrails.org/association_basics.html">rails</a>中很好的实现了多态关系。第一次遇到这个问题的时候没见过，以为能用自带的1对多关系解决，但是在经过一番尝试之后没法优雅的解决我的问题，所以求助了<a href="https://stackoverflow.com/questions/38433109/eloquent-belongsto-determine-relation-table">stackoverflow</a>，很快就有网友提示了正确的思路，避免我在错误的道路上越走越远，今天就来总结一下我的问题吧。</p>
+<p>在项目中有一些资源表，如games, news, songs，现在的需求要针对每种资源都能进行评论，所以还有一个评论表，但是在评论表中得区分是对什么资源的评论，所以用<code>commentable_id</code>和<code>commentable_type</code>来标识一个可被评论项实体。最初建表的时候是打算用<code>item_id</code>和<code>item_type</code>这2个字段的，但是按照laravel和ruby官方文档的建议，我还是改为以<code>able</code>结尾的单词了，我的model见下:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> Game
+{
+    <span class="kw">public</span> <span class="kw">function</span> comment<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphMany<span class="ot">(</span>Comment::<span class="kw">class</span><span class="ot">,</span> <span class="st">'commentable'</span><span class="ot">);</span>
+    }
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> News
+{
+    <span class="kw">public</span> <span class="kw">function</span> comment<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphMany<span class="ot">(</span>Comment::<span class="kw">class</span><span class="ot">,</span> <span class="st">'commentable'</span><span class="ot">);</span>
+    }
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> Comment
+{
+    <span class="kw">public</span> <span class="kw">function</span> commentable<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphTo<span class="ot">();</span>
+    }
+    <span class="kw">public</span> <span class="kw">function</span> getCommentableTypeAttribute<span class="ot">(</span><span class="kw">$value</span><span class="ot">)</span>
+    {
+        <span class="kw">if</span> <span class="ot">(</span><span class="kw">$value</span> == <span class="st">'App\Model\Game'</span><span class="ot">)</span> {
+            <span class="kw">return</span> <span class="st">'game'</span><span class="ot">;</span>
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="st">'news'</span><span class="ot">;</span>
+        }
+    }
+    <span class="kw">public</span> <span class="kw">function</span> author<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;belongsTo<span class="ot">(</span>User::<span class="kw">class</span><span class="ot">,</span> <span class="st">'author_id'</span><span class="ot">);</span>
+    }
+}</code></pre></div>
+<p>在获取一个用户发布的所有评论时，可以使用</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$comments</span> = Comment::where<span class="ot">(</span><span class="st">'author_id'</span><span class="ot">,</span> <span class="st">'='</span><span class="ot">,</span> <span class="kw">$id</span><span class="ot">)</span>
+    -&gt;with<span class="ot">(</span><span class="st">'commentable'</span><span class="ot">)</span>
+    -&gt;paginate<span class="ot">();</span></code></pre></div>
+<p>通过打印这行的查询日志发现总共有4条查询语句:</p>
+<ol style="list-style-type: decimal">
+<li><p>查询用户的总评论数，分页时用到</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> <span class="fu">count</span>(*) <span class="kw">as</span> aggregate <span class="kw">from</span> `comments` <span class="kw">where</span> `author_id` = ?</code></pre></div></li>
+<li><p>查询评论本身的信息</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `comments` <span class="kw">where</span> `author_id` = ? <span class="kw">limit</span> <span class="dv">15</span> offset <span class="dv">0</span></code></pre></div></li>
+<li><p>查询发布评论的人的信息</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `users` <span class="kw">where</span> `users`.`id` <span class="kw">in</span> (?)</code></pre></div></li>
+<li><p>查询被评论物的详细信息</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `games` <span class="kw">where</span> `games`.`id` <span class="kw">in</span> (?) <span class="kw">and</span> `status` = ?</code></pre></div></li>
+</ol>
+<p>一行代码对应4条查询，使用eloquent的优点由此可见，省去了很多自己手写查询的精力。</p>
+<p>另一个查询这种数据模型的思路是关联查询，</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> c.id <span class="kw">as</span> comment_id, c.commentable_id, g.name <span class="kw">as</span> title <span class="kw">from</span> comments <span class="kw">as</span> c <span class="kw">left</span> <span class="kw">join</span> games <span class="kw">as</span> g <span class="kw">on</span> c.commentable_id=g.id <span class="kw">where</span> c.commentable_type=<span class="st">'App</span><span class="ch">\\</span><span class="st">Model</span><span class="ch">\\</span><span class="st">Game'</span> <span class="kw">union</span> <span class="kw">select</span> c.id <span class="kw">as</span> comment_id, c.commentable_id, n.title <span class="kw">as</span> title <span class="kw">from</span> comments <span class="kw">as</span> c <span class="kw">left</span> <span class="kw">join</span> news <span class="kw">as</span> n <span class="kw">on</span> c.commentable_id=n.id <span class="kw">where</span> c.commentable_type=<span class="st">'App</span><span class="ch">\\</span><span class="st">Model</span><span class="ch">\\</span><span class="st">News'</span>;</code></pre></div>
+<p>开始是打算动态选择如何管理资源表的，后来尝试之后发现只能用union合并2条查询的结果，手写查询还是不如eloquent优雅。</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

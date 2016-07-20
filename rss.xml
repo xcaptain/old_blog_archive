@@ -8,8 +8,79 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-06-06T00:00:00Z</updated>
+    <updated>2016-07-18T00:00:00Z</updated>
     <entry>
+    <title>eloquent高级用法</title>
+    <link href="http://blog.iyue.club/posts/2016-07-18-delve-into-eloquent.html" />
+    <id>http://blog.iyue.club/posts/2016-07-18-delve-into-eloquent.html</id>
+    <published>2016-07-18T00:00:00Z</published>
+    <updated>2016-07-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>常见的关系模型有1对1,1对多，多对多，在一个model中描述这些关系用<code>hasOne</code>, <code>hasMany</code>, <code>belongsTo</code>, <code>belongsToMany</code>就够了，但是最近遇到一个新的情况要用到更复杂的关系模型，就是polymorphic relation，按照<a href="https://en.wikipedia.org/wiki/Polymorphic_association">wikipedia</a> 的说法，这个概念是在ORM开发中提出来的，<a href="https://laravel.com/docs/5.2/eloquent-relationships">laravel</a>和<a href="http://guides.rubyonrails.org/association_basics.html">rails</a>中很好的实现了多态关系。第一次遇到这个问题的时候没见过，以为能用自带的1对多关系解决，但是在经过一番尝试之后没法优雅的解决我的问题，所以求助了<a href="https://stackoverflow.com/questions/38433109/eloquent-belongsto-determine-relation-table">stackoverflow</a>，很快就有网友提示了正确的思路，避免我在错误的道路上越走越远，今天就来总结一下我的问题吧。</p>
+<p>在项目中有一些资源表，如games, news, songs，现在的需求要针对每种资源都能进行评论，所以还有一个评论表，但是在评论表中得区分是对什么资源的评论，所以用<code>commentable_id</code>和<code>commentable_type</code>来标识一个可被评论项实体。最初建表的时候是打算用<code>item_id</code>和<code>item_type</code>这2个字段的，但是按照laravel和ruby官方文档的建议，我还是改为以<code>able</code>结尾的单词了，我的model见下:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> Game
+{
+    <span class="kw">public</span> <span class="kw">function</span> comment<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphMany<span class="ot">(</span>Comment::<span class="kw">class</span><span class="ot">,</span> <span class="st">&#39;commentable&#39;</span><span class="ot">);</span>
+    }
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> News
+{
+    <span class="kw">public</span> <span class="kw">function</span> comment<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphMany<span class="ot">(</span>Comment::<span class="kw">class</span><span class="ot">,</span> <span class="st">&#39;commentable&#39;</span><span class="ot">);</span>
+    }
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> Comment
+{
+    <span class="kw">public</span> <span class="kw">function</span> commentable<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphTo<span class="ot">();</span>
+    }
+    <span class="kw">public</span> <span class="kw">function</span> getCommentableTypeAttribute<span class="ot">(</span><span class="kw">$value</span><span class="ot">)</span>
+    {
+        <span class="kw">if</span> <span class="ot">(</span><span class="kw">$value</span> == <span class="st">&#39;App\Model\Game&#39;</span><span class="ot">)</span> {
+            <span class="kw">return</span> <span class="st">&#39;game&#39;</span><span class="ot">;</span>
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> <span class="st">&#39;news&#39;</span><span class="ot">;</span>
+        }
+    }
+    <span class="kw">public</span> <span class="kw">function</span> author<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="kw">$this</span>-&gt;belongsTo<span class="ot">(</span>User::<span class="kw">class</span><span class="ot">,</span> <span class="st">&#39;author_id&#39;</span><span class="ot">);</span>
+    }
+}</code></pre></div>
+<p>在获取一个用户发布的所有评论时，可以使用</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$comments</span> = Comment::where<span class="ot">(</span><span class="st">&#39;author_id&#39;</span><span class="ot">,</span> <span class="st">&#39;=&#39;</span><span class="ot">,</span> <span class="kw">$id</span><span class="ot">)</span>
+    -&gt;with<span class="ot">(</span><span class="st">&#39;commentable&#39;</span><span class="ot">)</span>
+    -&gt;paginate<span class="ot">();</span></code></pre></div>
+<p>通过打印这行的查询日志发现总共有4条查询语句:</p>
+<ol style="list-style-type: decimal">
+<li><p>查询用户的总评论数，分页时用到</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> <span class="fu">count</span>(*) <span class="kw">as</span> aggregate <span class="kw">from</span> `comments` <span class="kw">where</span> `author_id` = ?</code></pre></div></li>
+<li><p>查询评论本身的信息</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `comments` <span class="kw">where</span> `author_id` = ? <span class="kw">limit</span> <span class="dv">15</span> offset <span class="dv">0</span></code></pre></div></li>
+<li><p>查询发布评论的人的信息</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `users` <span class="kw">where</span> `users`.`id` <span class="kw">in</span> (?)</code></pre></div></li>
+<li><p>查询被评论物的详细信息</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `games` <span class="kw">where</span> `games`.`id` <span class="kw">in</span> (?) <span class="kw">and</span> `status` = ?</code></pre></div></li>
+</ol>
+<p>一行代码对应4条查询，使用eloquent的优点由此可见，省去了很多自己手写查询的精力。</p>
+<p>另一个查询这种数据模型的思路是关联查询，</p>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> c.id <span class="kw">as</span> comment_id, c.commentable_id, g.name <span class="kw">as</span> title <span class="kw">from</span> comments <span class="kw">as</span> c <span class="kw">left</span> <span class="kw">join</span> games <span class="kw">as</span> g <span class="kw">on</span> c.commentable_id=g.id <span class="kw">where</span> c.commentable_type=<span class="st">&#39;App</span><span class="ch">\\</span><span class="st">Model</span><span class="ch">\\</span><span class="st">Game&#39;</span> <span class="kw">union</span> <span class="kw">select</span> c.id <span class="kw">as</span> comment_id, c.commentable_id, n.title <span class="kw">as</span> title <span class="kw">from</span> comments <span class="kw">as</span> c <span class="kw">left</span> <span class="kw">join</span> news <span class="kw">as</span> n <span class="kw">on</span> c.commentable_id=n.id <span class="kw">where</span> c.commentable_type=<span class="st">&#39;App</span><span class="ch">\\</span><span class="st">Model</span><span class="ch">\\</span><span class="st">News&#39;</span>;</code></pre></div>
+<p>开始是打算动态选择如何管理资源表的，后来尝试之后发现只能用union合并2条查询的结果，手写查询还是不如eloquent优雅。</p>]]></summary>
+</entry>
+<entry>
+    <title>laravel密码生成与校验机制</title>
+    <link href="http://blog.iyue.club/posts/2016-07-08-laravel-password.html" />
+    <id>http://blog.iyue.club/posts/2016-07-08-laravel-password.html</id>
+    <published>2016-07-08T00:00:00Z</published>
+    <updated>2016-07-08T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>在irc上听到有人说他们的应用改了.env中的APP_KEY之后就无法登录了，太奇怪了，在本地测试了几个例子都没有复现，决定详细看看这块</p>
+<p>在注册的时候生成密码的密文，内置了一个叫做<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Foundation/helpers.php#L180">bcrypt</a>的函数来加密明文密码，实际密码生成是在<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Hashing/BcryptHasher.php#L26">BcryptHasher#make</a>中，使用blowfish算法来生成密文，不带参数使用的cost是10</p>
+<p>再看看密码验证这部分 实际校验是在<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Auth/EloquentUserProvider.php#L114">EloquentUserProvider#validateCredentials</a>，调用BcryptHasher#check来校验，关于laravel和php的加密有<a href="https://mnshankar.wordpress.com/2014/03/29/laravel-hash-make-explained/">一篇很好的文章</a>讲述了blowfish这个算法的作用，盐和加密变换次数都存放在密码本身，所以密码的生成和校验完全和APP_KEY无关，别害怕使用<code>php artisan key:generate</code>，这个命令只会让session失效</p>]]></summary>
+</entry>
+<entry>
     <title>点赞收藏存储设计</title>
     <link href="http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html" />
     <id>http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html</id>
@@ -243,37 +314,6 @@ comment: 评论内容，varchar</code></pre>
     <summary type="html"><![CDATA[<p>对mysql有点厌倦了，因为用的人多就会导致产品趋于平凡，就算是mariadb也是一样，所以有必要了解一下postgresql。</p>
 <p>首先讲讲postgresql的安装配置吧，我是从<a href="https://wiki.debian.org/PostgreSql">debian官方</a>上面找到的wiki， 操作很简单，但是首先就感觉postgresql和mysql的设计哲学有点区别。要让一个用户能够访问pgsql的数据库，首先得在 操作系统上面创建对应的用户，然后用postgres这个默认的超级用户去连接默认的postgres数据库，连接上之后再在服务器 里面创建一个同名的用户，然后是创建一个数据库，然后是分配数据库访问权限，感觉这个过程很繁琐而且有点反人类。像 mysql是不需要在操作系统上面创建用户的，直接create user就可以，然后设置密码，分配数据库访问权限。</p>
 <p>接下来就是具体如何操作postgresql了，这部分得慢慢来，毕竟我刚学着用。</p>]]></summary>
-</entry>
-<entry>
-    <title>php编码规范</title>
-    <link href="http://blog.iyue.club/posts/2015-07-14-php-coding-style.html" />
-    <id>http://blog.iyue.club/posts/2015-07-14-php-coding-style.html</id>
-    <published>2015-07-14T00:00:00Z</published>
-    <updated>2015-07-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>之前写代码的时候一直不是很在意编码规范的问题，感觉只要把代码功能实现了就OK，但是看到越来越多的优秀开 源项目都给自己的项目制定了编码规范，提交PR必须要满足规范才能合并到主干，而且自己搞php开发也已经有1 年了，得开始走向规范化开发的道路。</p>
-<p>首先得介绍一下psr2，目前<a href="http://laravel.com/">laravel</a>项目使用的就是这个风格标准，具体的规定 在<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md">这里</a> 我以前的习惯大部分符合psr2的标准，但是因为渐渐的使用到了很多高级的php特性，比如说closure, trait, 抽象类等， 所以还是得纠正一点小的习惯。</p>
-<p>除了psr2这个标准之外，各大公司也有自己内部使用的标准，比如说symfony, wordpress, squiz等，还是靠拢 国际标准吧，目前我的emacs里面的php-mode的设置就是psr2的标准，自动格式化代码省了点心。</p>
-<p>代码写完了之后提交到github上却总是发现过不了持续集成(Continuous Integration)的审核，我自己目前几个个人 项目使用的是<a href="https://styleci.io/">styleci</a>这个在线审核的工具，功能很简单但是很强大，最初几次提交 总是会给我返回很多fail，导致严格要求自己按照编码规范来。</p>
-<p>为了避免提交之后被styleci给鄙视，从网上找到了<a href="https://github.com/squizlabs/PHP_CodeSniffer">PHP_CodeSniffer</a>这个 小工具，叫做php嗅探器，它其实包括2个小部件，一个是phpcs(php coding style)，另一个是phpcbf(PHP Code Beautifier and Fixer)， 前者只检查代码的问题，后者还会帮忙纠正代码，如果信不过机器帮忙纠正代码，那么之前一定的记得提交代码。根据官方文档上的 说明修改配置，简单使用，效果很不错。后来我又找了一个叫做<a href="https://github.com/nishimaki10/emacs-phpcbf">emacs-phpcbf</a>的 小工具，这个是一个emacs的插件配置好之后可以集成到php-mode里面，稍加配置就可以在保存php文件的时候自动纠正错误。</p>
-<p>后面发现通过phpcbf纠错的代码还是不能通过styleci，找了一下发现styleci用的是一个叫做<a href="https://github.com/FriendsOfPHP/PHP-CS-Fixer">php-cs-fixer</a> 的引擎来审核代码的，又对照着装了一个php-cs-fixer，和phpcbf的功能差不多，但是稍微严格一点，对于额外的空行也会删掉。</p>
-<p>码农要往正规化方向走，现在养成一下编码规范的习惯，以后再来培养测试驱动的习惯。</p>]]></summary>
-</entry>
-<entry>
-    <title>迁移一个discuz站点</title>
-    <link href="http://blog.iyue.club/posts/2015-06-23-migrate-a-discuz-site.html" />
-    <id>http://blog.iyue.club/posts/2015-06-23-migrate-a-discuz-site.html</id>
-    <published>2015-06-23T00:00:00Z</published>
-    <updated>2015-06-23T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>周五晚上帮同事迁移了一个网站，原来的<a href="http://www.huizu100.com">网站</a>是搭建在windows2003服务器上的，使用的是apache2 + php5.3 + mysql5.1 的架构，使用的是一个叫作PHPnow的一键安装包来管理服务器的，这种架构对于个人站长来说很方便，只要设置好了配置就可以自己搭建网站，但是扩展性特别差，简直就是没法维护，win2003本来就是老掉牙的技术了，这种服务器长期跑肯定是会有内存问题的，而用PHPnow搭建的网站，数据库，代码，数据都在一个目录里面，这样潜在的问题太大了，首先就是安全性问题，没有数据库本来应该单独放到一个专门的服务器上的。而且所有数据放在一起对于业务分离，备份也很不方便，一下备份一个几十G大的目录是很浪费资源的。</p>
-<p>所以在我的建议下，周五晚上对这个网站做了一个迁移，新的架构是LNMP，ubuntu 15.04 server + nginx 1.6 + hhvm 3.7 + mariadb 10.0.20 + redis 3.0，当然因为服务器只有一台，所以没有做负载均衡，没有做数据库读写分离，也没有做hhvm的均衡，因为等我把环境搭建完的时候就已经很稳定了，所以暂时不打算那么做，下面简单的来说说迁移过程。</p>
-<ol style="list-style-type: decimal">
-<li><p>服务器安装 我给的建议是装ubuntu，因为将来环境稳定下来之后要把权限分给站长，让他自己上去查看管理一些进程，而ubuntu的桌面又是比较简单易用的。本来他们是打算安装ubuntu 15.04 desktop版的，但是因为这个版本没法驱动DELL r710服务器自带的硬Raid，所以最后换成server版了。</p></li>
-<li><p>nginx，mariadb，hhvm，redis这些软件的安装都很简单，唯一一个比较特殊的功能就是用了hhvm来替换php，不过暂时没有感到太大的性能提升。LNMP环境搭建是很简单的，很快就完成了。</p></li>
-<li><p>接下来是服务器配置 最大的问题就是调整分区结构，服务器上有一块300G的自带硬盘，这款盘其实是由2块一样的硬盘搭建的raid0，自带了数据备份功能，所以这块盘理论上来说是不该保存太多系统以外的东西的。然后是1块1T的绿盘，这块盘的年头比较老了，以前的网站就部署在这块盘上，我打算把这个盘拿来当备份盘，还有一块2T的黑盘，这块盘是一块最新最好的数据盘，所以我打算把网站和数据库都放在这块盘上。首先要把这块2T的盘里面的数据备份了，很重要的资料一定得保存，但是里面用PHPNow的工具全量备份了站点，一个备份40G，备份一周的数据，复制这些内容浪费了好多时间。数据备份完了之后就是给硬盘分区，先分区那块2T的盘，准备分4个区，按照300+300+600+600来分，虽然暂时没有想好具体怎么使用，用<code>fdisk /dev/sdb</code>开始分区，分区之后就是创建文件系统，只用ext4，所以<code>mkfs.ext4 /dev/sdbn</code>。</p></li>
-<li><p>部署网站 这步就很简单了，直接复制代码，修改配置，修改权限，有一个比较大的问题是discuz的图片是存放在一个叫做<code>data/attachment</code>的目录下的，这些图片完全可以和代码分离，所以拿一块额外的分区来装就行，我是挂载的那个600G的分区到这个目录的。<code>mount /dev/sdb6 /pathtodata/attachment</code>。</p></li>
-</ol>
-<p>部署完成之后调试了一下网站就跑起来了，但是还有很多要做的事，discuz的代码结构比较混乱，不好改动，而且原来他的网站语言设置是GBK的，涉及到编码问题又更加复杂了，反正直到周日晚上才把问题全部解决，目前就是陆陆续续做一些服务器的小性能调优。</p>
-<p>6月25日更新： 这几天陆陆续续发现了一些bug，有样式错误的，有插件报错的，有缓存不能及时清的等等，突然感觉压力好大，工作日只能下班之后有时间做自己的事，端午节3天假2天加一晚上都折腾那个网站去了，本以为是没什么事了，没想到后续的问题更多更麻烦，早知道就不轻易答应人家了，而且以后坚决不再折腾discuz，继续折腾这个东西只会浪费我更多时间。</p>]]></summary>
 </entry>
 
 </feed>
