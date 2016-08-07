@@ -8,8 +8,32 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-07-18T00:00:00Z</updated>
+    <updated>2016-08-07T00:00:00Z</updated>
     <entry>
+    <title>递归地删除数组里面所有多余的空格</title>
+    <link href="http://blog.iyue.club/posts/2016-08-07-recursive-remove-space.html" />
+    <id>http://blog.iyue.club/posts/2016-08-07-recursive-remove-space.html</id>
+    <published>2016-08-07T00:00:00Z</published>
+    <updated>2016-08-07T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>在使用<a href="https://github.com/jdorn/json-editor">jsoneditor</a>的时候遇到一个问题就是总是会把多余的空格写入数据库，如：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="ot">[</span><span class="st">&#39;a&#39;</span> =&gt; <span class="st">&#39; hello&#39;</span><span class="ot">,</span> <span class="st">&#39;b&#39;</span> =&gt; <span class="st">&#39;world &#39;</span><span class="ot">,</span> <span class="st">&#39;c&#39;</span> =&gt; <span class="st">&#39; he &#39;</span><span class="ot">];</span></code></pre></div>
+<p>很多情况下我们都不需要开头结尾的空格，有时候空格甚至会带来麻烦，比如说图片地址后面加上空格之后就给前端操作带来麻烦，那么有什么好办法在写入数据库之前先过滤一遍呢？</p>
+<p>对于上面这种对象数组处理方式很简单：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="fu">array_map</span><span class="ot">(</span><span class="st">&#39;trim&#39;</span><span class="ot">,</span> <span class="kw">$a</span><span class="ot">);</span></code></pre></div>
+<p>但是如果数组结构复杂，比如说是二维数组</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="ot">[</span><span class="st">&#39;a&#39;</span> =&gt; <span class="st">&#39; hello&#39;</span><span class="ot">,</span> <span class="st">&#39;b&#39;</span> =&gt; <span class="st">&#39;world &#39;</span><span class="ot">,</span> <span class="st">&#39;c&#39;</span> =&gt; <span class="st">&#39; he &#39;</span><span class="ot">,</span> <span class="st">&#39;d&#39;</span> =&gt; <span class="ot">[</span><span class="st">&#39;a&#39;</span> =&gt; <span class="st">&#39; hello&#39;</span><span class="ot">,</span> <span class="st">&#39;b&#39;</span> =&gt; <span class="st">&#39;world &#39;</span><span class="ot">,</span> <span class="st">&#39;c&#39;</span> =&gt; <span class="st">&#39; he &#39;</span><span class="ot">]];</span></code></pre></div>
+<p>这时候就要有一个机制能够递归的处理每隔元素内部的空格，思路就是递归，代码见下：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$myfunc</span> = <span class="kw">function</span> <span class="ot">(</span>&amp;<span class="kw">$value</span><span class="ot">,</span> <span class="kw">$key</span><span class="ot">)</span> <span class="kw">use</span> <span class="ot">(</span>&amp;<span class="kw">$myfunc</span><span class="ot">)</span> {
+    <span class="kw">if</span> <span class="ot">(</span><span class="fu">is_array</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">))</span> {
+        <span class="fu">array_walk</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">,</span> <span class="kw">$myfunc</span><span class="ot">);</span>
+    } <span class="kw">else</span> {
+        <span class="kw">$value</span> = <span class="fu">trim</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">);</span>
+    }
+}<span class="ot">;</span>
+<span class="fu">array_walk</span><span class="ot">(</span><span class="kw">$a</span><span class="ot">,</span> <span class="kw">$myfunc</span><span class="ot">);</span></code></pre></div>
+<p>普通函数的递归很好写，但是匿名函数的递归就是第一次写来，竟然需要用use来把当前函数导入进闭包里面，而且必需以传引用的方式，php的语法也是丑得可以。</p>]]></summary>
+</entry>
+<entry>
     <title>eloquent高级用法</title>
     <link href="http://blog.iyue.club/posts/2016-07-18-delve-into-eloquent.html" />
     <id>http://blog.iyue.club/posts/2016-07-18-delve-into-eloquent.html</id>
@@ -304,16 +328,6 @@ comment: 评论内容，varchar</code></pre>
 <h2 id="处理拉取逻辑">处理拉取逻辑</h2>
 <h3 id="表结构设计">表结构设计</h3>
 <h3 id="如何获得最新的信息流">如何获得最新的信息流</h3>]]></summary>
-</entry>
-<entry>
-    <title>学习使用postgresql</title>
-    <link href="http://blog.iyue.club/posts/2015-07-22-use-postgresql.html" />
-    <id>http://blog.iyue.club/posts/2015-07-22-use-postgresql.html</id>
-    <published>2015-07-22T00:00:00Z</published>
-    <updated>2015-07-22T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>对mysql有点厌倦了，因为用的人多就会导致产品趋于平凡，就算是mariadb也是一样，所以有必要了解一下postgresql。</p>
-<p>首先讲讲postgresql的安装配置吧，我是从<a href="https://wiki.debian.org/PostgreSql">debian官方</a>上面找到的wiki， 操作很简单，但是首先就感觉postgresql和mysql的设计哲学有点区别。要让一个用户能够访问pgsql的数据库，首先得在 操作系统上面创建对应的用户，然后用postgres这个默认的超级用户去连接默认的postgres数据库，连接上之后再在服务器 里面创建一个同名的用户，然后是创建一个数据库，然后是分配数据库访问权限，感觉这个过程很繁琐而且有点反人类。像 mysql是不需要在操作系统上面创建用户的，直接create user就可以，然后设置密码，分配数据库访问权限。</p>
-<p>接下来就是具体如何操作postgresql了，这部分得慢慢来，毕竟我刚学着用。</p>]]></summary>
 </entry>
 
 </feed>
