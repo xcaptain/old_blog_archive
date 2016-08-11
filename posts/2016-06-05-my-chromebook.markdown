@@ -7,17 +7,20 @@ tags: linux,emacs,chromebook
 
 先来看看我的屏幕截图，目前看起来还觉得挺geek的
 ![终端](../images/chromebook-htop.png)
+![myadmin](../images/chromebook-myadmin.png)
 
 终端模拟器是用的chrome的一个插件叫做crosh window
 
 linux虚拟机是用crouton安装的ubuntu16.04 core,可惜是共享内核的，所以ubuntu的内核也是3.10.18的
 
-一些命令行的软件包括：
+一些常用工具包括：
+
 1. fish，我最喜欢的shell
 2. tmux，终端复用软件，可以开启多个会话
 3. ss，用来上网的，开启之后chromebook也可以共享上网，真不错
 4. emacs，我最爱的编辑器，之前crouton遇到最大的问题是中文输入法，有了emacs之后我可以用自带的pyim来输入中文了，没必要使用chromebook自带的输入法
 5. 开发环境，nginx, mysql, php7, python, rvm等等之类的
+6. 数据库连接是用一个叫做myadmin的chrome扩展实现的
 
 遇到的问题：
 
