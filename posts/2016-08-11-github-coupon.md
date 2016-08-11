@@ -1,0 +1,83 @@
+---
+title: 如何不要脸与低三下四
+tags: web
+---
+
+8月8号的时候github把我的教育网优惠资格给停用了，然后还给我发了一个邮件让我去绑定信用卡，这种事情真是不能忍，我3月底的时候收到一次邮件告诉我说我的教育网资格到期了，然后我就被自动降级为普通用户了，但是5月份之后我发现我还是可以继续用私有仓库的，说明我还是教育网用户，赶紧迁移了几个私有项目到github上面，结果问题就来了，周一又给我取消了，接下来就是连续的不要脸邮件对话，具体内容见下，我以为我踩中了他们系统的bug，要求他们给我补偿，但是他们却一口咬定我是8号正常到期，想我去绑定信用卡，就这样你来我往地回复了几封邮件，最后被额外送3个月优惠期，等于是用21美刀就把我打发了，我还以为至少能送我1年，挺郁闷的，不过github客服还是挺耐心的，到最后估计鄙视死我了哈哈。邮件对话见下，这么蹩脚的英文人家也能听懂，给自己点个赞。
+
+<pre>
+Gmail	Joey Xie <joey.xf@gmail.com>
+Re: I was an education pack user and now can't use private repository
+6 messages
+Andrew (GitHub Staff) <support@github.com>	Wed, Aug 10, 2016 at 6:03 PM
+To: Joey <joey.xf@gmail.com>
+Hey Joey,
+
+Sorry for any confusion! Your account was upgraded to a paid plan when you applied for a coupon a couple of years ago. The coupon covered the whole cost of a Micro plan, but after two years, the coupon expired while the account stayed at the Micro level (now referred to as Unlimited Private Repositories due to a change in our pricing structure).
+
+Our system tried to charge you for the next month of service at the Unlimited Private Repositories rate, but as our other email noted, you don't have a card on file. That email is sent automatically to users with expired coupons of all types (not just education discounts) to let you know you'll need to sort out your payment method.
+
+If you still qualify for a coupon, you can reapply for another educational discount coupon here:
+
+https://education.github.com/discount_requests/new
+
+If you are no longer qualified, you can either add a valid payment method following the link in the earlier email, or downgrade the account to a Free plan following these steps:
+
+https://help.github.com/articles/downgrading-a-user-account-to-free
+
+Hope that clears things up, and please do let us know if you have any other questions.
+
+All the best,
+Andrew
+
+Joey Xie <joey.xf@gmail.com>	Thu, Aug 11, 2016 at 1:58 AM
+To: "Andrew (GitHub Staff)" <support@github.com>
+Dear Andrew,
+
+In Mar 21 2014 you ended my education account and down grade me to free user but after May 11 2016 https://github.com/blog/2164-introducing-unlimited-private-repositories I can again use private repositories, so I migrated several private project to github. Now again you told me that I have no access to my private repository. I feel bad, my personal projects use these repositories. I hope you can be a nice personal since Amazon pay for their wrong orders but not customers.
+[Quoted text hidden]
+Andrew (GitHub Staff) <support@github.com>	Thu, Aug 11, 2016 at 2:33 AM
+To: Joey Xie <joey.xf@gmail.com>
+Hey Joey,
+
+The educational discount coupon expired on Mar 20 2016, at which point your account should have locked, and you would've been asked to either downgrade your plan to the free tier, or add a payment method to your account, in order to maintain access to your private repositories.
+
+That process was delayed until this Monday, at which point your account was updated to reflect the expired coupon.
+
+Our announcement regarding unlimited private repositories doesn't change anything in terms of the current situation, as (I'm sure you noted from reading the blog post) only paid accounts can benefit from unlimited private repositories.
+
+I've unlocked your account temporarily, so you can access your private repositories for the time being. If you wish to benefit from another educational discount, you can submit an application here:
+
+https://education.github.com/discount_requests/new
+
+Alternatively, you can update your account with a payment method, as instructed in my last email.
+
+If you have any further questions about this, just let me know - I'm happy to help!
+
+All the best,
+Andrew
+
+Joey Xie <joey.xf@gmail.com>	Thu, Aug 11, 2016 at 10:11 AM
+To: "Andrew (GitHub Staff)" <support@github.com>
+Hi Andrew
+
+I'm sure after Mar 20 I can't access my private repositories, but after this May I again can use private repository, So I think it's your fault that make me migrate my personal work to github, can you please make some compensate for me? I'm a poor programmer in China, I get a low salary have to work long hours everyday, can't afford a car or a house. You are so nice, can't you just give me a surprise thanks.
+[Quoted text hidden]
+Andrew (GitHub Staff) <support@github.com>	Thu, Aug 11, 2016 at 5:05 PM
+To: Joey Xie <joey.xf@gmail.com>
+Hi Joey,
+
+The previous coupon you had gave you free private repositories from March 21 2014, right up until last Monday.
+
+I have applied another coupon to your account, to cover the next three months, but after that time, you will need to downgrade to the free plan, or add a payment method to your account.
+
+If you have any further questions, please let me know.
+
+All the best,
+Andrew
+
+Joey Xie <joey.xf@gmail.com>	Thu, Aug 11, 2016 at 5:17 PM
+To: "Andrew (GitHub Staff)" <support@github.com>
+thanks Andrew, you saved me 21 bucks, I thought you would give me at lease another 1 year coupon, but again thanks.
+[Quoted text hidden]
+</pre>
