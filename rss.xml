@@ -8,8 +8,33 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-08-11T00:00:00Z</updated>
+    <updated>2016-08-22T00:00:00Z</updated>
     <entry>
+    <title>php从mysql中获取真实字段类型</title>
+    <link href="http://blog.iyue.club/posts/2016-08-22-php-pdo-results.html" />
+    <id>http://blog.iyue.club/posts/2016-08-22-php-pdo-results.html</id>
+    <published>2016-08-22T00:00:00Z</published>
+    <updated>2016-08-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>刚接触新公司代码不熟悉框架，发现Model层返回的数据都是字符串类型的,这可不能忍，在restapi中字段类型是要固定的，不然接口文档不明确，客户端调用时可能也会出问题。</p>
+<p>追查了一下发现这边低层连接mysql是用mysqli扩展连接的，主要查询操作是</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$result</span> = <span class="fu">mysqli_query</span><span class="ot">(</span><span class="kw">$handle</span><span class="ot">,</span> <span class="kw">$sql</span><span class="ot">);</span>
+<span class="kw">$row</span> = <span class="fu">mysqli_fetch_assoc</span><span class="ot">(</span><span class="kw">$result</span><span class="ot">);</span>
+<span class="fu">mysqli_free_result</span><span class="ot">(</span><span class="kw">$result</span><span class="ot">);</span></code></pre></div>
+<p>在这个地方打印 $row变量就是字符串了，导致后续的数据全部都是字符串类型。在php内部使用倒是没什么问题，毕竟php本身是弱类型的语言，字符串数字和纯数字基本没什么区别，但是在接口开发方面就会有很大问题，一个restapi首要就是文档清晰，如果连每个返回值的类型都不能正确给出那么在调用的时候就容易出现不可预测的事情。</p>
+<p>在老的代码中总是看到类似<code>$fieldType</code>这样的变量用来存放一个表的名称类型映射，但是这样做比较傻，涉及到数据库字段类型变更的时候还得改model。在pdo-mysql驱动中，底层的mysql驱动是mysqlnd，这个比mysqli先进，能够查询出每一行的元数据(metadata)，由一个PDO选项<code>PDO::ATTR_EMULATE_PREPARES</code>来控制是否返回真实的类型，具体见下面的例子：</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$servername</span> = <span class="st">&quot;localhost&quot;</span><span class="ot">;</span>
+<span class="kw">$username</span> = <span class="st">&quot;root&quot;</span><span class="ot">;</span>
+<span class="kw">$password</span> = <span class="st">&quot;123456&quot;</span><span class="ot">;</span>
+<span class="kw">$conn</span> = <span class="kw">new</span> <span class="kw">PDO</span><span class="ot">(</span><span class="st">&quot;mysql:host=</span><span class="kw">$servername</span><span class="st">;dbname=testdb&quot;</span><span class="ot">,</span> <span class="kw">$username</span><span class="ot">,</span> <span class="kw">$password</span><span class="ot">);</span>
+<span class="kw">$conn</span>-&gt;setAttribute<span class="ot">(</span><span class="kw">PDO</span>::<span class="kw">ATTR_EMULATE_PREPARES</span><span class="ot">,</span> <span class="kw">false</span><span class="ot">);</span>
+<span class="kw">$sql</span> = <span class="st">&quot;select * from test_table where id=1&quot;</span><span class="ot">;</span>
+<span class="kw">$sth</span> = <span class="kw">$conn</span>-&gt;prepare<span class="ot">(</span><span class="kw">$sql</span><span class="ot">);</span>
+<span class="kw">$sth</span>-&gt;execute<span class="ot">();</span>
+<span class="kw">$row</span> = <span class="kw">$sth</span>-&gt;fetch<span class="ot">();</span></code></pre></div>
+<p>如果不加<code>$conn-&gt;setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>这一行，返回值都是字符串类型，加了之后就能正确返回类型了。</p>
+<p>laravel的eloquent ORM很强大，看了一下底层连接db的代码，在<a href="https://github.com/laravel/framework/blob/5.3/src/Illuminate/Database/Connectors/Connector.php">framework/src/Illuminate/Database/Connectors/Connector.php</a>设置好的默认选项中就有这个，果然是自己写的代码越少，犯错的机会就越少，框架和软件的设计思想都应该把易用性和可配置性放到第一位，而且要做到把默认值设置为普遍最佳方案，这样开发者才能有更多精力专注业务开发，做更多充满创造力的事情，而不是花几十分钟去搜索这种尝试性的问题。喜欢自己开发框架，但是又写不出好框架的团队是一个差劲的团队。</p>]]></summary>
+</entry>
+<entry>
     <title>如何不要脸与低三下四</title>
     <link href="http://blog.iyue.club/posts/2016-08-11-github-coupon.html" />
     <id>http://blog.iyue.club/posts/2016-08-11-github-coupon.html</id>
@@ -374,30 +399,6 @@ comment: 评论内容，varchar</code></pre>
 <ul>
 <li>创建单元测试写测试是很重要的，尤其是写这种公共库，我也是对照这phpunit的文档一点一点的敲测试用例的</li>
 </ul>]]></summary>
-</entry>
-<entry>
-    <title>博客从octopress迁移到hakyll</title>
-    <link href="http://blog.iyue.club/posts/2015-12-10-switch-to-hakyll.html" />
-    <id>http://blog.iyue.club/posts/2015-12-10-switch-to-hakyll.html</id>
-    <published>2015-12-10T00:00:00Z</published>
-    <updated>2015-12-10T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<h3 id="准备完全迁移到hakyll上面了">准备完全迁移到hakyll上面了</h3>
-<p>之前的博客是使用octopress搭建的，这个静态站点生成器最大的好处就是简单，不需要自己额外的hack，装好octopress，简单设置好之后就能使用，而且提交，部署都有 现成的工具，主题也有很多，所以一用就用了一年多。从7月份开始就有点厌倦octopress了，因为不喜欢这么傻瓜式的东西，咱们的目标是to be a geeker，当然不能一直 不进步。hakyll算是非常极客的一个工具了，haskell写的，使用pandoc处理文本，而且配置文件完全是haskell代码，想着能用这么geek的语言，玩这么geek的软件，就 非常激动。</p>
-<p>使用hakyll也非常简单，步骤是:</p>
-<ol style="list-style-type: decimal">
-<li><code>cabal install hakyll</code> 安装hakyll，这一步非常耗时，因为自己的笔记本CPU落伍了。</li>
-<li><code>hakyll-init blog</code> 会在当前目录下创建一个叫作blog的目录。</li>
-<li><code>cd blog</code> 进入这个目录，会发现有一系列文件，这是默认的博客站点。</li>
-<li><code>cabal build</code> 默认会build这个haskell站点，生成站点可执行文件。</li>
-<li><code>dist/build/site/site build</code> 会编译<code>posts/</code>下面的文件，生成html文件到<code>_site/posts/</code>下面。</li>
-<li><code>dist/build/site/site watch</code> 会开启一个web服务器，默认访问地址是http://127.0.0.1:4000/ 点击访问，然后就你发现默认的首页了。</li>
-<li>默认站点好了接下来就是迁移原博客的文章，从原来的git仓库中把所有的markdown文件复制到<code>posts/</code>下面。</li>
-<li>再次试着build整个站点，这时候可能会有点问题，我这里因为有的文章元数据中categories:熟悉为空报了几个错，改完就好了。</li>
-<li>配置博客站点，修改站点外观，添加rss和tag页，我用的是<a href="https://github.com/eakron/variadic.me">variadic</a>的配置，很简单，配置文件改动很小但是 却把我要的功能都实现了，真的很厉害。</li>
-<li>再次build，并且watch新的项目，顺利跑通了之后，但是看不到标签，很奇怪，原来老的文章是使用categories作为标签名的，现在使用tags了，自然要改。 <code>sed -i 's/categories\:/tags\:/g'</code> 一行sed命令，批量替换，真不错。</li>
-<li>博客在本地搭好了，并且预览过了，接下来就是部署到线上，还是用github-pages。那么我就需要2个分支，一个source分支用来存放静态站点的代码，包括站点 配置，原始markdown格式的博文，这样将来要换到别的机器上，直接clone source分支的代码下来build就行了。还有一个分支是master分支，这个分支存放build之后 的文件，也就是所有的静态文件，html, css, js, 图片等。因为我线上已经有一个博客站点了，所以只需要添加远程github仓库就行。 <code>cd blog</code>进入我的博客根目录，执行<code>git init .</code> 添加版本控制, <code>git add .</code>, <code>git commit -m 'first commit'</code>, <code>git checkout -b source</code>切换到 source分支，然后删掉master分支<code>git branch -d master</code>，因为代码只要保存在source，master只能放生成的静态文件。<code>git remote add origin git@github.com:xcaptain/xcaptain.github.io</code>添加我的远程仓库， 要注意编辑.gitignore文件，把_site, _tmp, _cache都忽略掉。然后是<code>git submodule add git@github.com:xcaptain/xcaptain.github.io.git _site/</code>把 线上的master分支作为我的一个模块，克隆到_site目录下。再执行一下<code>dist/build/site/site build</code>会生成新的静态文件写入_site/目录，当然那些老的文件不会被 删掉，比如说我之前的CNAME文件，favicon文件都还留着，这时候<code>cd _site/</code>然后再提交一下。本地所有的代码都干净之后就是推送部署了。在<code>blog/</code>目录下执行 <code>git push origin source</code>把当前分支推送到origin的source分支，然后再切换到<code>_site/</code>目录，执行<code>git push origin master</code>把生成的静态文件推送到线上的 master分支。访问<a href="http://blog.iyue.club" class="uri">http://blog.iyue.club</a>开测，真不错。</li>
-</ol>
-<p>虽然说没有了octopress那么多做好的功能，但是通过折腾hakyll学习到了很多知识，等以后优化这个部署流程的时候可以自己写脚本部署，省得总是自己多次写shell命令</p>]]></summary>
 </entry>
 
 </feed>
