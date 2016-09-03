@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 安装和配置elasticsearch</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">安装和配置elasticsearch</h2>
+      <p class="metadata">
+        <span class="date">September  3, 2016</span> - <span class="tags"><a href="../tags/web.html">web</a>, <a href="../tags/php.html">php</a>, <a href="../tags/laravel.html">laravel</a>, <a href="../tags/elasticsearch.html">elasticsearch</a></span>
+      </p>
+    </header>
+    <p><a href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>是一个非常优秀的搜索工具，比数据库的搜索功能好太多了，以下介绍elasticsearch的配置与应用，以下操作在ubuntu 16.04下进行</p>
+<h3 id="安装">安装</h3>
+<p>默认源安装的是老版本，如果想要用最新版本可以手动添加源</p>
+<ol style="list-style-type: decimal">
+<li><code>apt install default-jre default-jdk</code></li>
+<li><code>wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -</code></li>
+<li><code>echo &quot;deb http://packages.elastic.co/elasticsearch/2.x/debian stable main&quot; | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list</code></li>
+<li><code>apt install elasticsearch</code></li>
+</ol>
+<h3 id="启动">启动</h3>
+<p><code>service elasticsearch start</code> 如果一切顺利，执行<code>curl 'http://localhost:9200'</code>的时候就可以正常返回一个json</p>
+<h3 id="安装中文分词插件ik">安装中文分词插件<a href="https://github.com/medcl/elasticsearch-analysis-ik">ik</a></h3>
+<ol style="list-style-type: decimal">
+<li>安装mvn <code>apt install maven</code></li>
+<li>按照github说明安装插件(elasticsearch对插件版本要求比较严格，有时候要自己改插件编译配置)</li>
+</ol>
+<h3 id="实际应用">实际应用</h3>
+<p>在laravel/lumen中集成elasticsearch很方便，我喜欢的2个库是<a href="https://github.com/elasticquent/elasticquent">elasticquent/elasticquent</a>和<a href="https://github.com/nordsoftware/lumen-elasticsearch">nordsoftware/lumen-elasticsearch</a></p>
+<p>elasticquent用来更新索引很方便，model更新的时候通过<a href="https://laravel.com/docs/5.3/eloquent#events">model event</a>来同步更新索引，lumen-elasticsearch主要是方便构造查询语句</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

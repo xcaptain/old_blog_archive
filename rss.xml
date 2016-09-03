@@ -8,8 +8,34 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-08-22T00:00:00Z</updated>
+    <updated>2016-09-03T00:00:00Z</updated>
     <entry>
+    <title>安装和配置elasticsearch</title>
+    <link href="http://blog.iyue.club/posts/2016-09-03-install-and-use-elasticsearch.html" />
+    <id>http://blog.iyue.club/posts/2016-09-03-install-and-use-elasticsearch.html</id>
+    <published>2016-09-03T00:00:00Z</published>
+    <updated>2016-09-03T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p><a href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>是一个非常优秀的搜索工具，比数据库的搜索功能好太多了，以下介绍elasticsearch的配置与应用，以下操作在ubuntu 16.04下进行</p>
+<h3 id="安装">安装</h3>
+<p>默认源安装的是老版本，如果想要用最新版本可以手动添加源</p>
+<ol style="list-style-type: decimal">
+<li><code>apt install default-jre default-jdk</code></li>
+<li><code>wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -</code></li>
+<li><code>echo &quot;deb http://packages.elastic.co/elasticsearch/2.x/debian stable main&quot; | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list</code></li>
+<li><code>apt install elasticsearch</code></li>
+</ol>
+<h3 id="启动">启动</h3>
+<p><code>service elasticsearch start</code> 如果一切顺利，执行<code>curl 'http://localhost:9200'</code>的时候就可以正常返回一个json</p>
+<h3 id="安装中文分词插件ik">安装中文分词插件<a href="https://github.com/medcl/elasticsearch-analysis-ik">ik</a></h3>
+<ol style="list-style-type: decimal">
+<li>安装mvn <code>apt install maven</code></li>
+<li>按照github说明安装插件(elasticsearch对插件版本要求比较严格，有时候要自己改插件编译配置)</li>
+</ol>
+<h3 id="实际应用">实际应用</h3>
+<p>在laravel/lumen中集成elasticsearch很方便，我喜欢的2个库是<a href="https://github.com/elasticquent/elasticquent">elasticquent/elasticquent</a>和<a href="https://github.com/nordsoftware/lumen-elasticsearch">nordsoftware/lumen-elasticsearch</a></p>
+<p>elasticquent用来更新索引很方便，model更新的时候通过<a href="https://laravel.com/docs/5.3/eloquent#events">model event</a>来同步更新索引，lumen-elasticsearch主要是方便构造查询语句</p>]]></summary>
+</entry>
+<entry>
     <title>php从mysql中获取真实字段类型</title>
     <link href="http://blog.iyue.club/posts/2016-08-22-php-pdo-results.html" />
     <id>http://blog.iyue.club/posts/2016-08-22-php-pdo-results.html</id>
@@ -355,50 +381,6 @@ comment: 评论内容，varchar</code></pre>
 <p>原来使用prelude的快捷键，基本按键都是遵循emacs默认的按键，比如说helm的快捷键也是， 按键设置没有规律，现在spacemacs的快捷键基本都统一格式了，我喜欢一致性</p>
 <h3 id="养成一个好习惯很重要">养成一个好习惯很重要</h3>
 <p>工具是有好坏之分的，如果不相信这句话而是一味的认为工具不重要，人才是最终要的，这样下去 就会让工作生活效率越来越低下</p>]]></summary>
-</entry>
-<entry>
-    <title>创建自己的composer包</title>
-    <link href="http://blog.iyue.club/posts/2015-12-15-create-composer-package.html" />
-    <id>http://blog.iyue.club/posts/2015-12-15-create-composer-package.html</id>
-    <published>2015-12-15T00:00:00Z</published>
-    <updated>2015-12-15T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>最近在做服务重构与模块化的工作，以前的老代码太多复制粘贴的东西，需要整理一下，否则 将来项目就不可维护了</p>
-<p>涉及到的服务有：</p>
-<ol style="list-style-type: decimal">
-<li>api 主要的接口模块，大部分客户端交互由这个接口完成</li>
-<li>image 图片服务，图片上传下载压缩等操作</li>
-<li>chat 聊天服务</li>
-</ol>
-<p>目前的架构就是这样的，等将来还可以继续拆分api接口，独立出更多小功能</p>
-<p>在api和image中都会用到mq来与后端的java服务通信，原来的实现是自己封装的mq，同一个功能实现2次， 现在抽象出mq功能作为一个公共库，让这2个服务都能调用同一个mq的库。</p>
-<p>主要涉及到的工具是composer，真是一个强大的武器。</p>
-<ol style="list-style-type: decimal">
-<li>创建库</li>
-</ol>
-<ul>
-<li>新建一个目录，<code>mkdir mqpackage</code></li>
-<li>切换进目录执行<code>composer init</code> 根据提示内容创建<code>composer.json</code>文件</li>
-<li>按照要求自己编辑这个json文件，比较重要的就是require和autoload这块</li>
-<li>然后就是敲代码了</li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li>提交package到git仓库</li>
-</ol>
-<ul>
-<li>因为是在公司里开发的项目，不敢放到github上，推送到内部的git服务器了</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>配置项目的composer.json文件，引入刚刚新增的库</li>
-</ol>
-<ul>
-<li>在项目的<code>composer.json</code>文件中的require区域加上上面的包要注意的就是要在repository里面加上这个包的地址，因为默认会从packgist上面拉</li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
-<li>重新测试一遍原有的2个服务的功能</li>
-</ol>
-<ul>
-<li>创建单元测试写测试是很重要的，尤其是写这种公共库，我也是对照这phpunit的文档一点一点的敲测试用例的</li>
-</ul>]]></summary>
 </entry>
 
 </feed>
