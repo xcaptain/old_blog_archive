@@ -8,8 +8,51 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-09-09T00:00:00Z</updated>
+    <updated>2016-09-30T00:00:00Z</updated>
     <entry>
+    <title>php的猴子补丁</title>
+    <link href="http://blog.iyue.club/posts/2016-09-30-php-monkey-patch.html" />
+    <id>http://blog.iyue.club/posts/2016-09-30-php-monkey-patch.html</id>
+    <published>2016-09-30T00:00:00Z</published>
+    <updated>2016-09-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>ruby和python都有<a href="https://en.wikipedia.org/wiki/Monkey_patch">monkey patch</a>，也就是可以在运行时修改某个对象或类的方法</p>
+<p>在过去php是没有这种特性的，如果要给一个对象添加方法只有继承</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+
+<span class="kw">class</span> <span class="kw">A</span>
+{
+    <span class="kw">public</span> <span class="kw">function</span> foo<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="st">&#39;foo&#39;</span><span class="ot">;</span>
+    }
+}
+<span class="kw">$obj</span> = <span class="kw">new</span> <span class="kw">A</span><span class="ot">();</span></code></pre></div>
+<p>如果在某个情况下，我们要给<code>$obj</code>对象添加一个方法，这时候该怎么办呢？</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+
+<span class="kw">class</span> <span class="kw">B</span> <span class="kw">extends</span> <span class="kw">A</span>
+{
+    <span class="kw">public</span> <span class="kw">function</span> bar<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="st">&#39;bar&#39;</span><span class="ot">;</span>
+    }
+}
+<span class="kw">$obj</span> = <span class="kw">new</span> <span class="kw">B</span><span class="ot">();</span></code></pre></div>
+<p>这样obj对象就有了<code>bar</code>方法，但是这种办法很傻，得新建一个子类，而且这个子类可能很难被用上，如果在另外的情况下要用到另一个新的方法<code>bar2</code>，这时候又该怎么办呢，是再写一个继承？继承A还是B呢？</p>
+<p>php7提供了一个新的语法叫做<a href="http://php.net/manual/en/language.oop5.anonymous.php">匿名类</a> 在上面的例子中，要给类A的实例添加方法就不需要新建一个类文件然后去继承，直接</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+
+<span class="kw">$obj</span> = <span class="kw">new</span> <span class="kw">class</span> <span class="kw">extends</span> <span class="kw">A</span>
+{
+    <span class="kw">public</span> <span class="kw">function</span> bar<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="st">&#39;bar&#39;</span><span class="ot">;</span>
+    }
+}<span class="ot">;</span></code></pre></div>
+<p>这样obj也有<code>bar</code>方法，但是却没有创建额外的类文件，毕竟目的只是作为临时补丁修复一下，如果能够确定这个方法会被很多地方用到，那么就得考虑是否把这个方法添加到基类中，还是放到单独的子类。</p>
+<p>在测试中这特性非常有用，测试<code>protected</code>方法，构造<code>mock</code>对象而不用改原有代码，第一次在真实场景中见到是在<a href="https://github.com/spatie/laravel-activitylog">activity-log</a>这个项目中<a href="https://github.com/spatie/laravel-activitylog/blob/master/tests/DetectsChangesTest.php" class="uri">https://github.com/spatie/laravel-activitylog/blob/master/tests/DetectsChangesTest.php</a>这里就构造了仅仅用于测试的model对象而没有改写原有的model</p>]]></summary>
+</entry>
+<entry>
     <title>php多进程处理大任务</title>
     <link href="http://blog.iyue.club/posts/2016-09-09-php-multi-process-task.html" />
     <id>http://blog.iyue.club/posts/2016-09-09-php-multi-process-task.html</id>
@@ -326,63 +369,6 @@ comment: 评论内容，varchar</code></pre>
 <li><p>联想是美帝良心企业，在国内就买不到chromebook，国内的thinkpad价格也要比美帝高出一截</p></li>
 <li><p>n21还算是一款性价比非常好的本子，就是性能有点弱，17年再换一个16年出的二手chromebook玩玩</p></li>
 </ol>]]></summary>
-</entry>
-<entry>
-    <title>php使用guzzle发送http请求</title>
-    <link href="http://blog.iyue.club/posts/2016-04-28-php-guzzle-http.html" />
-    <id>http://blog.iyue.club/posts/2016-04-28-php-guzzle-http.html</id>
-    <published>2016-04-28T00:00:00Z</published>
-    <updated>2016-04-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>最原始的发送http请求的方法是调用原生的curl扩展，这就需要在php.ini中允许 <code>extension=curl.so</code>，使用方式也很简单，下面是几个发送基本GET, POST请求的例子。</p>
-<ol style="list-style-type: decimal">
-<li><p>curl 发送GET请求:</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">)</span> <span class="ot">;</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_HEADER</span><span class="ot">,</span> <span class="dv">0</span><span class="ot">);</span> <span class="co">// 不返回http头</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">)</span> <span class="ot">;</span> <span class="co">// 按字符串返回而不是输出到屏幕上</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_TIMEOUT</span><span class="ot">,</span> <span class="dv">3</span><span class="ot">);</span> <span class="co">// 设置连接超时时间</span>
-<span class="kw">$result</span> = <span class="fu">curl_exec</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">)</span> <span class="ot">;</span>
-<span class="fu">curl_close</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
-<li><p>curl 发送POST请求:</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">);</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POST</span><span class="ot">,</span><span class="dv">1</span><span class="ot">);</span> <span class="co">// 表明是发送post请求</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="kw">$jsonString</span><span class="ot">);</span> <span class="co">// post的数据，支持json字符串和http_build_query之后的参数</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="kw">true</span><span class="ot">);</span>
-<span class="kw">$result</span> = <span class="fu">curl_exec</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">)</span> <span class="ot">;</span>
-<span class="fu">curl_close</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
-<li><p>curl上传文件: 也是一个post请求，例子见下面</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">);</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POST</span><span class="ot">,</span><span class="dv">1</span><span class="ot">);</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="ot">[</span>
-<span class="st">&#39;file&#39;</span> =&gt; <span class="kw">new</span> \CurlFile<span class="ot">(</span><span class="kw">$fullFileName</span><span class="ot">,</span> <span class="kw">$mimeType</span><span class="ot">,</span> <span class="kw">$filename</span><span class="ot">);</span>
-<span class="st">&#39;param1&#39;</span> =&gt; <span class="kw">$value1</span><span class="ot">,</span>
-<span class="st">&#39;param2&#39;</span> =&gt; <span class="kw">$value2</span><span class="ot">,</span>
-<span class="ot">]);</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">);</span>
-<span class="fu">curl_setopt</span><span class="ot">(</span><span class="kw">$ch</span><span class="ot">,</span> <span class="kw">CURLOPT_HTTPHEADER</span><span class="ot">,</span> <span class="ot">[</span>
-<span class="st">&#39;Content-type: multipart/form-data;&#39;</span>
-<span class="ot">]);</span>
-<span class="kw">$result</span>=<span class="fu">curl_exec</span> <span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span>
-<span class="fu">curl_close</span> <span class="ot">(</span><span class="kw">$ch</span><span class="ot">);</span></code></pre></div></li>
-</ol>
-<p>第一次使用curl上传文件的时候还遇到了一点小问题，网上大部分写法都是用<code>'file' =&gt; @&quot;$fullFileName&quot;</code>来加载文件的，我用这种写法反复测试了很久都不能获取到真是的文件，后来才发现<a href="https://secure.php.net/manual/en/class.curlfile.php">CurlFile</a>这个类，按照文档下面评论的说法，php发送multipart请求的时候会有问题，解决办法有2个，1：允许<code>CURLOPT_SAFE_UPLOAD</code>， 2：使用CURLFile 而不是 “@”</p>
-<p>我偏好的http请求库 <a href="https://github.com/guzzle/guzzle">guzzle</a> 作为一个应用开发者而言，更多的封装往往是更好的，curl太原始了，接口太少，选项太多，如果要发一个post请求，得先去查一下如何设置数据，如何设置请求头，返回值说明什么意思，如何表示20x, 30x, 40x, 50x的状态码，但是作为一个http库选择就更少了，我们只要知道如何创建请求对象，如何发送请求，响应对象，异常是什么就够了，知道了这几个概念如果要发送一种特殊请求只需要修改请求对象就行了</p>
-<p>请求对象:</p>
-<p>一个简单的GET请求的对象</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$request</span> = <span class="kw">new</span> \GuzzleHttp\Psr7\Request<span class="ot">(</span><span class="st">&#39;GET&#39;</span><span class="ot">,</span> <span class="st">&#39;http://httpbin.org&#39;</span><span class="ot">);</span></code></pre></div>
-<p>一个简单的POST请求的对象</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$request</span> = <span class="kw">new</span> \GuzzleHttp\Psr7\Request<span class="ot">(</span><span class="st">&#39;POST&#39;</span><span class="ot">,</span> <span class="st">&#39;http://httpbin.org&#39;</span><span class="ot">);</span></code></pre></div>
-<p>一个简单的发送multipart/form-data请求上传文件的例子</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$r</span> = <span class="kw">$client</span>-&gt;request<span class="ot">(</span><span class="st">&#39;POST&#39;</span><span class="ot">,</span> <span class="kw">$url</span><span class="ot">,</span> <span class="ot">[</span>
-    <span class="st">&#39;multipart&#39;</span> =&gt; <span class="ot">[</span>
-        <span class="ot">[</span><span class="st">&#39;name&#39;</span> =&gt; <span class="st">&#39;file&#39;</span><span class="ot">,</span><span class="st">&#39;contents&#39;</span> =&gt; <span class="kw">$body</span><span class="ot">],</span>
-        <span class="ot">[</span><span class="st">&#39;name&#39;</span> =&gt; <span class="st">&#39;user_id&#39;</span><span class="ot">,</span> <span class="st">&#39;contents&#39;</span> =&gt; <span class="dv">1</span><span class="ot">],</span>
-    <span class="ot">],</span>
-<span class="ot">]);</span></code></pre></div>
-<p>发送请求： 首先要有一个客户端对象，这个对象能够发送一个请求对象，然后获得响应</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span> = <span class="kw">new</span> Client<span class="ot">();</span></code></pre></div>
-<p>发送请求：</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span>-&gt;send<span class="ot">(</span><span class="kw">$request</span><span class="ot">);</span></code></pre></div>
-<p>在调试curl发请求的时候还发现了一个小技巧抓包，用<code>nc -l -p 8888</code>开启一个监听端口，然后把curl的请求地址设置为<code>http://127.0.0.1:8888</code>，这样就能抓到php发送http请求的数据了，总之guzzle比curl强大太多，能用就多用。</p>]]></summary>
 </entry>
 
 </feed>

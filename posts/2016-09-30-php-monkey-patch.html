@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - php的猴子补丁</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="row head">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="page-header">
+            <h1>
+              <a href="../">blog.iyue.club
+              </a>
+            </h1>
+          </div>
+          <ul class="nav nav-pills header">
+            <li>
+              <a href="../">Home</a>
+            </li>
+            <li>
+              <a href="../posts.html">Posts</a>
+            </li>
+            <li>
+              <a href="../tags.html">Tags</a>
+            </li>
+            <li>
+              <a href="../about.html">About</a>
+            </li>
+            <li>
+              <a href="../rss.xml">RSS</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row content">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="post">
+  <article>
+    <header>
+      <h2 class="post-title">php的猴子补丁</h2>
+      <p class="metadata">
+        <span class="date">September 30, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+      </p>
+    </header>
+    <p>ruby和python都有<a href="https://en.wikipedia.org/wiki/Monkey_patch">monkey patch</a>，也就是可以在运行时修改某个对象或类的方法</p>
+<p>在过去php是没有这种特性的，如果要给一个对象添加方法只有继承</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+
+<span class="kw">class</span> <span class="kw">A</span>
+{
+    <span class="kw">public</span> <span class="kw">function</span> foo<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="st">'foo'</span><span class="ot">;</span>
+    }
+}
+<span class="kw">$obj</span> = <span class="kw">new</span> <span class="kw">A</span><span class="ot">();</span></code></pre></div>
+<p>如果在某个情况下，我们要给<code>$obj</code>对象添加一个方法，这时候该怎么办呢？</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+
+<span class="kw">class</span> <span class="kw">B</span> <span class="kw">extends</span> <span class="kw">A</span>
+{
+    <span class="kw">public</span> <span class="kw">function</span> bar<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="st">'bar'</span><span class="ot">;</span>
+    }
+}
+<span class="kw">$obj</span> = <span class="kw">new</span> <span class="kw">B</span><span class="ot">();</span></code></pre></div>
+<p>这样obj对象就有了<code>bar</code>方法，但是这种办法很傻，得新建一个子类，而且这个子类可能很难被用上，如果在另外的情况下要用到另一个新的方法<code>bar2</code>，这时候又该怎么办呢，是再写一个继承？继承A还是B呢？</p>
+<p>php7提供了一个新的语法叫做<a href="http://php.net/manual/en/language.oop5.anonymous.php">匿名类</a> 在上面的例子中，要给类A的实例添加方法就不需要新建一个类文件然后去继承，直接</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">&lt;?php</span>
+
+<span class="kw">$obj</span> = <span class="kw">new</span> <span class="kw">class</span> <span class="kw">extends</span> <span class="kw">A</span>
+{
+    <span class="kw">public</span> <span class="kw">function</span> bar<span class="ot">()</span>
+    {
+        <span class="kw">return</span> <span class="st">'bar'</span><span class="ot">;</span>
+    }
+}<span class="ot">;</span></code></pre></div>
+<p>这样obj也有<code>bar</code>方法，但是却没有创建额外的类文件，毕竟目的只是作为临时补丁修复一下，如果能够确定这个方法会被很多地方用到，那么就得考虑是否把这个方法添加到基类中，还是放到单独的子类。</p>
+<p>在测试中这特性非常有用，测试<code>protected</code>方法，构造<code>mock</code>对象而不用改原有代码，第一次在真实场景中见到是在<a href="https://github.com/spatie/laravel-activitylog">activity-log</a>这个项目中<a href="https://github.com/spatie/laravel-activitylog/blob/master/tests/DetectsChangesTest.php" class="uri">https://github.com/spatie/laravel-activitylog/blob/master/tests/DetectsChangesTest.php</a>这里就构造了仅仅用于测试的model对象而没有改写原有的model</p>
+  </article>
+</div>
+        </div>
+      </div>
+      <div class="row footer">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="bottom">
+            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
