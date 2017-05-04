@@ -37,3 +37,7 @@ source分支，然后删掉master分支`git branch -d master`，因为代码只�
 master分支。访问[http://blog.iyue.club](http://blog.iyue.club)开测，真不错。
 
 虽然说没有了octopress那么多做好的功能，但是通过折腾hakyll学习到了很多知识，等以后优化这个部署流程的时候可以自己写脚本部署，省得总是自己多次写shell命令
+
+### Update 2017-05-05:
+
+模板重写，使用了[sakura](https://github.com/oxalorg/sakura)的样式，界面稍微变得更加美观点了。
