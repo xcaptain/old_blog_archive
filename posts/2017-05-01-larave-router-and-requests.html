@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - laravel路由与请求处理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">laravel路由与请求处理</h2>
+    <p class="metadata">
+      <span class="date">May  1, 2017</span> - <span class="tags"><a href="../tags/laravel.html">laravel</a>, <a href="../tags/php.html">php</a></span>
+    </p>
+  </header>
+  <p>把手上的几个项目都从laravel 5.3升级到5.4了，说说在升级过程中遇到的问题。</p>
+<h2 id="dingo-api不兼容问题的解决">dingo api不兼容问题的解决</h2>
+<p>dingo使用了自己的route service，在最开始的配置中和laravel5.4是不兼容的</p>
+<h2 id="jwt-auth的配置以及和dingo的配合使用">jwt-auth的配置以及和dingo的配合使用</h2>
+<p>通过配置jwt使得在代码中能够获取到当前登录用户信息，在middleware中能检验登录</p>
+<h2 id="通过middleware来记录request和response的log">通过middleware来记录request和response的log</h2>
+<p>terminate middleware</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>
