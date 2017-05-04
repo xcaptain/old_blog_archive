@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - php从mysql中获取真实字段类型</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">php从mysql中获取真实字段类型</h2>
-      <p class="metadata">
-        <span class="date">August 22, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a>, <a href="../tags/mysql.html">mysql</a>, <a href="../tags/web.html">web</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>刚接触新公司代码不熟悉框架，发现Model层返回的数据都是字符串类型的,这可不能忍，在restapi中字段类型是要固定的，不然接口文档不明确，客户端调用时可能也会出问题。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">php从mysql中获取真实字段类型</h2>
+    <p class="metadata">
+      <span class="date">August 22, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a>, <a href="../tags/mysql.html">mysql</a>, <a href="../tags/web.html">web</a></span>
+    </p>
+  </header>
+  <p>刚接触新公司代码不熟悉框架，发现Model层返回的数据都是字符串类型的,这可不能忍，在restapi中字段类型是要固定的，不然接口文档不明确，客户端调用时可能也会出问题。</p>
 <p>追查了一下发现这边低层连接mysql是用mysqli扩展连接的，主要查询操作是</p>
 <div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$result</span> = <span class="fu">mysqli_query</span><span class="ot">(</span><span class="kw">$handle</span><span class="ot">,</span> <span class="kw">$sql</span><span class="ot">);</span>
 <span class="kw">$row</span> = <span class="fu">mysqli_fetch_assoc</span><span class="ot">(</span><span class="kw">$result</span><span class="ot">);</span>
@@ -68,17 +66,12 @@
 <span class="kw">$row</span> = <span class="kw">$sth</span>-&gt;fetch<span class="ot">();</span></code></pre></div>
 <p>如果不加<code>$conn-&gt;setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>这一行，返回值都是字符串类型，加了之后就能正确返回类型了。</p>
 <p>laravel的eloquent ORM很强大，看了一下底层连接db的代码，在<a href="https://github.com/laravel/framework/blob/5.3/src/Illuminate/Database/Connectors/Connector.php">framework/src/Illuminate/Database/Connectors/Connector.php</a>设置好的默认选项中就有这个，果然是自己写的代码越少，犯错的机会就越少，框架和软件的设计思想都应该把易用性和可配置性放到第一位，而且要做到把默认值设置为普遍最佳方案，这样开发者才能有更多精力专注业务开发，做更多充满创造力的事情，而不是花几十分钟去搜索这种尝试性的问题。喜欢自己开发框架，但是又写不出好框架的团队是一个差劲的团队。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

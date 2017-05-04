@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - 解决pacman依赖关系破裂问题</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">解决pacman依赖关系破裂问题</h2>
-      <p class="metadata">
-        <span class="date">January  1, 2015</span> - <span class="tags"><a href="../tags/linux.html">linux</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">解决pacman依赖关系破裂问题</h2>
+    <p class="metadata">
+      <span class="date">January  1, 2015</span> - <span class="tags"><a href="../tags/linux.html">linux</a></span>
+    </p>
+  </header>
+  今天准备更新一下系统，执行<code>sudo pacman -Syu</code>的时候，竟然没法同步软件源了，报告说依赖错误。
 <pre>
 packagekit: requires pacman<4.2.0
 package-query: requires pacman<4.2.0
@@ -74,17 +72,12 @@ vboxnetadp             25443  0
 vboxdrv               348377  3 vboxnetadp,vboxnetflt,vboxpci
 </pre>
 <p>这时候才算是真正的把所有的驱动都加进来了。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

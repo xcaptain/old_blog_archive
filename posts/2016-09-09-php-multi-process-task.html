@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - php多进程处理大任务</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">php多进程处理大任务</h2>
-      <p class="metadata">
-        <span class="date">September  9, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>在写php脚本的过程中经常会遇到要并行处理大量数据的问题，比如说批量从数据库中处理几万行数据，调用第三方接口处理大数据等等，如果仅仅是循环去处理会导致非常低效，PHP本身是支持多进程的，如果让多个进程同时处理这部分数据就会让性能快很多。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">php多进程处理大任务</h2>
+    <p class="metadata">
+      <span class="date">September  9, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+    </p>
+  </header>
+  <p>在写php脚本的过程中经常会遇到要并行处理大量数据的问题，比如说批量从数据库中处理几万行数据，调用第三方接口处理大数据等等，如果仅仅是循环去处理会导致非常低效，PHP本身是支持多进程的，如果让多个进程同时处理这部分数据就会让性能快很多。</p>
 <p>在工作中遇到了一个这样的问题，把它抽象一下作为一个典型的例子记录，方便下次察看。</p>
 <h3 id="多进程生成csv文件的php脚本">多进程生成csv文件的PHP脚本</h3>
 <p>代码见<a href="https://gist.github.com/xcaptain/57aa46eaf52a1e0233f04caef1f1df66">gist</a></p>
@@ -80,17 +78,12 @@
 <li><p>删除重复行 <code>awk '!seen[$0]++' filename</code></p></li>
 <li><p>删除长度更短的行 <code>awk 'length($0)&gt;3' filename</code></p></li>
 </ol>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

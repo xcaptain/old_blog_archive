@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - 博客从octopress迁移到hakyll</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">博客从octopress迁移到hakyll</h2>
-      <p class="metadata">
-        <span class="date">December 10, 2015</span> - <span class="tags"><a href="../tags/blog.html">blog</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <h3 id="准备完全迁移到hakyll上面了">准备完全迁移到hakyll上面了</h3>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">博客从octopress迁移到hakyll</h2>
+    <p class="metadata">
+      <span class="date">December 10, 2015</span> - <span class="tags"><a href="../tags/blog.html">blog</a></span>
+    </p>
+  </header>
+  <h3 id="准备完全迁移到hakyll上面了">准备完全迁移到hakyll上面了</h3>
 <p>之前的博客是使用octopress搭建的，这个静态站点生成器最大的好处就是简单，不需要自己额外的hack，装好octopress，简单设置好之后就能使用，而且提交，部署都有 现成的工具，主题也有很多，所以一用就用了一年多。从7月份开始就有点厌倦octopress了，因为不喜欢这么傻瓜式的东西，咱们的目标是to be a geeker，当然不能一直 不进步。hakyll算是非常极客的一个工具了，haskell写的，使用pandoc处理文本，而且配置文件完全是haskell代码，想着能用这么geek的语言，玩这么geek的软件，就 非常激动。</p>
 <p>使用hakyll也非常简单，步骤是:</p>
 <ol style="list-style-type: decimal">
@@ -67,17 +65,14 @@
 <li>博客在本地搭好了，并且预览过了，接下来就是部署到线上，还是用github-pages。那么我就需要2个分支，一个source分支用来存放静态站点的代码，包括站点 配置，原始markdown格式的博文，这样将来要换到别的机器上，直接clone source分支的代码下来build就行了。还有一个分支是master分支，这个分支存放build之后 的文件，也就是所有的静态文件，html, css, js, 图片等。因为我线上已经有一个博客站点了，所以只需要添加远程github仓库就行。 <code>cd blog</code>进入我的博客根目录，执行<code>git init .</code> 添加版本控制, <code>git add .</code>, <code>git commit -m 'first commit'</code>, <code>git checkout -b source</code>切换到 source分支，然后删掉master分支<code>git branch -d master</code>，因为代码只要保存在source，master只能放生成的静态文件。<code>git remote add origin git@github.com:xcaptain/xcaptain.github.io</code>添加我的远程仓库， 要注意编辑.gitignore文件，把_site, _tmp, _cache都忽略掉。然后是<code>git submodule add git@github.com:xcaptain/xcaptain.github.io.git _site/</code>把 线上的master分支作为我的一个模块，克隆到_site目录下。再执行一下<code>dist/build/site/site build</code>会生成新的静态文件写入_site/目录，当然那些老的文件不会被 删掉，比如说我之前的CNAME文件，favicon文件都还留着，这时候<code>cd _site/</code>然后再提交一下。本地所有的代码都干净之后就是推送部署了。在<code>blog/</code>目录下执行 <code>git push origin source</code>把当前分支推送到origin的source分支，然后再切换到<code>_site/</code>目录，执行<code>git push origin master</code>把生成的静态文件推送到线上的 master分支。访问<a href="http://blog.iyue.club" class="uri">http://blog.iyue.club</a>开测，真不错。</li>
 </ol>
 <p>虽然说没有了octopress那么多做好的功能，但是通过折腾hakyll学习到了很多知识，等以后优化这个部署流程的时候可以自己写脚本部署，省得总是自己多次写shell命令</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+<h3 id="update-2017-05-05">Update 2017-05-05:</h3>
+<p>模板重写，使用了<a href="https://github.com/oxalorg/sakura">sakura</a>的样式，界面稍微变得更加美观点了。</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

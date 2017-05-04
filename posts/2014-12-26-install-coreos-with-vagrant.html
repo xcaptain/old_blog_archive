@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - 通过vagrant安装coreos</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">通过vagrant安装coreos</h2>
-      <p class="metadata">
-        <span class="date">December 26, 2014</span> - <span class="tags"><a href="../tags/virtualization.html">virtualization</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">通过vagrant安装coreos</h2>
+    <p class="metadata">
+      <span class="date">December 26, 2014</span> - <span class="tags"><a href="../tags/virtualization.html">virtualization</a></span>
+    </p>
+  </header>
+  <p>昨晚学习了一下vagrant的用法，今天开始试着用vagrant来在本地虚拟化一个coreos的系统，等熟悉coreos的基本操作之后就可以把我现在vps的freebsd10换成coreos了。</p>
 <p>按照<a href="https://coreos.com/docs/running-coreos/platforms/vagrant/">官方的教程</a>一步一步来。</p>
 <ol style="list-style-type: decimal">
 <li><code>git clone https://github.com/coreos/coreos-vagrant.git</code> 会在当前目录创建一个叫做<code>coreos-vagrant</code>的目录，里面包含coreos的基本配置以及vagrant的配置。</li>
@@ -148,17 +146,12 @@ coreos-vagrant_core-02_1419633622663_70678/  Public_default_1419540157403_62624/
 <p>昨天还只有<code>Public_default_1419540157403_62624/</code>一个目录，今天就多了3个了，算上昨天的那个ubuntu12.04，我是不是有4个虚拟系统了？</p>
 <p>进入到我的<code>Vagrantfile</code>所在的目录，执行<code>vagrant ssh core-01</code>，就登陆进我的第一个虚拟机了。</p>
 <p>剩下的就是学习如何使用coreos在上面部署开发环境了，有vagrant这么方便的工具来管理虚拟机，我都不想去研究docker了，我这样一个菜鸟竟然也能管理4台机器，科技真是使人懒惰。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

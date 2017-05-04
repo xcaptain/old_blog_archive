@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - php使用guzzle发送http请求</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">php使用guzzle发送http请求</h2>
-      <p class="metadata">
-        <span class="date">April 28, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>最原始的发送http请求的方法是调用原生的curl扩展，这就需要在php.ini中允许 <code>extension=curl.so</code>，使用方式也很简单，下面是几个发送基本GET, POST请求的例子。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">php使用guzzle发送http请求</h2>
+    <p class="metadata">
+      <span class="date">April 28, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+    </p>
+  </header>
+  <p>最原始的发送http请求的方法是调用原生的curl扩展，这就需要在php.ini中允许 <code>extension=curl.so</code>，使用方式也很简单，下面是几个发送基本GET, POST请求的例子。</p>
 <ol style="list-style-type: decimal">
 <li><p>curl 发送GET请求:</p>
 <div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$ch</span> = <span class="fu">curl_init</span><span class="ot">(</span><span class="kw">$url</span><span class="ot">)</span> <span class="ot">;</span>
@@ -100,17 +98,12 @@
 <p>发送请求：</p>
 <div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$client</span>-&gt;send<span class="ot">(</span><span class="kw">$request</span><span class="ot">);</span></code></pre></div>
 <p>在调试curl发请求的时候还发现了一个小技巧抓包，用<code>nc -l -p 8888</code>开启一个监听端口，然后把curl的请求地址设置为<code>http://127.0.0.1:8888</code>，这样就能抓到php发送http请求的数据了，总之guzzle比curl强大太多，能用就多用。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

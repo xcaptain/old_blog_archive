@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - mysql基础</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">mysql基础</h2>
-      <p class="metadata">
-        <span class="date">May  3, 2015</span> - <span class="tags"><a href="../tags/sql.html">sql</a>, <a href="../tags/mysql.html">mysql</a>, <a href="../tags/postgresql.html">postgresql</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>五一第二天泡国图看了一下午关于sql的书，小有所获，才发现以前工作中用到的只是mysql中的一个很小的子集，该好好整理一下了基础知识了，当然对于很基本，已经用得很熟练的知识就不提了。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">mysql基础</h2>
+    <p class="metadata">
+      <span class="date">May  3, 2015</span> - <span class="tags"><a href="../tags/sql.html">sql</a>, <a href="../tags/mysql.html">mysql</a>, <a href="../tags/postgresql.html">postgresql</a></span>
+    </p>
+  </header>
+  <p>五一第二天泡国图看了一下午关于sql的书，小有所获，才发现以前工作中用到的只是mysql中的一个很小的子集，该好好整理一下了基础知识了，当然对于很基本，已经用得很熟练的知识就不提了。</p>
 <h3 id="什么是sql语言">什么是sql语言</h3>
 <p>sql语言包括： DDL（数据定义语言）：创建数据库，创建表，创建视图，创建索引等。 DML（数据操作语言）：也就是增删改查操作。 DCL（数据控制语言）：COMMIT，ROLLBACK，GRANT等。</p>
 <h3 id="聚合查询">聚合查询</h3>
@@ -98,17 +96,12 @@ sql2;
 <li><code>char</code>类型是按照字典顺序来排序的，一直以来我都以为是按照ascii的顺序来排的。</li>
 <li>在建表的时候尽量避免使用NULL这个变量，因为在查询中空值比较不好处理，不好比较大小，不好做运算，不好count，我也不打算去研究NULL在各种情况下的意义。判断一个字段是否为NULL用<code>IS NULL</code>来判断。</li>
 </ol>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

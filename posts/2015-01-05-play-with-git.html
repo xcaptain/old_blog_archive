@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - 玩弄git</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">玩弄git</h2>
-      <p class="metadata">
-        <span class="date">January  5, 2015</span> - <span class="tags"><a href="../tags/git.html">git</a>, <a href="../tags/docker.html">docker</a>, <a href="../tags/vagrant.html">vagrant</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org" class="uri">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">玩弄git</h2>
+    <p class="metadata">
+      <span class="date">January  5, 2015</span> - <span class="tags"><a href="../tags/git.html">git</a>, <a href="../tags/docker.html">docker</a>, <a href="../tags/vagrant.html">vagrant</a></span>
+    </p>
+  </header>
+  <p>经过元旦几天的努力，论坛正式上线了<a href="http://f.joxy.org" class="uri">http://f.joxy.org</a>，目前仅仅是使用了<a href="https://github.com/discourse/discourse">discourse</a>的框架，自己还没有开始定制，总是需要一个熟悉的过程的，本地的开发环境因为邮件的问题，现在还没有好，挺郁闷的。</p>
 <p>今晚就稍微熟悉了一下discourse的结构。</p>
 <ol style="list-style-type: decimal">
 <li>我本地的开发环境，这个没什么多说的，就是用vagrant跑了一个虚拟机，上面运行着discourse需要的环境。</li>
@@ -67,17 +65,12 @@
 <li><p><code>git pull develop master</code> 就能把我的版本拿下来了，因为我的这个版本都会现在本地开发环境测试过之后再上，所以是很安全的</p></li>
 </ol>
 <p>这样应该也算是和一大伙志愿者协同开发吧，虽然我没有提交pull request，但是我一直在用别人的免费的代码，真是惭愧。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

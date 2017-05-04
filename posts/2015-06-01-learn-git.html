@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - 学习git</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">学习git</h2>
-      <p class="metadata">
-        <span class="date">June  1, 2015</span> - <span class="tags"><a href="../tags/git.html">git</a>, <a href="../tags/linux.html">linux</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>继续学习git，把统计后台的代码从内部git服务器迁移到github上面了，用的是自己的私有仓库。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">学习git</h2>
+    <p class="metadata">
+      <span class="date">June  1, 2015</span> - <span class="tags"><a href="../tags/git.html">git</a>, <a href="../tags/linux.html">linux</a></span>
+    </p>
+  </header>
+  <p>继续学习git，把统计后台的代码从内部git服务器迁移到github上面了，用的是自己的私有仓库。</p>
 <p>目前主要用到的功能有：</p>
 <ol style="list-style-type: decimal">
 <li><p>添加远程仓库 <code>git remote add origin https://github.com/xcaptain/simple-admin.git</code> 这样就能添加一个远程仓库了，等以后把代码push上去就行了，访问远程仓库的方式有2种，一种是ssh，一种是https，上面这种是https的仓库，也是github默认的访问仓库的方法， 因为ssh太不安全了，对于我们这种生活在封锁国度的老百姓来说，很容易被屏蔽。</p></li>
@@ -63,17 +61,12 @@
 <li><p>回滚版本库 这个操作目前做得比较少，都是<code>git reset --hard HEAD~1</code>，来回到上一个版本的，对于这个操作还不熟悉，至少svn回滚已经是很熟悉的了。</p></li>
 </ol>
 <p>git的功能很强大也很复杂，但是一定是要掌握的，这样才能成为一个合格的项目经理，以后慢慢积累，有新的体会再来更新这篇博客。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

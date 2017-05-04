@@ -8,8 +8,36 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2016-09-30T00:00:00Z</updated>
+    <updated>2017-05-01T00:00:00Z</updated>
     <entry>
+    <title>laravel路由与请求处理</title>
+    <link href="http://blog.iyue.club/posts/2017-05-01-larave-router-and-requests.html" />
+    <id>http://blog.iyue.club/posts/2017-05-01-larave-router-and-requests.html</id>
+    <published>2017-05-01T00:00:00Z</published>
+    <updated>2017-05-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>把手上的几个项目都从laravel 5.3升级到5.4了，说说在升级过程中遇到的问题。</p>
+<h2 id="dingo-api不兼容问题的解决">dingo api不兼容问题的解决</h2>
+<p>dingo使用了自己的route service，在最开始的配置中和laravel5.4是不兼容的</p>
+<h2 id="jwt-auth的配置以及和dingo的配合使用">jwt-auth的配置以及和dingo的配合使用</h2>
+<p>通过配置jwt使得在代码中能够获取到当前登录用户信息，在middleware中能检验登录</p>
+<h2 id="通过middleware来记录request和response的log">通过middleware来记录request和response的log</h2>
+<p>terminate middleware</p>]]></summary>
+</entry>
+<entry>
+    <title>新入手xps13 9360的体验</title>
+    <link href="http://blog.iyue.club/posts/2016-11-19-xps13-9360-first-eye.html" />
+    <id>http://blog.iyue.club/posts/2016-11-19-xps13-9360-first-eye.html</id>
+    <published>2016-11-19T00:00:00Z</published>
+    <updated>2016-11-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>双11的时候亚马逊入手了一台xps13 9360，机器配置是i7-7500u，8GB内存，带1920x1080的ips屏。决定删掉默认的win10，全盘安装喜爱的linux</p>
+<ol style="list-style-type: decimal">
+<li><p>安装系统</p></li>
+<li><p>安装软件</p></li>
+<li><p>配置软件</p></li>
+<li><p>同步数据</p></li>
+</ol>]]></summary>
+</entry>
+<entry>
     <title>php的猴子补丁</title>
     <link href="http://blog.iyue.club/posts/2016-09-30-php-monkey-patch.html" />
     <id>http://blog.iyue.club/posts/2016-09-30-php-monkey-patch.html</id>
@@ -97,23 +125,18 @@
     <updated>2016-09-03T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p><a href="https://www.elastic.co/products/elasticsearch">elasticsearch</a>是一个非常优秀的搜索工具，比数据库的搜索功能好太多了，以下介绍elasticsearch的配置与应用，以下操作在ubuntu 16.04下进行</p>
 <h3 id="安装">安装</h3>
-<p>默认源安装的是老版本，如果想要用最新版本可以手动添加源</p>
-<ol style="list-style-type: decimal">
-<li><code>apt install default-jre default-jdk</code></li>
-<li><code>wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -</code></li>
-<li><code>echo &quot;deb http://packages.elastic.co/elasticsearch/2.x/debian stable main&quot; | tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list</code></li>
-<li><code>apt install elasticsearch</code></li>
-</ol>
+<p>ubuntu 16.04中默认已经使用elasticsearch 5.x的源了，jdk最好使用java8 1. <code>apt install default-jre default-jdk</code> 2. <code>apt install elasticsearch</code></p>
 <h3 id="启动">启动</h3>
-<p><code>service elasticsearch start</code> 如果一切顺利，执行<code>curl 'http://localhost:9200'</code>的时候就可以正常返回一个json</p>
+<p><code>systemctl start elasticsearch.service</code> 如果一切顺利，执行<code>curl 'http://localhost:9200'</code>的时候就可以正常返回一个json</p>
 <h3 id="安装中文分词插件ik">安装中文分词插件<a href="https://github.com/medcl/elasticsearch-analysis-ik">ik</a></h3>
 <ol style="list-style-type: decimal">
 <li>安装mvn <code>apt install maven</code></li>
 <li>按照github说明安装插件(elasticsearch对插件版本要求比较严格，有时候要自己改插件编译配置)</li>
+<li>把编译好的zip文件复制到<code>/usr/local/share/elasticsearch/plugins/ik</code>中，删除目录中原有的代码，解压zip包，重启es</li>
+<li>重启之后要监控es的日志，避免因为更新插件导致启动失败</li>
 </ol>
 <h3 id="实际应用">实际应用</h3>
-<p>在laravel/lumen中集成elasticsearch很方便，我喜欢的2个库是<a href="https://github.com/elasticquent/elasticquent">elasticquent/elasticquent</a>和<a href="https://github.com/nordsoftware/lumen-elasticsearch">nordsoftware/lumen-elasticsearch</a></p>
-<p>elasticquent用来更新索引很方便，model更新的时候通过<a href="https://laravel.com/docs/5.3/eloquent#events">model event</a>来同步更新索引，lumen-elasticsearch主要是方便构造查询语句</p>]]></summary>
+<p>在laravel 5.4中已经集成了<a href="https://laravel.com/docs/5.4/scout">laravel-scout</a>，所以就不需要像以前那样使用第三方的包了，不过令人伤心的是在<a href="https://github.com/laravel/scout/tree/2.0">scout v2.0</a>之后，es的支持就被剥离出核心项目了，当然如果想继续使用scout+es，可以使用<a href="https://github.com/ErickTamayo/laravel-scout-elastic">laravel-scout-elastic</a>，这个库代码很少，包含了基本的api，使用很方便。</p>]]></summary>
 </entry>
 <entry>
     <title>php从mysql中获取真实字段类型</title>
@@ -318,57 +341,6 @@ thanks Andrew, you saved me 21 bucks, I thought you would give me at lease anoth
     <summary type="html"><![CDATA[<p>在irc上听到有人说他们的应用改了.env中的APP_KEY之后就无法登录了，太奇怪了，在本地测试了几个例子都没有复现，决定详细看看这块</p>
 <p>在注册的时候生成密码的密文，内置了一个叫做<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Foundation/helpers.php#L180">bcrypt</a>的函数来加密明文密码，实际密码生成是在<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Hashing/BcryptHasher.php#L26">BcryptHasher#make</a>中，使用blowfish算法来生成密文，不带参数使用的cost是10</p>
 <p>再看看密码验证这部分 实际校验是在<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Auth/EloquentUserProvider.php#L114">EloquentUserProvider#validateCredentials</a>，调用BcryptHasher#check来校验，关于laravel和php的加密有<a href="https://mnshankar.wordpress.com/2014/03/29/laravel-hash-make-explained/">一篇很好的文章</a>讲述了blowfish这个算法的作用，盐和加密变换次数都存放在密码本身，所以密码的生成和校验完全和APP_KEY无关，别害怕使用<code>php artisan key:generate</code>，这个命令只会让session失效</p>]]></summary>
-</entry>
-<entry>
-    <title>点赞收藏存储设计</title>
-    <link href="http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html" />
-    <id>http://blog.iyue.club/posts/2016-06-06-like-favorite-design.html</id>
-    <published>2016-06-06T00:00:00Z</published>
-    <updated>2016-06-06T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>前段时间给自己的业余项目写代码的时候遇到了一个问题就是如何设计点赞，评论，收藏的存储结构。这3个功能是社交软件必不可少的组成部份，但是设计起来确一点都不简单。</p>
-<p>先说评论</p>
-<p>之前在7k做zeze社区的时候我就发现了评论的复杂性，最大的问题是数据量大，以前做社区的时候一个楼层下可以有几万个评论，一个贴子可以有几百个楼层，一个论坛可以有好多贴子，数据增长很快。但是现在app的评论系统都比较简洁，不会像网页那么复杂，如果不支持嵌套回复的话，那就简单多了，表结构设计如下：</p>
-<pre class="plain"><code>id: 评论id，自增主键
-item_id: 被评论项目的id，int
-author_id: 作者id，int
-comment: 评论内容，varchar</code></pre>
-<p>这个模型没有解决大数据扩展的问题，但是已经算是非常简洁了，对于未来分表的设想是在中间加一张索引表，映射某一个范围的item_id,某个author_id的所有评论到一个分片中，这样按父id，和发布人id来索引评论的时候都简单。</p>
-<p>其次是点赞</p>
-<p>这个问题的难度在于用户可以反复点击，所以要求接口响应足够快，占用资源足够少，不然同时多个用户连续点赞取消赞就会给服务器带来很大的压力了。最初我的设想是把点赞设计为用户和帖子的一个关系，如果用户点赞了某一个帖子，用户就和这个贴子有关系，如果取消了点赞这个关系就断开了。那么点赞表就是一个多对多的关系表了，按帖子和用户查询都可以很快。这种实现的坏处是如果用户反复点击赞接口时，都会有一个查询去判断用户是否赞过这个帖子了，因为所有的产品都是要求用户 不能反复点赞同一个帖子，需要程序自己来维护点赞操作的幂等性，也就是每次写库之前先find一次，如果有就更新时间，如果没有就插入。毫无疑问这个接口会很慢而且占用很多资源，所以要找另一个更优化的方案。我后来决定使用redis的zset来存储点赞信息，以帖子id作为key，以点赞用户的uid作为value，score是点赞时间，由于集合自身是不允许出现重复的value的，所以每次都可以直接zadd把点赞用户更新进去，不需要人工维护数据唯一，太省事了，不过如果还要按用户索引被点赞过的帖子，那就得再新增一个key，以uid作为key，以帖子id作为value，不能支持多字段查询是redis的设计导致的，不过更新2个redis的key可比更新1行mysql快多了，最好使用multi保证原子操作。</p>
-<p>取消赞，收藏，取消收藏我都是用同样的方式做的，只要确保redis服务器不挂，不丢数据就行。</p>]]></summary>
-</entry>
-<entry>
-    <title>我的chromebook</title>
-    <link href="http://blog.iyue.club/posts/2016-06-05-my-chromebook.html" />
-    <id>http://blog.iyue.club/posts/2016-06-05-my-chromebook.html</id>
-    <published>2016-06-05T00:00:00Z</published>
-    <updated>2016-06-05T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>今年2月份附近入手的一台二手chromebook，到目前为止已经用了很长一段时间了，打算写一篇文章来总结一下使用体验。</p>
-<p>先来看看我的屏幕截图，目前看起来还觉得挺geek的 <img src="../images/chromebook-htop.png" alt="终端" /> <img src="../images/chromebook-myadmin.png" alt="myadmin" /></p>
-<p>终端模拟器是用的chrome的一个插件叫做crosh window</p>
-<p>linux虚拟机是用crouton安装的ubuntu16.04 core,可惜是共享内核的，所以ubuntu的内核也是3.10.18的</p>
-<p>一些常用工具包括：</p>
-<ol style="list-style-type: decimal">
-<li>fish，我最喜欢的shell</li>
-<li>tmux，终端复用软件，可以开启多个会话</li>
-<li>ss，用来上网的，开启之后chromebook也可以共享上网，真不错</li>
-<li>emacs，我最爱的编辑器，之前crouton遇到最大的问题是中文输入法，有了emacs之后我可以用自带的pyim来输入中文了，没必要使用chromebook自带的输入法</li>
-<li>开发环境，nginx, mysql, php7, python, rvm等等之类的</li>
-<li>数据库连接是用一个叫做myadmin的chrome扩展实现的</li>
-</ol>
-<p>遇到的问题：</p>
-<ol style="list-style-type: decimal">
-<li><p>cpu性能太差劲，我的lenovon21用的cpu是intel n2840的，一款低功耗的arm架构双核cpu，在打开多个浏览器标签时资源使用率总是达到100%，我在编译代码的时候就更费劲了，昨晚编译hakyll花了1个多小时，用公司的thinkpad t440s编译大概10分钟能搞定</p></li>
-<li><p>显示器太渣，现在应该没有720p的笔记本显示器了吧，看着觉得很糢糊</p></li>
-<li><p>机身是黑色塑料的，看起来很廉价，没有chromebook pixel和mac book pro那么银光闪闪</p></li>
-<li><p>还是cpu太差劲，平时敲代码打字都有明显的卡顿了</p></li>
-</ol>
-<p>总结一下：</p>
-<ol style="list-style-type: decimal">
-<li><p>google是一家非常伟大的公司，感谢他们发明了chromebook这么伟大的产品</p></li>
-<li><p>联想是美帝良心企业，在国内就买不到chromebook，国内的thinkpad价格也要比美帝高出一截</p></li>
-<li><p>n21还算是一款性价比非常好的本子，就是性能有点弱，17年再换一个16年出的二手chromebook玩玩</p></li>
-</ol>]]></summary>
 </entry>
 
 </feed>

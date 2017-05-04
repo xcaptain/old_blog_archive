@@ -5,65 +5,58 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - emacs自定义grep-find的模板</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">emacs自定义grep-find的模板</h2>
-      <p class="metadata">
-        <span class="date">March  7, 2015</span> - <span class="tags"><a href="../tags/emacs.html">emacs</a>, <a href="../tags/fish.html">fish</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>被emacs的搜索功能纠结好久了，今天下定决心来解决一下。以前执行<code>grep-find</code>命令的时候查找的模板都是<code>find . -type f -exec grep -nH -e {} +</code>，但是这条命令在fish下没法用，找了一下发现在<a href="https://github.com/fish-shell/fish-shell/issues/95">这个issue</a>里面作者提到了为什么fish里面没法用find，因为在fish里面<code>{}</code>是有意义的，所以就会提示exec缺少参数，所以如果写成<code>find . -type f -exec grep -nH -e '{}' +</code>就可以了，接下来的任务就是修改emacs的配置，把默认的<code>grep-find</code>的行为改掉。</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">emacs自定义grep-find的模板</h2>
+    <p class="metadata">
+      <span class="date">March  7, 2015</span> - <span class="tags"><a href="../tags/emacs.html">emacs</a>, <a href="../tags/fish.html">fish</a></span>
+    </p>
+  </header>
+  <p>被emacs的搜索功能纠结好久了，今天下定决心来解决一下。以前执行<code>grep-find</code>命令的时候查找的模板都是<code>find . -type f -exec grep -nH -e {} +</code>，但是这条命令在fish下没法用，找了一下发现在<a href="https://github.com/fish-shell/fish-shell/issues/95">这个issue</a>里面作者提到了为什么fish里面没法用find，因为在fish里面<code>{}</code>是有意义的，所以就会提示exec缺少参数，所以如果写成<code>find . -type f -exec grep -nH -e '{}' +</code>就可以了，接下来的任务就是修改emacs的配置，把默认的<code>grep-find</code>的行为改掉。</p>
 <p>因为查找功能是emacs默认就有的，所以我直接就去源代码目录找了，在<code>/usr/share/emacs/24.4/</code>下执行<code>grep 'grep-find' -R *</code>，然后在<code>lisp/ldefs-boot.el</code>和<code>lisp/loaddefs.el</code>找到了相关的代码，然后试着修改第12669行，这行看起来像是相关的代码，结果改完了半天不生效，无奈之下去<a href="http://stackoverflow.com/questions/28915372/change-the-default-find-grep-command-in-emacs/">stackoverflow</a>提问，这个网站效率真的不是一般的高，很快就拿到答案了，有人说我找到的代码只不过是docstring而已，要修改的话得改<code>grep-find-template</code>,通过<code>C-h v</code>查看了一下这个变量的值，默认的是<code>&quot;find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; {} +&quot;</code>，修改它就行了，编辑<code>~/.emacs.d/personal/custom.el</code>，在最底下加上<code>(setq grep-find-template &quot;find . &lt;X&gt; -type f &lt;F&gt; -exec grep &lt;C&gt; -nH -e &lt;R&gt; \'{}\' +&quot;)</code>，然后<code>eval-buffer</code>，问题完美解决，不得不说emacs真是灵活，不用改源代码就能实现自定义功能。</p>
 <p>后面又修改了<code>find-grep-dired</code>的模板，好像这条命令没有模板，所以我直接改的代码，<code>/usr/share/emacs/24.4/lisp/find-dired.el.gz</code>编辑第278行，把{}转义了。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>

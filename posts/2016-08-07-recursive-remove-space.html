@@ -5,52 +5,50 @@
     <meta charset="UTF-8">
     <meta name="description" content="Code, design, systems">
     <title>blog.iyue.club - 递归地删除数组里面所有多余的空格</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
     <link rel="stylesheet" href="../css/core.css" />
     <link rel="image_src" href="../favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
-
   </head>
   <body>
-    <div class="container">
-      <div class="row head">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="page-header">
-            <h1>
-              <a href="../">blog.iyue.club
-              </a>
-            </h1>
-          </div>
-          <ul class="nav nav-pills header">
-            <li>
-              <a href="../">Home</a>
-            </li>
-            <li>
-              <a href="../posts.html">Posts</a>
-            </li>
-            <li>
-              <a href="../tags.html">Tags</a>
-            </li>
-            <li>
-              <a href="../about.html">About</a>
-            </li>
-            <li>
-              <a href="../rss.xml">RSS</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="row content">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="post">
-  <article>
     <header>
-      <h2 class="post-title">递归地删除数组里面所有多余的空格</h2>
-      <p class="metadata">
-        <span class="date">August  7, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
-      </p>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
     </header>
-    <p>在使用<a href="https://github.com/jdorn/json-editor">jsoneditor</a>的时候遇到一个问题就是总是会把多余的空格写入数据库，如：</p>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">递归地删除数组里面所有多余的空格</h2>
+    <p class="metadata">
+      <span class="date">August  7, 2016</span> - <span class="tags"><a href="../tags/php.html">php</a></span>
+    </p>
+  </header>
+  <p>在使用<a href="https://github.com/jdorn/json-editor">jsoneditor</a>的时候遇到一个问题就是总是会把多余的空格写入数据库，如：</p>
 <div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="ot">[</span><span class="st">'a'</span> =&gt; <span class="st">' hello'</span><span class="ot">,</span> <span class="st">'b'</span> =&gt; <span class="st">'world '</span><span class="ot">,</span> <span class="st">'c'</span> =&gt; <span class="st">' he '</span><span class="ot">];</span></code></pre></div>
 <p>很多情况下我们都不需要开头结尾的空格，有时候空格甚至会带来麻烦，比如说图片地址后面加上空格之后就给前端操作带来麻烦，那么有什么好办法在写入数据库之前先过滤一遍呢？</p>
 <p>对于上面这种对象数组处理方式很简单：</p>
@@ -67,17 +65,12 @@
 }<span class="ot">;</span>
 <span class="fu">array_walk</span><span class="ot">(</span><span class="kw">$a</span><span class="ot">,</span> <span class="kw">$myfunc</span><span class="ot">);</span></code></pre></div>
 <p>普通函数的递归很好写，但是匿名函数的递归就是第一次写来，竟然需要用use来把当前函数导入进闭包里面，而且必需以传引用的方式，php的语法也是丑得可以。</p>
-  </article>
-</div>
-        </div>
-      </div>
-      <div class="row footer">
-        <div class="col-lg-8 col-lg-offset-2">
-          <div class="bottom">
-            Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
-          </div>
-        </div>
-      </div>
-    </div>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
   </body>
 </html>
