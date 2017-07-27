@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - php陷阱与缺陷</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">php陷阱与缺陷</h2>
+    <p class="metadata">
+      <span class="date">June 30, 2017</span> - <span class="tags"><a href="../tags/php.html">php</a>, <a href="../tags/programming.html">programming</a></span>
+    </p>
+  </header>
+  <p>最近使用php时遇到一个很奇怪的问题，即</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">// php</span>
+<span class="dv">0</span> == <span class="st">'a'</span><span class="ot">;</span> <span class="co">// true</span></code></pre></div>
+<p>这个问题在web开发的时候可能会导致一些莫名其妙的问题，比较了一些其他语言之后发现大部分是不这么做的，先总结 0==‘a’ ==&gt; true的</p>
+<div class="sourceCode"><pre class="sourceCode perl"><code class="sourceCode perl"><span class="co"># perl</span>
+<span class="dv">0</span> == <span class="kw">'</span><span class="st">a</span><span class="kw">'</span> <span class="co"># 1</span>
+<span class="dv">1</span> == <span class="kw">'</span><span class="st">a</span><span class="kw">'</span> <span class="co"># 0</span>
+<span class="dv">0</span> == <span class="kw">'</span><span class="st">0</span><span class="kw">'</span> <span class="co"># 1</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">// php</span>
+<span class="dv">0</span> == <span class="st">'a'</span> <span class="co">// ==&gt; true</span>
+<span class="dv">0</span> === <span class="st">'a'</span> <span class="co">// false</span>
+<span class="dv">1</span> == <span class="st">'a'</span> <span class="co">// ==&gt; false</span>
+<span class="dv">0</span> == <span class="st">'0'</span> <span class="co">// true</span></code></pre></div>
+<p>0==‘a’ ==&gt; False的：</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># python 3.6</span>
+<span class="dv">0</span> <span class="op">==</span> <span class="st">'a'</span> <span class="co"># False</span>
+<span class="dv">0</span> <span class="op">==</span> <span class="st">'0'</span> <span class="co"># False</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="co"># ruby 2.4</span>
+<span class="dv">0</span> == <span class="ch">'a'</span> <span class="co"># false</span>
+<span class="dv">0</span> == <span class="ch">'0'</span> <span class="co"># false</span></code></pre></div>
+<pre class="elisp"><code>; elisp
+(= 0 &quot;a&quot;) ;; error
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span class="co">(* ocaml 4.04.1 *)</span>
+<span class="dv">0</span> == <span class="ch">'0'</span>;; <span class="co">(* error *)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- ghci 8.0.2</span>
+<span class="dv">0</span> <span class="fu">==</span> <span class="ch">'0'</span> <span class="co">-- error</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">% erlang otp 20</span>
+<span class="dv">0</span> <span class="op">==</span> <span class="ch">'0'</span><span class="fu">.</span> <span class="co">% false</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="co">// C</span>
+<span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+
+<span class="dt">int</span> main(<span class="dt">void</span>) {
+  <span class="dt">char</span> a = <span class="ch">'a'</span>;
+  printf(<span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span>, (<span class="dv">0</span> == a)); <span class="co">// 0</span>
+
+  <span class="cf">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+<p>其他更加现代的语言，如rust,typescript,idris等就不说了，强大的type inference导致这样的代码根本不能通过编译器。 按照这样对照看来和php行为类似的只有perl，其他语言比较0==’a’要么报错，要么返回false。不管是返回true还是false，我还是更喜欢在编译时报错，这样可以及时发现代码中的问题。</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>

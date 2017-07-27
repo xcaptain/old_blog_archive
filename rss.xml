@@ -8,8 +8,131 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2017-05-01T00:00:00Z</updated>
+    <updated>2017-06-30T00:00:00Z</updated>
     <entry>
+    <title>php陷阱与缺陷</title>
+    <link href="http://blog.iyue.club/posts/2017-06-30-php-pitfalls.html" />
+    <id>http://blog.iyue.club/posts/2017-06-30-php-pitfalls.html</id>
+    <published>2017-06-30T00:00:00Z</published>
+    <updated>2017-06-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>最近使用php时遇到一个很奇怪的问题，即</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">// php</span>
+<span class="dv">0</span> == <span class="st">&#39;a&#39;</span><span class="ot">;</span> <span class="co">// true</span></code></pre></div>
+<p>这个问题在web开发的时候可能会导致一些莫名其妙的问题，比较了一些其他语言之后发现大部分是不这么做的，先总结 0==‘a’ ==&gt; true的</p>
+<div class="sourceCode"><pre class="sourceCode perl"><code class="sourceCode perl"><span class="co"># perl</span>
+<span class="dv">0</span> == <span class="kw">&#39;</span><span class="st">a</span><span class="kw">&#39;</span> <span class="co"># 1</span>
+<span class="dv">1</span> == <span class="kw">&#39;</span><span class="st">a</span><span class="kw">&#39;</span> <span class="co"># 0</span>
+<span class="dv">0</span> == <span class="kw">&#39;</span><span class="st">0</span><span class="kw">&#39;</span> <span class="co"># 1</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">// php</span>
+<span class="dv">0</span> == <span class="st">&#39;a&#39;</span> <span class="co">// ==&gt; true</span>
+<span class="dv">0</span> === <span class="st">&#39;a&#39;</span> <span class="co">// false</span>
+<span class="dv">1</span> == <span class="st">&#39;a&#39;</span> <span class="co">// ==&gt; false</span>
+<span class="dv">0</span> == <span class="st">&#39;0&#39;</span> <span class="co">// true</span></code></pre></div>
+<p>0==‘a’ ==&gt; False的：</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># python 3.6</span>
+<span class="dv">0</span> <span class="op">==</span> <span class="st">&#39;a&#39;</span> <span class="co"># False</span>
+<span class="dv">0</span> <span class="op">==</span> <span class="st">&#39;0&#39;</span> <span class="co"># False</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby"><span class="co"># ruby 2.4</span>
+<span class="dv">0</span> == <span class="ch">&#39;a&#39;</span> <span class="co"># false</span>
+<span class="dv">0</span> == <span class="ch">&#39;0&#39;</span> <span class="co"># false</span></code></pre></div>
+<pre class="elisp"><code>; elisp
+(= 0 &quot;a&quot;) ;; error
+</code></pre>
+<div class="sourceCode"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span class="co">(* ocaml 4.04.1 *)</span>
+<span class="dv">0</span> == <span class="ch">&#39;0&#39;</span>;; <span class="co">(* error *)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="co">-- ghci 8.0.2</span>
+<span class="dv">0</span> <span class="fu">==</span> <span class="ch">&#39;0&#39;</span> <span class="co">-- error</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode erlang"><code class="sourceCode erlang"><span class="co">% erlang otp 20</span>
+<span class="dv">0</span> <span class="op">==</span> <span class="ch">&#39;0&#39;</span><span class="fu">.</span> <span class="co">% false</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="co">// C</span>
+<span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+
+<span class="dt">int</span> main(<span class="dt">void</span>) {
+  <span class="dt">char</span> a = <span class="ch">&#39;a&#39;</span>;
+  printf(<span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span>, (<span class="dv">0</span> == a)); <span class="co">// 0</span>
+
+  <span class="cf">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+<p>其他更加现代的语言，如rust,typescript,idris等就不说了，强大的type inference导致这样的代码根本不能通过编译器。 按照这样对照看来和php行为类似的只有perl，其他语言比较0==’a’要么报错，要么返回false。不管是返回true还是false，我还是更喜欢在编译时报错，这样可以及时发现代码中的问题。</p>]]></summary>
+</entry>
+<entry>
+    <title>学习idris</title>
+    <link href="http://blog.iyue.club/posts/2017-06-06-learning-idris.html" />
+    <id>http://blog.iyue.club/posts/2017-06-06-learning-idris.html</id>
+    <published>2017-06-06T00:00:00Z</published>
+    <updated>2017-06-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>在工作中一直写的是php，偶尔写点javascript, python，动态语言写多了之后发现很多语言本身的问题，导致要通过很多人为的规范来让程序变得可维护。</p>
+<p>目前对php语言的一些感受：</p>
+<ol>
+<li>无类型推导(<a href="https://en.wikipedia.org/wiki/Type_inference">Type inference</a>)</li>
+<li>无确定性异常捕获(<a href="https://stackoverflow.com/questions/6115896/java-checked-vs-unchecked-exception-explanation">checked exception</a>)</li>
+</ol>
+<p>目前在php7中加入了强类型开关，如果启用了能做部分类型推导，但是目前公司大部分代码还是php5的语法，而且线上环境还未切换到7。其实就算完全用php7 的严格模式开发，要想充分利用到类型推导带来的好处似乎也不太简单，php的创始人做的<a href="https://github.com/etsy/phan">phan</a> 项目还没有发布v1.0版本，再说到处使用array, stdclass 这样的类型来存储变量，phan要实现这种代码的静态分析应该也很吃力，因为php7还不支持 <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent type</a>。看php相关的新闻，最近开发组的工作重心 似乎在jit以及性能优化上，要想做一个完整的类型系统估计还要很久，在这之前能加上一个好用的debugger我就知足了。</p>
+<p>为什么类型推导这么重要呢，举个例子吧。 领导有个需求让实现一个字符串截取功能，你很快就写出来了</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">/**</span>
+<span class="co"> * 一个很简单的字符串截取函数</span>
+<span class="co"> *</span>
+<span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">string</span><span class="co"> $str 待处理的字符串</span>
+<span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">int</span><span class="co"> $start 开始点</span>
+<span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">int</span><span class="co"> $length 截取长度</span>
+<span class="co"> * </span><span class="an">@return</span><span class="co"> string</span>
+<span class="co"> */</span>
+<span class="kw">function</span> cut_str<span class="ot">(</span><span class="kw">$str</span><span class="ot">,</span> <span class="kw">$start</span><span class="ot">,</span> <span class="kw">$length</span><span class="ot">)</span>
+{
+    <span class="kw">return</span> <span class="fu">substr</span><span class="ot">(</span><span class="kw">$str</span><span class="ot">,</span> <span class="kw">$start</span><span class="ot">,</span> <span class="kw">$length</span><span class="ot">);</span>
+}</code></pre></div>
+<p>你还特意给这个简单得不能再简单的方法添加了注释文档，但是有一天你在查看程序的日志时发现以下内容:</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">PHP warning:  substr() expects parameter 1 to be string, array given on line 1
+PHP error:  Undefined variable: a on line 1</code></pre></div>
+<p>如果公司做了错误日志收集监控，并且和kpi挂钩的话，那你就惨了，郁闷的你仔细查了一下代码，发现某个队友在调用你的cut_str方法时没有按照你给的注释来 传字符串参数而是传了一个数组过来，你可能会去和那个同事理论，告诉他你的文档里写得很清楚这个方法第一个参数是字符串不能传数组过来，他可能会埋怨你 这个方法写得不严谨没有做好脏数据的异常处理，互相扯皮几句之后还得回去老老实实修改代码，思考了一下之后你可能改成如下的样子:</p>
+<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="co">/**</span>
+<span class="co"> * 一个很简单的字符串截取函数</span>
+<span class="co"> *</span>
+<span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">string</span><span class="co"> $str 待处理的字符串</span>
+<span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">int</span><span class="co"> $start 开始点</span>
+<span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">int</span><span class="co"> $length 截取长度</span>
+<span class="co"> * </span><span class="an">@return</span><span class="co"> string</span>
+<span class="co"> */</span>
+<span class="kw">function</span> cut_str<span class="ot">(</span><span class="kw">$str</span><span class="ot">,</span> <span class="kw">$start</span><span class="ot">,</span> <span class="kw">$length</span><span class="ot">)</span>
+{
+    <span class="kw">if</span> <span class="ot">(</span>! <span class="fu">is_string</span><span class="ot">(</span><span class="kw">$str</span><span class="ot">))</span> {
+        <span class="co">// do some log</span>
+        <span class="kw">return</span> <span class="st">&#39;&#39;</span><span class="ot">;</span>
+    }
+    <span class="kw">if</span> <span class="ot">(</span><span class="kw">$start</span> &lt; <span class="dv">0</span><span class="ot">)</span> {
+        <span class="co">// do some log</span>
+        <span class="kw">return</span> <span class="st">&#39;&#39;</span><span class="ot">;</span>
+    }
+    <span class="kw">if</span> <span class="ot">(</span><span class="kw">$start</span> &gt;= str_len<span class="ot">(</span><span class="kw">$str</span><span class="ot">))</span> {
+        <span class="co">// do some log</span>
+        <span class="kw">return</span> <span class="st">&#39;&#39;</span><span class="ot">;</span>
+    }
+    <span class="kw">if</span> <span class="ot">(</span><span class="kw">$length</span> &lt; <span class="dv">0</span><span class="ot">)</span> {
+        <span class="co">// do some log</span>
+        <span class="kw">return</span> <span class="st">&#39;&#39;</span><span class="ot">;</span>
+    }
+    <span class="kw">return</span> <span class="fu">substr</span><span class="ot">(</span><span class="kw">$str</span><span class="ot">,</span> <span class="kw">$start</span><span class="ot">,</span> <span class="kw">$length</span><span class="ot">);</span>
+}</code></pre></div>
+<p>写完之后你志得意满，新的方法太健壮了，不管猪队友传任何参数过来这个方法都能容错不会挂，而且可以默默的记录一些日志提醒自己有人传了乱七八糟的参数过来， 但是这个方法真的写得好吗？原来一行能搞定的问题被硬生生扩展到了15行，大部分都是冗余的校验，而且把校验，记日志，返回结果这3个职责混在一起做了，违反 了单一职责原则。在这里我们没有考虑抛异常把异常抛给上层去处理，因为这是上面checked exception相关的内容了。</p>
+<p>说了这么多就是想引出idris这们语言，按照官网的介绍：</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">Idris is a general purpose pure functional programming language with dependent types. Dependent types allow types to be predicated on values, meaning that some aspects of a program’s behaviour can be specified precisely in the type. It is compiled, with eager evaluation. Its features are influenced by Haskell and ML</code></pre></div>
+<p>简单说就是idris实现了一个很强大的类型系统，在编译时能能检测出大部分程序潜在的问题，真正做到once it compiles, it runs.</p>
+<p>用idris重写一下上面那个cut_str方法</p>
+<div class="sourceCode"><pre class="sourceCode idris"><code class="sourceCode idris"><span class="fu">cut_str</span> <span class="ot">:</span> (index <span class="ot">:</span> <span class="dt">Nat</span>) <span class="ot">-&gt;</span> (len <span class="ot">:</span> <span class="dt">Nat</span>) <span class="ot">-&gt;</span> (subject <span class="ot">:</span> <span class="dt">String</span>) <span class="ot">-&gt;</span> <span class="dt">String</span>
+cut_str <span class="fu">=</span> substr</code></pre></div>
+<p>这时候谁要是写 cut_str 0 2 [“hello”] 这样的代码，编译器直接会报错，没机会走到runtime</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">When checking argument subject to function Main.cut_str:
+<span class="bn">        Can&#39;t disambiguate since no name has a suitable type:</span>
+<span class="bn">                Prelude.List.::, Prelude.Stream.::</span></code></pre></div>
+<p>这种形式的代码我非常喜欢，方法的参数定义得很明确，功能定义也很明确，如果谁乱调用，那么就将自食其果。</p>
+<p>之前关注过的强类型的语言还有:</p>
+<ol>
+<li><a href="https://www.rust-lang.org">rust</a></li>
+<li><a href="http://www.typescriptlang.org/">typescript</a></li>
+</ol>
+<p>今后每天抽出一点时间学习这些语言背后的思想</p>]]></summary>
+</entry>
+<entry>
     <title>laravel路由与请求处理</title>
     <link href="http://blog.iyue.club/posts/2017-05-01-larave-router-and-requests.html" />
     <id>http://blog.iyue.club/posts/2017-05-01-larave-router-and-requests.html</id>
@@ -270,77 +393,6 @@ thanks Andrew, you saved me 21 bucks, I thought you would give me at lease anoth
 }<span class="ot">;</span>
 <span class="fu">array_walk</span><span class="ot">(</span><span class="kw">$a</span><span class="ot">,</span> <span class="kw">$myfunc</span><span class="ot">);</span></code></pre></div>
 <p>普通函数的递归很好写，但是匿名函数的递归就是第一次写来，竟然需要用use来把当前函数导入进闭包里面，而且必需以传引用的方式，php的语法也是丑得可以。</p>]]></summary>
-</entry>
-<entry>
-    <title>eloquent高级用法</title>
-    <link href="http://blog.iyue.club/posts/2016-07-18-delve-into-eloquent.html" />
-    <id>http://blog.iyue.club/posts/2016-07-18-delve-into-eloquent.html</id>
-    <published>2016-07-18T00:00:00Z</published>
-    <updated>2016-07-18T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>常见的关系模型有1对1,1对多，多对多，在一个model中描述这些关系用<code>hasOne</code>, <code>hasMany</code>, <code>belongsTo</code>, <code>belongsToMany</code>就够了，但是最近遇到一个新的情况要用到更复杂的关系模型，就是polymorphic relation，按照<a href="https://en.wikipedia.org/wiki/Polymorphic_association">wikipedia</a> 的说法，这个概念是在ORM开发中提出来的，<a href="https://laravel.com/docs/5.2/eloquent-relationships">laravel</a>和<a href="http://guides.rubyonrails.org/association_basics.html">rails</a>中很好的实现了多态关系。第一次遇到这个问题的时候没见过，以为能用自带的1对多关系解决，但是在经过一番尝试之后没法优雅的解决我的问题，所以求助了<a href="https://stackoverflow.com/questions/38433109/eloquent-belongsto-determine-relation-table">stackoverflow</a>，很快就有网友提示了正确的思路，避免我在错误的道路上越走越远，今天就来总结一下我的问题吧。</p>
-<p>在项目中有一些资源表，如games, news, songs，现在的需求要针对每种资源都能进行评论，所以还有一个评论表，但是在评论表中得区分是对什么资源的评论，所以用<code>commentable_id</code>和<code>commentable_type</code>来标识一个可被评论项实体。最初建表的时候是打算用<code>item_id</code>和<code>item_type</code>这2个字段的，但是按照laravel和ruby官方文档的建议，我还是改为以<code>able</code>结尾的单词了，我的model见下:</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> Game
-{
-    <span class="kw">public</span> <span class="kw">function</span> comment<span class="ot">()</span>
-    {
-        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphMany<span class="ot">(</span>Comment::<span class="kw">class</span><span class="ot">,</span> <span class="st">&#39;commentable&#39;</span><span class="ot">);</span>
-    }
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> News
-{
-    <span class="kw">public</span> <span class="kw">function</span> comment<span class="ot">()</span>
-    {
-        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphMany<span class="ot">(</span>Comment::<span class="kw">class</span><span class="ot">,</span> <span class="st">&#39;commentable&#39;</span><span class="ot">);</span>
-    }
-}</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">class</span> Comment
-{
-    <span class="kw">public</span> <span class="kw">function</span> commentable<span class="ot">()</span>
-    {
-        <span class="kw">return</span> <span class="kw">$this</span>-&gt;morphTo<span class="ot">();</span>
-    }
-    <span class="kw">public</span> <span class="kw">function</span> getCommentableTypeAttribute<span class="ot">(</span><span class="kw">$value</span><span class="ot">)</span>
-    {
-        <span class="kw">if</span> <span class="ot">(</span><span class="kw">$value</span> == <span class="st">&#39;App\Model\Game&#39;</span><span class="ot">)</span> {
-            <span class="kw">return</span> <span class="st">&#39;game&#39;</span><span class="ot">;</span>
-        } <span class="kw">else</span> {
-            <span class="kw">return</span> <span class="st">&#39;news&#39;</span><span class="ot">;</span>
-        }
-    }
-    <span class="kw">public</span> <span class="kw">function</span> author<span class="ot">()</span>
-    {
-        <span class="kw">return</span> <span class="kw">$this</span>-&gt;belongsTo<span class="ot">(</span>User::<span class="kw">class</span><span class="ot">,</span> <span class="st">&#39;author_id&#39;</span><span class="ot">);</span>
-    }
-}</code></pre></div>
-<p>在获取一个用户发布的所有评论时，可以使用</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$comments</span> = Comment::where<span class="ot">(</span><span class="st">&#39;author_id&#39;</span><span class="ot">,</span> <span class="st">&#39;=&#39;</span><span class="ot">,</span> <span class="kw">$id</span><span class="ot">)</span>
-    -&gt;with<span class="ot">(</span><span class="st">&#39;commentable&#39;</span><span class="ot">)</span>
-    -&gt;paginate<span class="ot">();</span></code></pre></div>
-<p>通过打印这行的查询日志发现总共有4条查询语句:</p>
-<ol style="list-style-type: decimal">
-<li><p>查询用户的总评论数，分页时用到</p>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> <span class="fu">count</span>(*) <span class="kw">as</span> aggregate <span class="kw">from</span> `comments` <span class="kw">where</span> `author_id` = ?</code></pre></div></li>
-<li><p>查询评论本身的信息</p>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `comments` <span class="kw">where</span> `author_id` = ? <span class="kw">limit</span> <span class="dv">15</span> offset <span class="dv">0</span></code></pre></div></li>
-<li><p>查询发布评论的人的信息</p>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `users` <span class="kw">where</span> `users`.`id` <span class="kw">in</span> (?)</code></pre></div></li>
-<li><p>查询被评论物的详细信息</p>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> * <span class="kw">from</span> `games` <span class="kw">where</span> `games`.`id` <span class="kw">in</span> (?) <span class="kw">and</span> `status` = ?</code></pre></div></li>
-</ol>
-<p>一行代码对应4条查询，使用eloquent的优点由此可见，省去了很多自己手写查询的精力。</p>
-<p>另一个查询这种数据模型的思路是关联查询，</p>
-<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">select</span> c.id <span class="kw">as</span> comment_id, c.commentable_id, g.name <span class="kw">as</span> title <span class="kw">from</span> comments <span class="kw">as</span> c <span class="kw">left</span> <span class="kw">join</span> games <span class="kw">as</span> g <span class="kw">on</span> c.commentable_id=g.id <span class="kw">where</span> c.commentable_type=<span class="st">&#39;App</span><span class="ch">\\</span><span class="st">Model</span><span class="ch">\\</span><span class="st">Game&#39;</span> <span class="kw">union</span> <span class="kw">select</span> c.id <span class="kw">as</span> comment_id, c.commentable_id, n.title <span class="kw">as</span> title <span class="kw">from</span> comments <span class="kw">as</span> c <span class="kw">left</span> <span class="kw">join</span> news <span class="kw">as</span> n <span class="kw">on</span> c.commentable_id=n.id <span class="kw">where</span> c.commentable_type=<span class="st">&#39;App</span><span class="ch">\\</span><span class="st">Model</span><span class="ch">\\</span><span class="st">News&#39;</span>;</code></pre></div>
-<p>开始是打算动态选择如何管理资源表的，后来尝试之后发现只能用union合并2条查询的结果，手写查询还是不如eloquent优雅。</p>]]></summary>
-</entry>
-<entry>
-    <title>laravel密码生成与校验机制</title>
-    <link href="http://blog.iyue.club/posts/2016-07-08-laravel-password.html" />
-    <id>http://blog.iyue.club/posts/2016-07-08-laravel-password.html</id>
-    <published>2016-07-08T00:00:00Z</published>
-    <updated>2016-07-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>在irc上听到有人说他们的应用改了.env中的APP_KEY之后就无法登录了，太奇怪了，在本地测试了几个例子都没有复现，决定详细看看这块</p>
-<p>在注册的时候生成密码的密文，内置了一个叫做<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Foundation/helpers.php#L180">bcrypt</a>的函数来加密明文密码，实际密码生成是在<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Hashing/BcryptHasher.php#L26">BcryptHasher#make</a>中，使用blowfish算法来生成密文，不带参数使用的cost是10</p>
-<p>再看看密码验证这部分 实际校验是在<a href="https://github.com/laravel/framework/blob/5.2/src/Illuminate/Auth/EloquentUserProvider.php#L114">EloquentUserProvider#validateCredentials</a>，调用BcryptHasher#check来校验，关于laravel和php的加密有<a href="https://mnshankar.wordpress.com/2014/03/29/laravel-hash-make-explained/">一篇很好的文章</a>讲述了blowfish这个算法的作用，盐和加密变换次数都存放在密码本身，所以密码的生成和校验完全和APP_KEY无关，别害怕使用<code>php artisan key:generate</code>，这个命令只会让session失效</p>]]></summary>
 </entry>
 
 </feed>
