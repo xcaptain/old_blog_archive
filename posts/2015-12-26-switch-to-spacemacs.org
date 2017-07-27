@@ -12,7 +12,7 @@ tags: emacs
 *** 从elpa或者是melpa上面下载别人贡献的包
 
 ** 目前的配置
-*** spacemacs 
+*** spacemacs
 所有配置都使用spacemacs的规则
 
 ** 切换的原因
@@ -34,3 +34,8 @@ spacemacs的ui也很美观，下面的状态条非常漂亮
 *** 养成一个好习惯很重要
 工具是有好坏之分的，如果不相信这句话而是一味的认为工具不重要，人才是最终要的，这样下去
 就会让工作生活效率越来越低下
+
+** emacs使用技巧
+   1. SPC b p 切换到上一个Buffer
+   2. SPC l l 显示所有的layouts
+   3. SPC p l 显示所有可用的project，并且作为project layout打开

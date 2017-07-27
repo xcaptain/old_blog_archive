@@ -1,0 +1,77 @@
+---
+title: php陷阱与缺陷
+tags: php,programming
+---
+#+OPTIONS: ^:nil
+
+最近使用php时遇到一个很奇怪的问题，即
+#+BEGIN_SRC php
+// php
+0 == 'a'; // true
+#+END_SRC
+这个问题在web开发的时候可能会导致一些莫名其妙的问题，比较了一些其他语言之后发现大部分是不这么做的，先总结 0=='a' ==> true的
+
+#+BEGIN_SRC perl
+# perl
+0 == 'a' # 1
+1 == 'a' # 0
+0 == '0' # 1
+#+END_SRC
+
+#+BEGIN_SRC php
+// php
+0 == 'a' // ==> true
+0 === 'a' // false
+1 == 'a' // ==> false
+0 == '0' // true
+#+END_SRC
+
+
+0=='a' ==> False的：
+
+#+BEGIN_SRC python
+# python 3.6
+0 == 'a' # False
+0 == '0' # False
+#+END_SRC
+
+#+BEGIN_SRC ruby
+# ruby 2.4
+0 == 'a' # false
+0 == '0' # false
+#+END_SRC
+
+#+BEGIN_SRC elisp
+; elisp
+(= 0 "a") ;; error
+#+END_SRC
+
+#+BEGIN_SRC ocaml
+(* ocaml 4.04.1 *)
+0 == '0';; (* error *)
+#+END_SRC
+
+#+BEGIN_SRC haskell
+-- ghci 8.0.2
+0 == '0' -- error
+#+END_SRC
+
+#+BEGIN_SRC erlang
+% erlang otp 20
+0 == '0'. % false
+#+END_SRC
+
+#+BEGIN_SRC c
+// C
+#include <stdio.h>
+
+int main(void) {
+  char a = 'a';
+  printf("%d\n", (0 == a)); // 0
+
+  return 0;
+}
+#+END_SRC
+
+其他更加现代的语言，如rust,typescript,idris等就不说了，强大的type inference导致这样的代码根本不能通过编译器。
+按照这样对照看来和php行为类似的只有perl，其他语言比较0=='a'要么报错，要么返回false。不管是返回true还是false，我还是更喜欢在编译时报错，这样可以及时发现代码中的问题。
