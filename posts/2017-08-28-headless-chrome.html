@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 使用headless chromium来抓取网页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">使用headless chromium来抓取网页</h2>
+    <p class="metadata">
+      <span class="date">August 28, 2017</span> - <span class="tags"><a href="../tags/python.html">python</a>, <a href="../tags/web.html">web</a></span>
+    </p>
+  </header>
+  <p>在使用<a href="https://scrapy.org/">scrapy</a>编写爬虫的过程中遇到一些动态加载的内容不好抓取，所以研究了一下<a href="https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md">headless chromium</a>，如果不用这种方式的话就得手动 破解ajax请求的接口，了解不同网站做的校验规则，使用浏览器解析dom然后分析页面结构是最简单快速的方法了。</p>
+<h1 id="headless-chromium基本用法">headless chromium基本用法</h1>
+<p>根据<a href="https://developers.google.com/web/updates/2017/04/headless-chrome">官方教程</a>说明，在chromium59版本之后的浏览器自带了无头模式，只要通过命令行执行</p>
+<p><code>chromium --headless --disable-gpu</code></p>
+<p>就能打开一个无头的浏览器了，如果我想打开某个网页，并且分析完全加载完成的dom结构，那么只要执行</p>
+<p><code>chromium --headless --disable-gpu --dump-dom http://www.dianping.com/shop/14198848 &gt; /tmp/14198848.html</code></p>
+<p>想要做后续的分析直接分析这个html文件就行了</p>
+<h1 id="通过selenium来驱动headless-chromium">通过selenium来驱动headless chromium</h1>
+<p>python有个叫selenium的包叫作，安装好之后就能操作浏览器了</p>
+<h2 id="安装依赖">安装依赖</h2>
+<p><code>sudo pip install selenium</code></p>
+<h2 id="示例代码">示例代码</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> selenium <span class="im">import</span> webdriver
+<span class="im">from</span> selenium.webdriver.chrome.options <span class="im">import</span> Options
+
+chrome_options <span class="op">=</span> Options()
+chrome_options.add_argument(<span class="st">&quot;--headless&quot;</span>)
+
+driver <span class="op">=</span> webdriver.Chrome(chrome_options<span class="op">=</span>chrome_options)
+driver.get(<span class="st">'http://www.dianping.com/shop/59473758'</span>)
+html <span class="op">=</span> driver.execute_script(<span class="st">&quot;return document.documentElement.outerHTML&quot;</span>)
+
+<span class="bu">id</span> <span class="op">=</span> <span class="st">'59474758'</span>
+<span class="cf">with</span> <span class="bu">open</span>(<span class="bu">id</span> <span class="op">+</span> <span class="st">'.html'</span>, <span class="st">'wb'</span>) <span class="im">as</span> f:
+    f.write(<span class="bu">str</span>.encode(html))
+
+driver.save_screenshot(<span class="bu">id</span> <span class="op">+</span> <span class="st">'.png'</span>)
+driver.quit()</code></pre></div>
+<p>这段脚本的作用很明显，首先是创建一个headless chromium的浏览器对象，然后用它打开大众点评的一个网页，然后导出dom，写入到一个html文件 中，最后把当前网页截图保存为一个png文件，并且关闭浏览器</p>
+<h1 id="scrapy操作字符串">scrapy操作字符串</h1>
+<p>通过headless chromium导出的是纯字符串，如果要让它支持xpath解析，需要处理一下，比如：</p>
+<ol>
+<li><a href="https://stackoverflow.com/questions/27323740/scrapy-convert-html-string-to-htmlresponse-object">转成HtmlResponse对象</a></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> scrapy.http <span class="im">import</span> HtmlResponse
+
+response <span class="op">=</span> HtmlResponse(url<span class="op">=</span><span class="st">&quot;my HTML string&quot;</span>, body<span class="op">=</span><span class="st">'&lt;div id=&quot;test&quot;&gt;Test text&lt;/div&gt;'</span>)
+response.xpath(<span class="st">'//div[@id=&quot;test&quot;]/text()'</span>).extract()[<span class="dv">0</span>].strip()</code></pre></div>
+<ol>
+<li><a href="https://stackoverflow.com/questions/8711030/fetch-partial-string-matched-html-tag-using-xpath">转成lxml对象</a></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> lxml
+
+html <span class="op">=</span> <span class="st">'&lt;div id=&quot;test&quot;&gt;Test text&lt;/div&gt;'</span>
+doc <span class="op">=</span> lxml.html.fromstring(html)</code></pre></div>
+<p>有了headless chromium之后写爬虫就方便多了，甚至现代的各种SPA应用也不用担心，happy hacking!</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>

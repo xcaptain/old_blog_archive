@@ -8,8 +8,110 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2017-06-30T00:00:00Z</updated>
+    <updated>2017-08-28T00:00:00Z</updated>
     <entry>
+    <title>使用headless chromium来抓取网页</title>
+    <link href="http://blog.iyue.club/posts/2017-08-28-headless-chrome.html" />
+    <id>http://blog.iyue.club/posts/2017-08-28-headless-chrome.html</id>
+    <published>2017-08-28T00:00:00Z</published>
+    <updated>2017-08-28T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>在使用<a href="https://scrapy.org/">scrapy</a>编写爬虫的过程中遇到一些动态加载的内容不好抓取，所以研究了一下<a href="https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md">headless chromium</a>，如果不用这种方式的话就得手动 破解ajax请求的接口，了解不同网站做的校验规则，使用浏览器解析dom然后分析页面结构是最简单快速的方法了。</p>
+<h1 id="headless-chromium基本用法">headless chromium基本用法</h1>
+<p>根据<a href="https://developers.google.com/web/updates/2017/04/headless-chrome">官方教程</a>说明，在chromium59版本之后的浏览器自带了无头模式，只要通过命令行执行</p>
+<p><code>chromium --headless --disable-gpu</code></p>
+<p>就能打开一个无头的浏览器了，如果我想打开某个网页，并且分析完全加载完成的dom结构，那么只要执行</p>
+<p><code>chromium --headless --disable-gpu --dump-dom http://www.dianping.com/shop/14198848 &gt; /tmp/14198848.html</code></p>
+<p>想要做后续的分析直接分析这个html文件就行了</p>
+<h1 id="通过selenium来驱动headless-chromium">通过selenium来驱动headless chromium</h1>
+<p>python有个叫selenium的包叫作，安装好之后就能操作浏览器了</p>
+<h2 id="安装依赖">安装依赖</h2>
+<p><code>sudo pip install selenium</code></p>
+<h2 id="示例代码">示例代码</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> selenium <span class="im">import</span> webdriver
+<span class="im">from</span> selenium.webdriver.chrome.options <span class="im">import</span> Options
+
+chrome_options <span class="op">=</span> Options()
+chrome_options.add_argument(<span class="st">&quot;--headless&quot;</span>)
+
+driver <span class="op">=</span> webdriver.Chrome(chrome_options<span class="op">=</span>chrome_options)
+driver.get(<span class="st">&#39;http://www.dianping.com/shop/59473758&#39;</span>)
+html <span class="op">=</span> driver.execute_script(<span class="st">&quot;return document.documentElement.outerHTML&quot;</span>)
+
+<span class="bu">id</span> <span class="op">=</span> <span class="st">&#39;59474758&#39;</span>
+<span class="cf">with</span> <span class="bu">open</span>(<span class="bu">id</span> <span class="op">+</span> <span class="st">&#39;.html&#39;</span>, <span class="st">&#39;wb&#39;</span>) <span class="im">as</span> f:
+    f.write(<span class="bu">str</span>.encode(html))
+
+driver.save_screenshot(<span class="bu">id</span> <span class="op">+</span> <span class="st">&#39;.png&#39;</span>)
+driver.quit()</code></pre></div>
+<p>这段脚本的作用很明显，首先是创建一个headless chromium的浏览器对象，然后用它打开大众点评的一个网页，然后导出dom，写入到一个html文件 中，最后把当前网页截图保存为一个png文件，并且关闭浏览器</p>
+<h1 id="scrapy操作字符串">scrapy操作字符串</h1>
+<p>通过headless chromium导出的是纯字符串，如果要让它支持xpath解析，需要处理一下，比如：</p>
+<ol>
+<li><a href="https://stackoverflow.com/questions/27323740/scrapy-convert-html-string-to-htmlresponse-object">转成HtmlResponse对象</a></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> scrapy.http <span class="im">import</span> HtmlResponse
+
+response <span class="op">=</span> HtmlResponse(url<span class="op">=</span><span class="st">&quot;my HTML string&quot;</span>, body<span class="op">=</span><span class="st">&#39;&lt;div id=&quot;test&quot;&gt;Test text&lt;/div&gt;&#39;</span>)
+response.xpath(<span class="st">&#39;//div[@id=&quot;test&quot;]/text()&#39;</span>).extract()[<span class="dv">0</span>].strip()</code></pre></div>
+<ol>
+<li><a href="https://stackoverflow.com/questions/8711030/fetch-partial-string-matched-html-tag-using-xpath">转成lxml对象</a></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> lxml
+
+html <span class="op">=</span> <span class="st">&#39;&lt;div id=&quot;test&quot;&gt;Test text&lt;/div&gt;&#39;</span>
+doc <span class="op">=</span> lxml.html.fromstring(html)</code></pre></div>
+<p>有了headless chromium之后写爬虫就方便多了，甚至现代的各种SPA应用也不用担心，happy hacking!</p>]]></summary>
+</entry>
+<entry>
+    <title>使用rust创建websocket服务器</title>
+    <link href="http://blog.iyue.club/posts/2017-08-15-rust-websocket-tutorial.html" />
+    <id>http://blog.iyue.club/posts/2017-08-15-rust-websocket-tutorial.html</id>
+    <published>2017-08-15T00:00:00Z</published>
+    <updated>2017-08-15T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>最近需要做实时推送相关的应用，所以继续调研了一下websocket，在15年底的时候曾经使用过<a href="https://github.com/sumory/gru">Gru</a>来做聊天推送， 但是那时候没仔细研究过websocket的细节。现在趁机自己构思一下</p>
+<h1 id="使用ws-rs构建websocket服务端">使用<a href="https://github.com/housleyjk/ws-rs">ws-rs</a>构建websocket服务端</h1>
+<p>按照<a href="https://ws-rs.org/guide">Guide</a>搭建服务端应用，`cargo new ws-server1 –bin`</p>
+<div class="sourceCode"><pre class="sourceCode rust"><code class="sourceCode rust"><span class="kw">extern</span> <span class="kw">crate</span> ws;
+
+<span class="kw">use</span> ws::listen;
+
+<span class="kw">fn</span> main() <span class="op">{</span>
+    listen(<span class="st">&quot;127.0.0.1:3012&quot;</span>, |out| <span class="op">{</span>
+        <span class="kw">move</span> |msg| <span class="op">{</span>
+            <span class="pp">println!</span>(<span class="st">&quot;received msg: {}&quot;</span>, msg);
+            out.broadcast(msg)
+        <span class="op">}</span>
+    <span class="op">}</span>).unwrap()
+<span class="op">}</span></code></pre></div>
+<p>cargo run 运行服务端</p>
+<h1 id="服务端推送">服务端推送</h1>
+<p>往socket里面推送消息 `cargo new ws-client1 –bin`</p>
+<div class="sourceCode"><pre class="sourceCode rust"><code class="sourceCode rust"><span class="kw">extern</span> <span class="kw">crate</span> ws;
+
+<span class="kw">use</span> ws::<span class="op">{</span>connect, CloseCode<span class="op">}</span>;
+
+<span class="kw">fn</span> main() <span class="op">{</span>
+    connect(<span class="st">&quot;ws://127.0.0.1:3012&quot;</span>, |out| <span class="op">{</span>
+        out.send(<span class="st">&quot;Hello WebSocket&quot;</span>).unwrap();
+
+        <span class="kw">move</span> |msg| <span class="op">{</span>
+            <span class="pp">println!</span>(<span class="st">&quot;Got message: {}&quot;</span>, msg);
+            out.close(CloseCode::Normal)
+        <span class="op">}</span>
+    <span class="op">}</span>).unwrap()
+<span class="op">}</span></code></pre></div>
+<p>运行 cargo run，这时候会看到服务端输出`received msg: Hello WebSocket`，客户端输出`Got message: Hello WebSocket`</p>
+<h1 id="客户端连接">客户端连接</h1>
+<p>创建2个websocket客户端连接，打开2个chrome标签，分别在终端执行</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">ws <span class="op">=</span> <span class="kw">new</span> <span class="at">WebSocket</span>(<span class="st">&#39;ws://127.0.0.1:3012&#39;</span>)<span class="op">;</span> <span class="co">// 创建连接</span>
+<span class="va">ws</span>.<span class="at">addEventListener</span>(<span class="st">&#39;message&#39;</span><span class="op">,</span> <span class="kw">function</span> (event) <span class="op">{</span>
+    <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;Message from server &#39;</span><span class="op">,</span> <span class="va">event</span>.<span class="at">data</span>)<span class="op">;</span>
+<span class="op">}</span>)<span class="op">;</span> <span class="co">// 监听服务端</span>
+
+<span class="va">ws</span>.<span class="at">send</span>(<span class="st">&#39;from browser&#39;</span>)<span class="op">;</span> <span class="co">// 可以在2个console中互相发消息玩</span></code></pre></div>
+<p>能发现websocket会自动检测连接，如果连接断开会提示 <code>WebSocket is already in CLOSING or CLOSED state.</code> 这也省去了手动发送心跳包 检测连接的麻烦</p>]]></summary>
+</entry>
+<entry>
     <title>php陷阱与缺陷</title>
     <link href="http://blog.iyue.club/posts/2017-06-30-php-pitfalls.html" />
     <id>http://blog.iyue.club/posts/2017-06-30-php-pitfalls.html</id>
@@ -285,114 +387,6 @@ cut_str <span class="fu">=</span> substr</code></pre></div>
 <span class="kw">$row</span> = <span class="kw">$sth</span>-&gt;fetch<span class="ot">();</span></code></pre></div>
 <p>如果不加<code>$conn-&gt;setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>这一行，返回值都是字符串类型，加了之后就能正确返回类型了。</p>
 <p>laravel的eloquent ORM很强大，看了一下底层连接db的代码，在<a href="https://github.com/laravel/framework/blob/5.3/src/Illuminate/Database/Connectors/Connector.php">framework/src/Illuminate/Database/Connectors/Connector.php</a>设置好的默认选项中就有这个，果然是自己写的代码越少，犯错的机会就越少，框架和软件的设计思想都应该把易用性和可配置性放到第一位，而且要做到把默认值设置为普遍最佳方案，这样开发者才能有更多精力专注业务开发，做更多充满创造力的事情，而不是花几十分钟去搜索这种尝试性的问题。喜欢自己开发框架，但是又写不出好框架的团队是一个差劲的团队。</p>]]></summary>
-</entry>
-<entry>
-    <title>如何不要脸与低三下四</title>
-    <link href="http://blog.iyue.club/posts/2016-08-11-github-coupon.html" />
-    <id>http://blog.iyue.club/posts/2016-08-11-github-coupon.html</id>
-    <published>2016-08-11T00:00:00Z</published>
-    <updated>2016-08-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>8月8号的时候github把我的教育网优惠资格给停用了，然后还给我发了一个邮件让我去绑定信用卡，这种事情真是不能忍，我3月底的时候收到一次邮件告诉我说我的教育网资格到期了，然后我就被自动降级为普通用户了，但是5月份之后我发现我还是可以继续用私有仓库的，说明我还是教育网用户，赶紧迁移了几个私有项目到github上面，结果问题就来了，周一又给我取消了，接下来就是连续的不要脸邮件对话，具体内容见下，我以为我踩中了他们系统的bug，要求他们给我补偿，但是他们却一口咬定我是8号正常到期，想我去绑定信用卡，就这样你来我往地回复了几封邮件，最后被额外送3个月优惠期，等于是用21美刀就把我打发了，我还以为至少能送我1年，挺郁闷的，不过github客服还是挺耐心的，到最后估计鄙视死我了哈哈。邮件对话见下，这么蹩脚的英文人家也能听懂，给自己点个赞。</p>
-<pre>
-Gmail	Joey Xie <joey.xf@gmail.com>
-Re: I was an education pack user and now can't use private repository
-6 messages
-Andrew (GitHub Staff) <support@github.com>	Wed, Aug 10, 2016 at 6:03 PM
-To: Joey <joey.xf@gmail.com>
-Hey Joey,
-
-Sorry for any confusion! Your account was upgraded to a paid plan when you applied for a coupon a couple of years ago. The coupon covered the whole cost of a Micro plan, but after two years, the coupon expired while the account stayed at the Micro level (now referred to as Unlimited Private Repositories due to a change in our pricing structure).
-
-Our system tried to charge you for the next month of service at the Unlimited Private Repositories rate, but as our other email noted, you don't have a card on file. That email is sent automatically to users with expired coupons of all types (not just education discounts) to let you know you'll need to sort out your payment method.
-
-If you still qualify for a coupon, you can reapply for another educational discount coupon here:
-
-https://education.github.com/discount_requests/new
-
-If you are no longer qualified, you can either add a valid payment method following the link in the earlier email, or downgrade the account to a Free plan following these steps:
-
-https://help.github.com/articles/downgrading-a-user-account-to-free
-
-Hope that clears things up, and please do let us know if you have any other questions.
-
-All the best,
-Andrew
-
-Joey Xie <joey.xf@gmail.com>	Thu, Aug 11, 2016 at 1:58 AM
-To: "Andrew (GitHub Staff)" <support@github.com>
-Dear Andrew,
-
-In Mar 21 2014 you ended my education account and down grade me to free user but after May 11 2016 https://github.com/blog/2164-introducing-unlimited-private-repositories I can again use private repositories, so I migrated several private project to github. Now again you told me that I have no access to my private repository. I feel bad, my personal projects use these repositories. I hope you can be a nice personal since Amazon pay for their wrong orders but not customers.
-[Quoted text hidden]
-Andrew (GitHub Staff) <support@github.com>	Thu, Aug 11, 2016 at 2:33 AM
-To: Joey Xie <joey.xf@gmail.com>
-Hey Joey,
-
-The educational discount coupon expired on Mar 20 2016, at which point your account should have locked, and you would've been asked to either downgrade your plan to the free tier, or add a payment method to your account, in order to maintain access to your private repositories.
-
-That process was delayed until this Monday, at which point your account was updated to reflect the expired coupon.
-
-Our announcement regarding unlimited private repositories doesn't change anything in terms of the current situation, as (I'm sure you noted from reading the blog post) only paid accounts can benefit from unlimited private repositories.
-
-I've unlocked your account temporarily, so you can access your private repositories for the time being. If you wish to benefit from another educational discount, you can submit an application here:
-
-https://education.github.com/discount_requests/new
-
-Alternatively, you can update your account with a payment method, as instructed in my last email.
-
-If you have any further questions about this, just let me know - I'm happy to help!
-
-All the best,
-Andrew
-
-Joey Xie <joey.xf@gmail.com>	Thu, Aug 11, 2016 at 10:11 AM
-To: "Andrew (GitHub Staff)" <support@github.com>
-Hi Andrew
-
-I'm sure after Mar 20 I can't access my private repositories, but after this May I again can use private repository, So I think it's your fault that make me migrate my personal work to github, can you please make some compensate for me? I'm a poor programmer in China, I get a low salary have to work long hours everyday, can't afford a car or a house. You are so nice, can't you just give me a surprise thanks.
-[Quoted text hidden]
-Andrew (GitHub Staff) <support@github.com>	Thu, Aug 11, 2016 at 5:05 PM
-To: Joey Xie <joey.xf@gmail.com>
-Hi Joey,
-
-The previous coupon you had gave you free private repositories from March 21 2014, right up until last Monday.
-
-I have applied another coupon to your account, to cover the next three months, but after that time, you will need to downgrade to the free plan, or add a payment method to your account.
-
-If you have any further questions, please let me know.
-
-All the best,
-Andrew
-
-Joey Xie <joey.xf@gmail.com>	Thu, Aug 11, 2016 at 5:17 PM
-To: "Andrew (GitHub Staff)" <support@github.com>
-thanks Andrew, you saved me 21 bucks, I thought you would give me at lease another 1 year coupon, but again thanks.
-[Quoted text hidden]
-</pre>]]></summary>
-</entry>
-<entry>
-    <title>递归地删除数组里面所有多余的空格</title>
-    <link href="http://blog.iyue.club/posts/2016-08-07-recursive-remove-space.html" />
-    <id>http://blog.iyue.club/posts/2016-08-07-recursive-remove-space.html</id>
-    <published>2016-08-07T00:00:00Z</published>
-    <updated>2016-08-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>在使用<a href="https://github.com/jdorn/json-editor">jsoneditor</a>的时候遇到一个问题就是总是会把多余的空格写入数据库，如：</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="ot">[</span><span class="st">&#39;a&#39;</span> =&gt; <span class="st">&#39; hello&#39;</span><span class="ot">,</span> <span class="st">&#39;b&#39;</span> =&gt; <span class="st">&#39;world &#39;</span><span class="ot">,</span> <span class="st">&#39;c&#39;</span> =&gt; <span class="st">&#39; he &#39;</span><span class="ot">];</span></code></pre></div>
-<p>很多情况下我们都不需要开头结尾的空格，有时候空格甚至会带来麻烦，比如说图片地址后面加上空格之后就给前端操作带来麻烦，那么有什么好办法在写入数据库之前先过滤一遍呢？</p>
-<p>对于上面这种对象数组处理方式很简单：</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="fu">array_map</span><span class="ot">(</span><span class="st">&#39;trim&#39;</span><span class="ot">,</span> <span class="kw">$a</span><span class="ot">);</span></code></pre></div>
-<p>但是如果数组结构复杂，比如说是二维数组</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$a</span> = <span class="ot">[</span><span class="st">&#39;a&#39;</span> =&gt; <span class="st">&#39; hello&#39;</span><span class="ot">,</span> <span class="st">&#39;b&#39;</span> =&gt; <span class="st">&#39;world &#39;</span><span class="ot">,</span> <span class="st">&#39;c&#39;</span> =&gt; <span class="st">&#39; he &#39;</span><span class="ot">,</span> <span class="st">&#39;d&#39;</span> =&gt; <span class="ot">[</span><span class="st">&#39;a&#39;</span> =&gt; <span class="st">&#39; hello&#39;</span><span class="ot">,</span> <span class="st">&#39;b&#39;</span> =&gt; <span class="st">&#39;world &#39;</span><span class="ot">,</span> <span class="st">&#39;c&#39;</span> =&gt; <span class="st">&#39; he &#39;</span><span class="ot">]];</span></code></pre></div>
-<p>这时候就要有一个机制能够递归的处理每隔元素内部的空格，思路就是递归，代码见下：</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$myfunc</span> = <span class="kw">function</span> <span class="ot">(</span>&amp;<span class="kw">$value</span><span class="ot">,</span> <span class="kw">$key</span><span class="ot">)</span> <span class="kw">use</span> <span class="ot">(</span>&amp;<span class="kw">$myfunc</span><span class="ot">)</span> {
-    <span class="kw">if</span> <span class="ot">(</span><span class="fu">is_array</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">))</span> {
-        <span class="fu">array_walk</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">,</span> <span class="kw">$myfunc</span><span class="ot">);</span>
-    } <span class="kw">else</span> {
-        <span class="kw">$value</span> = <span class="fu">trim</span><span class="ot">(</span><span class="kw">$value</span><span class="ot">);</span>
-    }
-}<span class="ot">;</span>
-<span class="fu">array_walk</span><span class="ot">(</span><span class="kw">$a</span><span class="ot">,</span> <span class="kw">$myfunc</span><span class="ot">);</span></code></pre></div>
-<p>普通函数的递归很好写，但是匿名函数的递归就是第一次写来，竟然需要用use来把当前函数导入进闭包里面，而且必需以传引用的方式，php的语法也是丑得可以。</p>]]></summary>
 </entry>
 
 </feed>

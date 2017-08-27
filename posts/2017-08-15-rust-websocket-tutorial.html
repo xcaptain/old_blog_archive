@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - 使用rust创建websocket服务器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">blog.iyue.club
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">使用rust创建websocket服务器</h2>
+    <p class="metadata">
+      <span class="date">August 15, 2017</span> - <span class="tags"><a href="../tags/rust.html">rust</a>, <a href="../tags/websocket.html">websocket</a></span>
+    </p>
+  </header>
+  <p>最近需要做实时推送相关的应用，所以继续调研了一下websocket，在15年底的时候曾经使用过<a href="https://github.com/sumory/gru">Gru</a>来做聊天推送， 但是那时候没仔细研究过websocket的细节。现在趁机自己构思一下</p>
+<h1 id="使用ws-rs构建websocket服务端">使用<a href="https://github.com/housleyjk/ws-rs">ws-rs</a>构建websocket服务端</h1>
+<p>按照<a href="https://ws-rs.org/guide">Guide</a>搭建服务端应用，`cargo new ws-server1 –bin`</p>
+<div class="sourceCode"><pre class="sourceCode rust"><code class="sourceCode rust"><span class="kw">extern</span> <span class="kw">crate</span> ws;
+
+<span class="kw">use</span> ws::listen;
+
+<span class="kw">fn</span> main() <span class="op">{</span>
+    listen(<span class="st">&quot;127.0.0.1:3012&quot;</span>, |out| <span class="op">{</span>
+        <span class="kw">move</span> |msg| <span class="op">{</span>
+            <span class="pp">println!</span>(<span class="st">&quot;received msg: {}&quot;</span>, msg);
+            out.broadcast(msg)
+        <span class="op">}</span>
+    <span class="op">}</span>).unwrap()
+<span class="op">}</span></code></pre></div>
+<p>cargo run 运行服务端</p>
+<h1 id="服务端推送">服务端推送</h1>
+<p>往socket里面推送消息 `cargo new ws-client1 –bin`</p>
+<div class="sourceCode"><pre class="sourceCode rust"><code class="sourceCode rust"><span class="kw">extern</span> <span class="kw">crate</span> ws;
+
+<span class="kw">use</span> ws::<span class="op">{</span>connect, CloseCode<span class="op">}</span>;
+
+<span class="kw">fn</span> main() <span class="op">{</span>
+    connect(<span class="st">&quot;ws://127.0.0.1:3012&quot;</span>, |out| <span class="op">{</span>
+        out.send(<span class="st">&quot;Hello WebSocket&quot;</span>).unwrap();
+
+        <span class="kw">move</span> |msg| <span class="op">{</span>
+            <span class="pp">println!</span>(<span class="st">&quot;Got message: {}&quot;</span>, msg);
+            out.close(CloseCode::Normal)
+        <span class="op">}</span>
+    <span class="op">}</span>).unwrap()
+<span class="op">}</span></code></pre></div>
+<p>运行 cargo run，这时候会看到服务端输出`received msg: Hello WebSocket`，客户端输出`Got message: Hello WebSocket`</p>
+<h1 id="客户端连接">客户端连接</h1>
+<p>创建2个websocket客户端连接，打开2个chrome标签，分别在终端执行</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">ws <span class="op">=</span> <span class="kw">new</span> <span class="at">WebSocket</span>(<span class="st">'ws://127.0.0.1:3012'</span>)<span class="op">;</span> <span class="co">// 创建连接</span>
+<span class="va">ws</span>.<span class="at">addEventListener</span>(<span class="st">'message'</span><span class="op">,</span> <span class="kw">function</span> (event) <span class="op">{</span>
+    <span class="va">console</span>.<span class="at">log</span>(<span class="st">'Message from server '</span><span class="op">,</span> <span class="va">event</span>.<span class="at">data</span>)<span class="op">;</span>
+<span class="op">}</span>)<span class="op">;</span> <span class="co">// 监听服务端</span>
+
+<span class="va">ws</span>.<span class="at">send</span>(<span class="st">'from browser'</span>)<span class="op">;</span> <span class="co">// 可以在2个console中互相发消息玩</span></code></pre></div>
+<p>能发现websocket会自动检测连接，如果连接断开会提示 <code>WebSocket is already in CLOSING or CLOSED state.</code> 这也省去了手动发送心跳包 检测连接的麻烦</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>
