@@ -32,7 +32,12 @@ python有个叫selenium的包叫作，安装好之后就能操作浏览器了
 
   driver = webdriver.Chrome(chrome_options=chrome_options)
   driver.get('http://www.dianping.com/shop/59473758')
+
+  # 返回html
   html = driver.execute_script("return document.documentElement.outerHTML")
+
+  # 读取js全局变量
+  shop_config = driver.execute_script("return window.shop_config")
 
   id = '59474758'
   with open(id + '.html', 'wb') as f:
@@ -42,7 +47,7 @@ python有个叫selenium的包叫作，安装好之后就能操作浏览器了
   driver.quit()
 #+END_SRC
 这段脚本的作用很明显，首先是创建一个headless chromium的浏览器对象，然后用它打开大众点评的一个网页，然后导出dom，写入到一个html文件
-中，最后把当前网页截图保存为一个png文件，并且关闭浏览器
+中，最后把当前网页截图保存为一个png文件，并且关闭浏览器。竟然还能读取到js的变量，真是太强大了
 
 * scrapy操作字符串
 通过headless chromium导出的是纯字符串，如果要让它支持xpath解析，需要处理一下，比如：
