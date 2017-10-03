@@ -6,7 +6,7 @@ title: About
 
 编程语言爱好者(ruby, scheme, racket, haskell, ml, erlang, shell)
 
-linux爱好者(ubuntu, mint, opensuse, archlinux)
+arch linux 爱好者
 
 emacs爱好者
 

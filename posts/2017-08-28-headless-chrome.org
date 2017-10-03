@@ -29,6 +29,7 @@ python有个叫selenium的包叫作，安装好之后就能操作浏览器了
 
   chrome_options = Options()
   chrome_options.add_argument("--headless")
+  chrome_options.add_argument("--user-agent=some user-agent name")
 
   driver = webdriver.Chrome(chrome_options=chrome_options)
   driver.get('http://www.dianping.com/shop/59473758')
@@ -44,10 +45,26 @@ python有个叫selenium的包叫作，安装好之后就能操作浏览器了
       f.write(str.encode(html))
 
   driver.save_screenshot(id + '.png')
-  driver.quit()
+  driver.close()  # 关闭chrome进程
+  driver.quit()  # 关闭chromewebdriver进程
 #+END_SRC
 这段脚本的作用很明显，首先是创建一个headless chromium的浏览器对象，然后用它打开大众点评的一个网页，然后导出dom，写入到一个html文件
 中，最后把当前网页截图保存为一个png文件，并且关闭浏览器。竟然还能读取到js的变量，真是太强大了
+
+* 在使用headless chromium过程中遇到的问题
+** 一些引用的资源加载超时，导致整个页面超时
+这个问题没有好的解决办法，看到文档上有设置页面ready的配置
+1. [[https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options]]
+2. https://stackoverflow.com/questions/46160929/puppeteer-wait-for-all-images-to-load-then-take-screenshot
+但是selenium webdriver没法提供扩展，目前我的解决办法是加了
+#+BEGIN_SRC python
+  driver.implicitly_wait(10)  # 资源10s没加载完就放弃
+  driver.set_script_timeout(10)  # 资源10s没加载完就放弃
+  driver.set_page_load_timeout(30)  # 请求30s没完成就放弃
+#+END_SRC
+不是很好用，最好的办法是绕过这些有加载不了的资源的网页。
+** python程序异常退出导致chrome进程变成僵尸进程
+正确设置异常处理程序，在出现异常时记得close()和quit()
 
 * scrapy操作字符串
 通过headless chromium导出的是纯字符串，如果要让它支持xpath解析，需要处理一下，比如：
@@ -66,5 +83,20 @@ python有个叫selenium的包叫作，安装好之后就能操作浏览器了
   html = '<div id="test">Test text</div>'
   doc = lxml.html.fromstring(html)
 #+END_SRC
+
+* 使用BeautifulSoup操作html
+bs的api比lxml的易用多了，比如说要新建一个标签，并且添加到某个节点下，lxml就比较难实现了，毕竟html不是标准的xml，看了一下lxml的api感觉比较复杂
+就选择了用bs
+#+BEGIN_SRC python
+  from bs4 import BeautifulSoup
+  import json
+
+  soup = BeautifulSoup(html, 'html5lib')
+  # add script tag
+  script_tag = soup.new_tag('script')
+  script_tag.append('window.globale_config=' + json.dumps(global_config) + ';')
+  soup.body.insert_before(script_tag)
+#+END_SRC
+这段代码在body标签的前面新增了一个script标签，标签内部定义了一个全局变量，这样就可以把dom和脚本都保存到本地了
 
 有了headless chromium之后写爬虫就方便多了，甚至现代的各种SPA应用也不用担心，happy hacking!
