@@ -32,6 +32,7 @@
 
 chrome_options <span class="op">=</span> Options()
 chrome_options.add_argument(<span class="st">&quot;--headless&quot;</span>)
+chrome_options.add_argument(<span class="st">&quot;--user-agent=some user-agent name&quot;</span>)
 
 driver <span class="op">=</span> webdriver.Chrome(chrome_options<span class="op">=</span>chrome_options)
 driver.get(<span class="st">&#39;http://www.dianping.com/shop/59473758&#39;</span>)
@@ -47,8 +48,23 @@ shop_config <span class="op">=</span> driver.execute_script(<span class="st">&qu
     f.write(<span class="bu">str</span>.encode(html))
 
 driver.save_screenshot(<span class="bu">id</span> <span class="op">+</span> <span class="st">&#39;.png&#39;</span>)
-driver.quit()</code></pre></div>
+driver.close()  <span class="co"># 关闭chrome进程</span>
+driver.quit()  <span class="co"># 关闭chromewebdriver进程</span></code></pre></div>
 <p>这段脚本的作用很明显，首先是创建一个headless chromium的浏览器对象，然后用它打开大众点评的一个网页，然后导出dom，写入到一个html文件 中，最后把当前网页截图保存为一个png文件，并且关闭浏览器。竟然还能读取到js的变量，真是太强大了</p>
+<h1 id="在使用headless-chromium过程中遇到的问题">在使用headless chromium过程中遇到的问题</h1>
+<h2 id="一些引用的资源加载超时导致整个页面超时">一些引用的资源加载超时，导致整个页面超时</h2>
+<p>这个问题没有好的解决办法，看到文档上有设置页面ready的配置</p>
+<ol>
+<li><a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options" class="uri">https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagegotourl-options</a></li>
+<li><a href="https://stackoverflow.com/questions/46160929/puppeteer-wait-for-all-images-to-load-then-take-screenshot" class="uri">https://stackoverflow.com/questions/46160929/puppeteer-wait-for-all-images-to-load-then-take-screenshot</a></li>
+</ol>
+<p>但是selenium webdriver没法提供扩展，目前我的解决办法是加了</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">driver.implicitly_wait(<span class="dv">10</span>)  <span class="co"># 资源10s没加载完就放弃</span>
+driver.set_script_timeout(<span class="dv">10</span>)  <span class="co"># 资源10s没加载完就放弃</span>
+driver.set_page_load_timeout(<span class="dv">30</span>)  <span class="co"># 请求30s没完成就放弃</span></code></pre></div>
+<p>不是很好用，最好的办法是绕过这些有加载不了的资源的网页。</p>
+<h2 id="python程序异常退出导致chrome进程变成僵尸进程">python程序异常退出导致chrome进程变成僵尸进程</h2>
+<p>正确设置异常处理程序，在出现异常时记得close()和quit()</p>
 <h1 id="scrapy操作字符串">scrapy操作字符串</h1>
 <p>通过headless chromium导出的是纯字符串，如果要让它支持xpath解析，需要处理一下，比如：</p>
 <ol>
@@ -65,6 +81,17 @@ response.xpath(<span class="st">&#39;//div[@id=&quot;test&quot;]/text()&#39;</sp
 
 html <span class="op">=</span> <span class="st">&#39;&lt;div id=&quot;test&quot;&gt;Test text&lt;/div&gt;&#39;</span>
 doc <span class="op">=</span> lxml.html.fromstring(html)</code></pre></div>
+<h1 id="使用beautifulsoup操作html">使用BeautifulSoup操作html</h1>
+<p>bs的api比lxml的易用多了，比如说要新建一个标签，并且添加到某个节点下，lxml就比较难实现了，毕竟html不是标准的xml，看了一下lxml的api感觉比较复杂 就选择了用bs</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup
+<span class="im">import</span> json
+
+soup <span class="op">=</span> BeautifulSoup(html, <span class="st">&#39;html5lib&#39;</span>)
+<span class="co"># add script tag</span>
+script_tag <span class="op">=</span> soup.new_tag(<span class="st">&#39;script&#39;</span>)
+script_tag.append(<span class="st">&#39;window.globale_config=&#39;</span> <span class="op">+</span> json.dumps(global_config) <span class="op">+</span> <span class="st">&#39;;&#39;</span>)
+soup.body.insert_before(script_tag)</code></pre></div>
+<p>这段代码在body标签的前面新增了一个script标签，标签内部定义了一个全局变量，这样就可以把dom和脚本都保存到本地了</p>
 <p>有了headless chromium之后写爬虫就方便多了，甚至现代的各种SPA应用也不用担心，happy hacking!</p>]]></summary>
 </entry>
 <entry>
