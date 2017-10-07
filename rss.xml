@@ -8,8 +8,53 @@
         <name>Joey Xie</name>
         <email>joey.xf@gmail.com</email>
     </author>
-    <updated>2017-08-28T00:00:00Z</updated>
+    <updated>2017-10-07T00:00:00Z</updated>
     <entry>
+    <title>再次基于discourse构建自己的论坛</title>
+    <link href="http://blog.iyue.club/posts/2017-10-07-rebuild-discourse.html" />
+    <id>http://blog.iyue.club/posts/2017-10-07-rebuild-discourse.html</id>
+    <published>2017-10-07T00:00:00Z</published>
+    <updated>2017-10-07T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>早在14年的时候就关注过 <a href="https://github.com/discourse/discourse">discourse</a> 并且在自己的服务器上部署过一个小论坛，但是当时精力有限，并且只是当玩具玩的，所以没多久就没有再维护了。 最近工作稍微不那么忙了，有了更多时间思考产品和运营的这块，而且自己业余时间做了几个小项目，突然有了一个想把目前做的这些项目整合起来做一个闭合的生态圈的想法</p>
+<p>整理一下最近做的玩意儿：</p>
+<h1 id="hspot"><a href="https://hspot.iyue.club/">hspot</a></h1>
+<p>我称之为热点，或者high点，这个网站是用来做资讯聚合以及订阅的，目前集成了一个爬虫抓取我觉得有意思的资源然后在前台展示</p>
+<h1 id="discuss"><a href="https://discuss.iyue.club/">discuss</a></h1>
+<p>这是今天早上开始搭建的一个discourse的论坛，我打算用来做资讯交流，因为我自己看完新闻之后是喜欢和朋友严肃探讨一下的，网易和头条的评论 喷子太多，而且很多评论没多少价值，不是我喜欢的。国外的reddit, hackernews 上面的评论很多价值都很高，都是用户深思熟虑之后发表上去的， 我希望我能做一个类似的论坛让大家发表严肃的交流</p>
+<h1 id="slackbot">slackbot</h1>
+<p>最近喜欢上了做机器人，所以我把hspot和discuss都深度集成了slackbot，未来的考虑是把 <a href="https://api.ai/">AI</a> 给集成进来，让我的机器人更加智能</p>
+<p>接下来重点讲讲我部署discuss的经历吧，毕竟折腾一场，留点纪念。操作其实比较简单，discourse的开发团队很专业，文档，社区都很完善</p>
+<h2 id="通过docker线上部署discourse站点">通过docker线上部署discourse站点</h2>
+<p>这步操作比较简单，先把docker的仓库拉下来，然后初始化配置，再build站点</p>
+<ol>
+<li><code>./discourse-setup</code></li>
+<li><code>./launcher build app</code></li>
+</ol>
+<h2 id="配置多站点支持">配置多站点支持</h2>
+<p>这步稍微需要折腾一下，以前部署php站点是很简单的，因为php服务不吃内存，一台机器上可以部署几十上百个站点，但是对于rails应用来说就不行了， rails很吃内存，discourse甚至要求服务器至少1G的内存，因为我的机器上已经跑了几个别的站点了，所以我要把这个论坛集成进去，不能让它独占我的 80和443端口。</p>
+<p>通过上面的操作已经生成了一个叫 <code>containers/app.yml</code> 的配置文件，把template选项修改成以下的内容</p>
+<div class="sourceCode"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span class="fu">templates:</span>
+  <span class="kw">-</span> <span class="st">&quot;templates/postgres.template.yml&quot;</span>
+  <span class="kw">-</span> <span class="st">&quot;templates/redis.template.yml&quot;</span>
+  <span class="kw">-</span> <span class="st">&quot;templates/web.template.yml&quot;</span>
+  <span class="kw">-</span> <span class="st">&quot;templates/web.ratelimited.template.yml&quot;</span>
+<span class="co">## Uncomment these two lines if you wish to add Lets Encrypt (https)</span>
+<span class="co">##   - &quot;templates/web.ssl.template.yml&quot;</span>
+  <span class="kw">-</span> <span class="st">&quot;templates/web.letsencrypt.ssl.template.yml&quot;</span>
+  <span class="kw">-</span> <span class="st">&quot;templates/web.socketed.template.yml&quot;</span></code></pre></div>
+<p>而且还要把expose的2个端口配置给删掉，容器内不暴露端口而是通过socket与宿主机通信。 rebuild一下，会发现多了一个 <code>shared/standalone/nginx.http.sock</code> 文件，修改一下宿主机对应的nginx配置，通过proxy_pass把请求转到这个socket上，就搞定了</p>
+<h2 id="配置https">配置https</h2>
+<p>在上面的app.yml文件中注释掉了ssl配置就是因为要把https配置放到宿主机的nginx上，在宿主机上配置https也很简单，轻车熟路通过 <code>certbox --nginx</code> 生成ssl证书以及key。这里有个疑问，在proxy_pass过程中是把加密的数据包发给后端了还是把解密之后的数据包发过去了，有空的时候再去了解下，这里存疑。</p>
+<h2 id="配置邮件服务">配置邮件服务</h2>
+<p>邮件服务是花了最多时间的，因为<a href="https://www.mailgun.com/">mailgun</a> 的审核机制太慢了，按照里面的配置一步一步配置好，填好信用卡，配置好自定义域名，到最后还是处于 disabled状态，给客服发工单又是让填各种信息，回答各种问题，要求保证不spam，等到晚上才把我的站点给active了。mailgun提供api和smtp这2种 发邮件的方式，discourse默认用的是smtp发送，只要把smtp的用户名，密码，发送端口填好就行了，虽然官网介绍说api发送比smtp快3倍，但那有怎样呢， 我要到那个量级估计我的信用卡被刷爆了</p>
+<h2 id="设置主题">设置主题</h2>
+<p>主题通过后台的自定义主题功能装了官方提供的一个material design主题</p>
+<h2 id="设置插件">设置插件</h2>
+<p>目前我装了一个官方的slack插件，简单试验了一下效果不错，具体slack配置不提</p>
+<h2 id="其它">其它</h2>
+<p>配置一个这么复杂的论坛不容易，我还有很多东西没弄，比如说cdn，比如说自定义logo,icon，还有首页布局等是待做的</p>]]></summary>
+</entry>
+<entry>
     <title>使用headless chromium来抓取网页</title>
     <link href="http://blog.iyue.club/posts/2017-08-28-headless-chrome.html" />
     <id>http://blog.iyue.club/posts/2017-08-28-headless-chrome.html</id>
@@ -394,31 +439,6 @@ cut_str <span class="fu">=</span> substr</code></pre></div>
 </ol>
 <h3 id="实际应用">实际应用</h3>
 <p>在laravel 5.4中已经集成了<a href="https://laravel.com/docs/5.4/scout">laravel-scout</a>，所以就不需要像以前那样使用第三方的包了，不过令人伤心的是在<a href="https://github.com/laravel/scout/tree/2.0">scout v2.0</a>之后，es的支持就被剥离出核心项目了，当然如果想继续使用scout+es，可以使用<a href="https://github.com/ErickTamayo/laravel-scout-elastic">laravel-scout-elastic</a>，这个库代码很少，包含了基本的api，使用很方便。</p>]]></summary>
-</entry>
-<entry>
-    <title>php从mysql中获取真实字段类型</title>
-    <link href="http://blog.iyue.club/posts/2016-08-22-php-pdo-results.html" />
-    <id>http://blog.iyue.club/posts/2016-08-22-php-pdo-results.html</id>
-    <published>2016-08-22T00:00:00Z</published>
-    <updated>2016-08-22T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>刚接触新公司代码不熟悉框架，发现Model层返回的数据都是字符串类型的,这可不能忍，在restapi中字段类型是要固定的，不然接口文档不明确，客户端调用时可能也会出问题。</p>
-<p>追查了一下发现这边低层连接mysql是用mysqli扩展连接的，主要查询操作是</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$result</span> = <span class="fu">mysqli_query</span><span class="ot">(</span><span class="kw">$handle</span><span class="ot">,</span> <span class="kw">$sql</span><span class="ot">);</span>
-<span class="kw">$row</span> = <span class="fu">mysqli_fetch_assoc</span><span class="ot">(</span><span class="kw">$result</span><span class="ot">);</span>
-<span class="fu">mysqli_free_result</span><span class="ot">(</span><span class="kw">$result</span><span class="ot">);</span></code></pre></div>
-<p>在这个地方打印 $row变量就是字符串了，导致后续的数据全部都是字符串类型。在php内部使用倒是没什么问题，毕竟php本身是弱类型的语言，字符串数字和纯数字基本没什么区别，但是在接口开发方面就会有很大问题，一个restapi首要就是文档清晰，如果连每个返回值的类型都不能正确给出那么在调用的时候就容易出现不可预测的事情。</p>
-<p>在老的代码中总是看到类似<code>$fieldType</code>这样的变量用来存放一个表的名称类型映射，但是这样做比较傻，涉及到数据库字段类型变更的时候还得改model。在pdo-mysql驱动中，底层的mysql驱动是mysqlnd，这个比mysqli先进，能够查询出每一行的元数据(metadata)，由一个PDO选项<code>PDO::ATTR_EMULATE_PREPARES</code>来控制是否返回真实的类型，具体见下面的例子：</p>
-<div class="sourceCode"><pre class="sourceCode php"><code class="sourceCode php"><span class="kw">$servername</span> = <span class="st">&quot;localhost&quot;</span><span class="ot">;</span>
-<span class="kw">$username</span> = <span class="st">&quot;root&quot;</span><span class="ot">;</span>
-<span class="kw">$password</span> = <span class="st">&quot;123456&quot;</span><span class="ot">;</span>
-<span class="kw">$conn</span> = <span class="kw">new</span> <span class="kw">PDO</span><span class="ot">(</span><span class="st">&quot;mysql:host=</span><span class="kw">$servername</span><span class="st">;dbname=testdb&quot;</span><span class="ot">,</span> <span class="kw">$username</span><span class="ot">,</span> <span class="kw">$password</span><span class="ot">);</span>
-<span class="kw">$conn</span>-&gt;setAttribute<span class="ot">(</span><span class="kw">PDO</span>::<span class="kw">ATTR_EMULATE_PREPARES</span><span class="ot">,</span> <span class="kw">false</span><span class="ot">);</span>
-<span class="kw">$sql</span> = <span class="st">&quot;select * from test_table where id=1&quot;</span><span class="ot">;</span>
-<span class="kw">$sth</span> = <span class="kw">$conn</span>-&gt;prepare<span class="ot">(</span><span class="kw">$sql</span><span class="ot">);</span>
-<span class="kw">$sth</span>-&gt;execute<span class="ot">();</span>
-<span class="kw">$row</span> = <span class="kw">$sth</span>-&gt;fetch<span class="ot">();</span></code></pre></div>
-<p>如果不加<code>$conn-&gt;setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>这一行，返回值都是字符串类型，加了之后就能正确返回类型了。</p>
-<p>laravel的eloquent ORM很强大，看了一下底层连接db的代码，在<a href="https://github.com/laravel/framework/blob/5.3/src/Illuminate/Database/Connectors/Connector.php">framework/src/Illuminate/Database/Connectors/Connector.php</a>设置好的默认选项中就有这个，果然是自己写的代码越少，犯错的机会就越少，框架和软件的设计思想都应该把易用性和可配置性放到第一位，而且要做到把默认值设置为普遍最佳方案，这样开发者才能有更多精力专注业务开发，做更多充满创造力的事情，而不是花几十分钟去搜索这种尝试性的问题。喜欢自己开发框架，但是又写不出好框架的团队是一个差劲的团队。</p>]]></summary>
 </entry>
 
 </feed>
