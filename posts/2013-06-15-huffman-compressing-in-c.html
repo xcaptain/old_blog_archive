@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - CSDN老博文迁移-用huffman编码一个字符串</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">Joey's Blog
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">CSDN老博文迁移-用huffman编码一个字符串</h2>
+    <p class="metadata">
+      <span class="date">June 15, 2013</span> - <span class="tags"><a href="../tags/algorithms.html">algorithms</a></span>
+    </p>
+  </header>
+  <p>原文链接见：<a href="http://blog.csdn.net/zazzle/article/details/9103867"><a href="http://blog.csdn.net/zazzle/article/details/9103867" class="uri">http://blog.csdn.net/zazzle/article/details/9103867</a></a></p>
+<p>一、霍夫曼编码</p>
+<p>实验目的： (1).利用霍夫曼编码给一个字符串编码</p>
+<p>实验原理 如何构造一棵霍夫曼树： (1).构造一个优先队列，从小到大排列每一个元素。 (2).2个权值最小的队列结点出队，构造一个新的结点满足新结点的权值是原来2个结点权值之和。 (3).把新的结点压入最小优先队列中。 (4).重复2.3知道队列为空，这是就构造了一棵霍夫曼树。</p>
+<p>实验步骤： (1).先任意输入一个字符串，求出每一个字符出现的频数，存在数组freqs里面 (2).把频数数组freqs作为参数传递给create_huffman_codes函数构造霍夫曼树。 (3).打印出每一个字符，及它对应的十进制编码和二进制编码。</p>
+<p>具体实现程序：</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;string.h&gt;</span>
+
+<span class="pp">#define BYTES 256</span>
+
+<span class="kw">struct</span> huffcode {
+  <span class="dt">int</span> nbits;
+  <span class="dt">int</span> code;
+};
+<span class="kw">typedef</span> <span class="kw">struct</span> huffcode huffcode_t;
+
+<span class="kw">struct</span> huffheap {
+  <span class="dt">int</span> *h;
+  <span class="dt">int</span> n, s, cs;
+  <span class="dt">long</span> *f;
+};
+<span class="kw">typedef</span> <span class="kw">struct</span> huffheap heap_t;
+
+<span class="co">/* heap handling funcs */</span>
+<span class="dt">static</span> heap_t *_heap_create(<span class="dt">int</span> s, <span class="dt">long</span> *f)
+{
+  heap_t *h;
+  h = malloc(<span class="kw">sizeof</span>(heap_t));
+  h-&gt;h = malloc(<span class="kw">sizeof</span>(<span class="dt">int</span>)*s);
+  h-&gt;s = h-&gt;cs = s;
+  h-&gt;n = <span class="dv">0</span>;
+  h-&gt;f = f;
+  <span class="cf">return</span> h;
+}
+
+<span class="dt">static</span> <span class="dt">void</span> _heap_destroy(heap_t *heap)
+{
+  free(heap-&gt;h);
+  free(heap);
+}
+
+<span class="pp">#define swap_(I,J) do { int t_; t_ = a[(I)];    \</span>
+<span class="pp">    a[(I)] = a[(J)]; a[(J)] = t_; } while(0)</span>
+<span class="dt">static</span> <span class="dt">void</span> _heap_sort(heap_t *heap)
+{
+  <span class="dt">int</span> i=<span class="dv">1</span>, j=<span class="dv">2</span>; <span class="co">/* gnome sort */</span>
+  <span class="dt">int</span> *a = heap-&gt;h;
+
+  <span class="cf">while</span>(i &lt; heap-&gt;n) { <span class="co">/* smaller values are kept at the end */</span>
+    <span class="cf">if</span> ( heap-&gt;f[a[i-<span class="dv">1</span>]] &gt;= heap-&gt;f[a[i]] ) {
+      i = j; j++;
+    } <span class="cf">else</span> {
+      swap_(i-<span class="dv">1</span>, i);
+      i--;
+      i = (i==<span class="dv">0</span>) ? j++ : i;
+    }
+  }
+}
+<span class="pp">#undef swap_</span>
+
+<span class="dt">static</span> <span class="dt">void</span> _heap_add(heap_t *heap, <span class="dt">int</span> c)
+{
+  <span class="cf">if</span> ( (heap-&gt;n + <span class="dv">1</span>) &gt; heap-&gt;s ) {
+    heap-&gt;h = realloc(heap-&gt;h, heap-&gt;s + heap-&gt;cs);
+    heap-&gt;s += heap-&gt;cs;
+  }
+  heap-&gt;h[heap-&gt;n] = c;
+  heap-&gt;n++;
+  _heap_sort(heap);
+}
+
+<span class="dt">static</span> <span class="dt">int</span> _heap_remove(heap_t *heap)
+{
+  <span class="cf">if</span> ( heap-&gt;n &gt; <span class="dv">0</span> ) {
+    heap-&gt;n--;
+    <span class="cf">return</span> heap-&gt;h[heap-&gt;n];
+  }
+  <span class="cf">return</span> -<span class="dv">1</span>;
+}
+
+<span class="co">/* huffmann code generator */</span>
+huffcode_t **create_huffman_codes(<span class="dt">long</span> *freqs)
+{
+  huffcode_t **codes;
+  heap_t *heap;
+  <span class="dt">long</span> efreqs[BYTES*<span class="dv">2</span>];
+  <span class="dt">int</span> preds[BYTES*<span class="dv">2</span>];
+  <span class="dt">int</span> i, extf=BYTES;
+  <span class="dt">int</span> r1, r2;
+
+  memcpy(efreqs, freqs, <span class="kw">sizeof</span>(<span class="dt">long</span>)*BYTES);
+  memset(&amp;efreqs[BYTES], <span class="dv">0</span>, <span class="kw">sizeof</span>(<span class="dt">long</span>)*BYTES);
+
+  heap = _heap_create(BYTES*<span class="dv">2</span>, efreqs);
+  <span class="cf">if</span> ( heap == NULL ) <span class="cf">return</span> NULL;
+
+  <span class="cf">for</span>(i=<span class="dv">0</span>; i &lt; BYTES; i++) <span class="cf">if</span> ( efreqs[i] &gt; <span class="dv">0</span> ) _heap_add(heap, i);
+
+  <span class="cf">while</span>( heap-&gt;n &gt; <span class="dv">1</span> )
+    {
+      r1 = _heap_remove(heap);
+      r2 = _heap_remove(heap);
+      efreqs[extf] = efreqs[r1] + efreqs[r2];
+      _heap_add(heap, extf);
+      preds[r1] = extf;
+      preds[r2] = -extf;
+      extf++;
+    }
+  r1 = _heap_remove(heap);
+  preds[r1] = r1;
+  _heap_destroy(heap);
+
+  codes = malloc(<span class="kw">sizeof</span>(huffcode_t *)*BYTES);
+
+  <span class="dt">int</span> bc, bn, ix;
+  <span class="cf">for</span>(i=<span class="dv">0</span>; i &lt; BYTES; i++) {
+    bc=<span class="dv">0</span>; bn=<span class="dv">0</span>;
+    <span class="cf">if</span> ( efreqs[i] == <span class="dv">0</span> ) { codes[i] = NULL; <span class="cf">continue</span>; }
+    ix = i;
+    <span class="cf">while</span>( abs(preds[ix]) != ix ) {
+      bc |= ((preds[ix] &gt;= <span class="dv">0</span>) ? <span class="dv">1</span> : <span class="dv">0</span> ) &lt;&lt; bn;
+      ix = abs(preds[ix]);
+      bn++;
+    }
+    codes[i] = malloc(<span class="kw">sizeof</span>(huffcode_t));
+    codes[i]-&gt;nbits = bn;
+    codes[i]-&gt;code = bc;
+  }
+  <span class="cf">return</span> codes;
+}
+
+<span class="dt">void</span> free_huffman_codes(huffcode_t **c)
+{
+  <span class="dt">int</span> i;
+
+  <span class="cf">for</span>(i=<span class="dv">0</span>; i &lt; BYTES; i++) free(c[i]);
+  free(c);
+}
+
+<span class="pp">#define MAXBITSPERCODE 100</span>
+
+<span class="dt">void</span> inttobits(<span class="dt">int</span> c, <span class="dt">int</span> n, <span class="dt">char</span> *s)
+{
+  s[n] = <span class="dv">0</span>;
+  <span class="cf">while</span>(n &gt; <span class="dv">0</span>) {
+    s[n-<span class="dv">1</span>] = (c%<span class="dv">2</span>) + <span class="ch">'0'</span>;
+    c &gt;&gt;= <span class="dv">1</span>; n--;
+  }
+}
+
+<span class="dt">const</span> <span class="dt">char</span> *test = <span class="st">&quot;hellohellohello&quot;</span>;
+
+<span class="dt">int</span> main()
+{
+  huffcode_t **r;
+  <span class="dt">int</span> i;
+  <span class="dt">char</span> strbit[MAXBITSPERCODE];
+  <span class="dt">const</span> <span class="dt">char</span> *p;
+  <span class="dt">long</span> freqs[BYTES];
+
+  memset(freqs, <span class="dv">0</span>, <span class="kw">sizeof</span> freqs);
+
+  p = test;
+  <span class="cf">while</span>(*p != '\<span class="dv">0</span>') freqs[*p++]++;
+
+  r = create_huffman_codes(freqs);
+
+  <span class="cf">for</span>(i=<span class="dv">0</span>; i &lt; BYTES; i++) {
+    <span class="cf">if</span> ( r[i] != NULL ) {
+      inttobits(r[i]-&gt;code, r[i]-&gt;nbits, strbit);
+      printf(<span class="st">&quot;%c (%d) %s</span><span class="sc">\n</span><span class="st">&quot;</span>, i, r[i]-&gt;code, strbit);
+    }
+  }
+
+  free_huffman_codes(r);
+
+  <span class="cf">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+<p>测试字符串是”hellohellohello” 运行结果： e(1) 01 h(0) 000 l(1) 1 o(1) 001</p>
+<p>如果要用huffman编码来实现文本压缩的话只要把每一个字符与它对应的码字构造一个字典放在压缩文件中， 再把所有字符的码字输入到压缩文件中，这样就能实现压缩，如果要解压的话在字典中查一下码字对应的字符就能解压了，暂时不太熟悉文本操作，什么时候时间多了再去完善一下。</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>

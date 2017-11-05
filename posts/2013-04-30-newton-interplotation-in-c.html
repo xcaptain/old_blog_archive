@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - CSDN老博文迁移-牛顿插值法的C语言实现</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">Joey's Blog
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">CSDN老博文迁移-牛顿插值法的C语言实现</h2>
+    <p class="metadata">
+      <span class="date">April 30, 2013</span> - <span class="tags"><a href="../tags/algorithms.html">algorithms</a></span>
+    </p>
+  </header>
+  <p>原文链接见：<a href="http://blog.csdn.net/zazzle/article/details/8870810"><a href="http://blog.csdn.net/zazzle/article/details/8870810" class="uri">http://blog.csdn.net/zazzle/article/details/8870810</a></a></p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+
+<span class="pp">#define N 100</span>
+<span class="dt">double</span> diff_quot(<span class="dt">double</span> *x, <span class="dt">double</span> *y, <span class="dt">int</span> start, <span class="dt">int</span> end);
+<span class="dt">double</span> compute_y(<span class="dt">double</span> *x, <span class="dt">double</span> *y, <span class="dt">double</span> *t, <span class="dt">int</span> len, <span class="dt">double</span> xx);
+<span class="dt">int</span> main(<span class="dt">void</span>) {
+  <span class="dt">double</span> x[N], y[N], t[N], xx, yy, mul = <span class="fl">1.0</span>;
+  <span class="dt">int</span> i, j, n, start, len, ch;
+  <span class="dt">char</span> chh;
+
+  len = <span class="dv">0</span>; <span class="co">//len 保存了数组x和y的长度</span>
+  start = <span class="dv">0</span>; <span class="co">//start是每一次循环之后添加元素的起始位置</span>
+
+  <span class="cf">while</span> (<span class="dv">1</span>) {
+    printf(<span class="st">&quot;输入要添加的点数: &quot;</span>);
+    scanf(<span class="st">&quot;%d&quot;</span>, &amp;n);
+    len += n;
+
+    <span class="co">//输入数组x和y</span>
+    printf(<span class="st">&quot;输入x: &quot;</span>);
+    <span class="cf">for</span> (i = start; i &lt; start + n; i++) {
+      scanf(<span class="st">&quot;%lf&quot;</span>, &amp;x[i]);
+    }
+    printf(<span class="st">&quot;输入y: &quot;</span>);
+    <span class="cf">for</span> (i = start; i &lt; start + n; i++) {
+      scanf(<span class="st">&quot;%lf&quot;</span>, &amp;y[i]);
+    }
+    start += n; <span class="co">//不断跟新start的位置</span>
+
+    <span class="co">//开始求各阶差商了</span>
+    <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; len; i++) {
+      t[i] = diff_quot(x, y, <span class="dv">0</span>, i);
+    }
+    printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);
+    <span class="co">//打印各阶差商</span>
+    <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; len; i++) {
+      printf(<span class="st">&quot;%12.5lf &quot;</span>, t[i]);
+
+    }
+    printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);
+
+    <span class="co">//计算插入点的函数值</span>
+  again:
+    printf(<span class="st">&quot;输入要计算的x值: &quot;</span>);
+    scanf(<span class="st">&quot;%lf&quot;</span>, &amp;xx);
+
+    yy = compute_y(x, y, t, len, xx);
+    printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">xx对应的值是 %lf: </span><span class="sc">\n</span><span class="st">&quot;</span>, yy);
+
+    printf(<span class="st">&quot;继续求值吗1继续2停止？</span><span class="sc">\n</span><span class="st">&quot;</span>);
+    scanf(<span class="st">&quot;%d&quot;</span>, &amp;ch);
+    <span class="cf">if</span> (ch == <span class="dv">1</span>) {
+      <span class="cf">goto</span> again;
+    }
+
+    <span class="co">//小技巧来了，输入一个数字来判断是否继续输入</span>
+    printf(<span class="st">&quot;继续添加点吗? 1 for yes and 2 for no</span><span class="sc">\n</span><span class="st">&quot;</span>);
+    scanf(<span class="st">&quot;%d&quot;</span>, &amp;ch);
+    <span class="cf">if</span> (ch == <span class="dv">1</span>) {
+      <span class="cf">continue</span>;
+    } <span class="cf">else</span> <span class="cf">if</span> (ch == <span class="dv">2</span>) {
+      <span class="cf">break</span>;
+    }
+
+  }
+  system(<span class="st">&quot;pause&quot;</span>);
+  <span class="cf">return</span> <span class="dv">0</span>;
+}
+
+<span class="dt">double</span> diff_quot(<span class="dt">double</span> *x, <span class="dt">double</span> *y, <span class="dt">int</span> start, <span class="dt">int</span> end) {
+  <span class="cf">if</span> (start == end) {
+    <span class="cf">return</span> y[start];
+  } <span class="cf">else</span> {
+    <span class="cf">return</span> ( (diff_quot(x, y, start, end-<span class="dv">1</span>) - diff_quot(x, y, start+<span class="dv">1</span>, end)) / (x[start] - x[end]) );
+  }
+}
+
+<span class="dt">double</span> compute_y(<span class="dt">double</span> *x, <span class="dt">double</span> *y, <span class="dt">double</span> *t, <span class="dt">int</span> len, <span class="dt">double</span> xx) {
+  <span class="dt">double</span> ret = t[<span class="dv">0</span>];
+  <span class="dt">double</span> mul = <span class="fl">1.0</span>;
+  <span class="dt">int</span> i;
+  <span class="cf">for</span> (i = <span class="dv">1</span>; i &lt; len; i++) {
+    mul *= (xx - x[i-<span class="dv">1</span>]);
+    ret += t[i] * mul;
+  }
+  <span class="cf">return</span> ret;
+}</code></pre></div>
+<p>《数值逼近》老师让我们写一个牛顿插值公式的程序，要满足如下要求：1. 输入一串点，能输出它们的各阶差商。2. 输入一个x值，通过插值函数能计算出它对应的y值。3.提示是否要继续加点，因为牛顿插值比起拉格朗日插值的最大优点就是新增加点不需要重新计算前面点的差商。4. 添加点之后继续回到第二步，重复。对程序要求的分析：1.有2个子函数要写，一个是求差商的，暂且叫作diff_quot吧，另一个是计算函数值的，把它叫作compute_y吧。2.之后还有一个小技巧要实现，就是实现一些交互功能，能判断是否要继续输入，继续输入之后还要继续计算。这里可以使用while(1) 结合break&amp; continue来实现。 diff_quot这个函数是用来求牛顿插值的插值多项式系数的，用的是递归的方法实现，也可以用循环迭代来实现，但是这样就要写更多代码了，递归的话8行搞定。简洁又明了。 如果要迭代的话就要不断更新牛顿差商表，不断更新那个下三角矩阵。</p>
+<p>compute_y是用来求已知插值多项式系数的情况下给定一个x的y值的函数，比较简单，就是简单的累加累乘。 博客难写啊，连个代码怎么放上去都不熟悉，郁闷。</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - CSDN老博文迁移-用lzw算法编码一个字符串</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">Joey's Blog
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">CSDN老博文迁移-用lzw算法编码一个字符串</h2>
+    <p class="metadata">
+      <span class="date">June 15, 2013</span> - <span class="tags"><a href="../tags/algorithms.html">algorithms</a></span>
+    </p>
+  </header>
+  <p>原文链接见：<a href="http://blog.csdn.net/zazzle/article/details/9103885"><a href="http://blog.csdn.net/zazzle/article/details/9103885" class="uri">http://blog.csdn.net/zazzle/article/details/9103885</a></a></p>
+<p>实验目的： (1).利用LZW算法给一个字符串编码</p>
+<p>实验原理： (1).构造一个4096个元素的字典数组，前256个初始化为ASCII字符集，即表示单个字符。 (2).逐个读入测试字符串中的字符。 (3).判断这个字符是否在字典中 (4).由于先初始化了前256个元素，所以单个字符肯定是在字典中的。 (5).读入下一个字符，添加到前一个字符后面，判断字符串在不在字典中，如果在不做什么，否则更新字典，从256开始更新。</p>
+<p>实验步骤： (1).初始化字典。 (2).读入字符串并更新字典。 (3).打印出对字符串的编码。</p>
+<p>具体实现代码：</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;string.h&gt;</span>
+<span class="pp">#define STR_LEN 100</span>
+<span class="pp">#define DIC_LEN 4096</span>
+
+<span class="kw">struct</span> dict {
+  <span class="dt">char</span> str[STR_LEN];
+  <span class="dt">int</span> index;
+} Dict[DIC_LEN];
+
+<span class="dt">int</span> j = <span class="dv">256</span>;
+
+<span class="dt">int</span> in_dict(<span class="dt">char</span> *s, <span class="kw">struct</span> dict *Dict); <span class="co">/* 判断一个字符串s是否在字典中 */</span>
+<span class="dt">int</span> index_of(<span class="dt">char</span> *s, <span class="kw">struct</span> dict *Dict);<span class="co">/* 通过字符串在字典中查找编号 */</span>
+<span class="dt">void</span> insert_into_dict(<span class="dt">char</span> *s, <span class="kw">struct</span> dict *Dict);<span class="co">/*把字符串添加到字典中 */</span>
+<span class="dt">void</span> init(<span class="kw">struct</span> dict *Dict); <span class="co">/* 初始化字典 */</span>
+<span class="dt">void</span> output(<span class="dt">int</span> code, <span class="dt">char</span> *s);<span class="co">/* 输出编码与相应的字符串 */</span>
+
+<span class="dt">int</span> main(<span class="dt">void</span>) {
+  <span class="dt">int</span> i, code;
+  <span class="dt">char</span> ch;
+  <span class="dt">char</span> *str = <span class="st">&quot;hellohellohello&quot;</span>;
+  <span class="dt">char</span> old_string[STR_LEN], new_string[STR_LEN];
+  old_string[<span class="dv">0</span>] = str[<span class="dv">0</span>];
+  old_string[<span class="dv">1</span>] = '\<span class="dv">0</span>';
+
+  init(Dict);
+
+  <span class="cf">for</span> (i = <span class="dv">1</span>; str[i] != '\<span class="dv">0</span>'; i++) {
+    ch = str[i];
+    strcpy(new_string, old_string);
+    strncat(new_string, &amp;ch, <span class="dv">1</span>);
+    <span class="cf">if</span> (in_dict(new_string, Dict)) {
+      strcpy(old_string, new_string);<span class="co">/* 更新旧字符串 */</span>
+    } <span class="cf">else</span> {
+      code = index_of(old_string, Dict); <span class="co">/* 找到编码 */</span>
+      output(code, old_string); <span class="co">/* 输出编码 */</span>
+      insert_into_dict(new_string, Dict); <span class="co">/* 更新字典 */</span>
+      j++;
+      old_string[<span class="dv">0</span>] = ch;
+      old_string[<span class="dv">1</span>] = '\<span class="dv">0</span>';
+    }
+  }
+  code = index_of(old_string, Dict);
+  output(code, old_string);
+  printf(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>);
+
+  <span class="cf">return</span> <span class="dv">0</span>;
+}
+
+<span class="dt">int</span> in_dict(<span class="dt">char</span> *s, <span class="kw">struct</span> dict *Dict) {
+  <span class="dt">int</span> i;
+  <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; DIC_LEN; i++) {
+    <span class="cf">if</span> (strcmp(s, Dict[i].str) == <span class="dv">0</span>) {
+      <span class="cf">return</span> <span class="dv">1</span>;
+    }
+  }
+  <span class="cf">return</span> <span class="dv">0</span>;
+}
+
+<span class="dt">int</span> index_of(<span class="dt">char</span> *s, <span class="kw">struct</span> dict *Dict) {
+  <span class="dt">int</span> i;
+  <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; DIC_LEN; i++) {
+    <span class="cf">if</span> (strcmp(s, Dict[i].str) == <span class="dv">0</span>) {
+      <span class="cf">return</span> Dict[i].index;
+    }
+  }
+}
+
+<span class="dt">void</span> insert_into_dict(<span class="dt">char</span> *s, <span class="kw">struct</span> dict *Dict) {
+  Dict[j].index = j;
+  strcpy(Dict[j].str, s);
+}
+
+<span class="dt">void</span> init(<span class="kw">struct</span> dict *Dict) {
+  <span class="dt">int</span> i, j;
+  <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; DIC_LEN; i++) {
+    <span class="cf">for</span> (j = <span class="dv">0</span>; j &lt; STR_LEN; j++) {
+      Dict[i].str[j] = '\<span class="dv">0</span>';
+    }
+    Dict[i].index = i;
+  }
+  <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">256</span>; i++) {
+    Dict[i].str[<span class="dv">0</span>] = (<span class="dt">char</span>) i;
+  }
+}
+
+<span class="dt">void</span> output(<span class="dt">int</span> code, <span class="dt">char</span> *s) {
+  printf(<span class="st">&quot;%d (%s)</span><span class="sc">\n</span><span class="st">&quot;</span>, code, s);
+}</code></pre></div>
+<p>测试字符串是“hellohellohello” 运行结果： 104(h) 101(e) 108(l) 108(l) 111(o) 256(he) 258(ll) 260(oh) 257(el)</p>
+<p>用这种方法也能实现文本压缩，只要把字典输出到文件中，再把上述对文本的编码也附加到压缩文件中，解压的时候把编码从字典中对比就能实现解压了。</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>

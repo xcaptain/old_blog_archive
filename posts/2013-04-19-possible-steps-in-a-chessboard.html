@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - CSDN老博文迁移-棋盘中走n步的所有可能走法</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">Joey's Blog
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">CSDN老博文迁移-棋盘中走n步的所有可能走法</h2>
+    <p class="metadata">
+      <span class="date">April 19, 2013</span> - <span class="tags"><a href="../tags/algorithms.html">algorithms</a></span>
+    </p>
+  </header>
+  <p>原文链接见：<a href="http://blog.csdn.net/zazzle/article/details/8825150"><a href="http://blog.csdn.net/zazzle/article/details/8825150" class="uri">http://blog.csdn.net/zazzle/article/details/8825150</a></a></p>
+<p>问题，求下列递推式值： = 3*-2*+2, a1=3,a2=7,a3=17,a4=41, 求</p>
+<p>来源： a1 = 3, a2 = 7, a3 = 17, a4 = 41, a5 =99</p>
+<p>b1 = 1, b2 = 2, b3 = 5, b4 = 12, b5 =29</p>
+<p>更深的来源：走棋盘问题，一个无限大的棋盘上有人在走路，可以往3个方向走，上，左，右。 向前走之后原来那个格子就不能走了，问如果走n步有几种可能的走法。</p>
+<p>我的思路是按照排列组合的方法来数情况，如果可能就列出递归式来。 第一步如果是上，第二步有3种走法。 第一步如果是左或者右，第二步有2种走法。 …</p>
+<p>到最后肯定能列举出走n步的可能数，但是不可能单纯的数数，可以利用数列的思想来做。 设走n步有an种可能，an由3部分组成，b1,n b2,n b3,n an = b1,n + b2,n + b3,n ，其中b2,n= b3,n</p>
+<p>这样下去就能得到递归式了。</p>
+<p>其中是an的前n-3项和，到此递归式出来了，可以编程求解了。</p>
+<p>因为a1= 3, a2 = 7, a3 = 17, a4 = 41, a5 = 99 …</p>
+<p>下面开始写程序：</p>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * count the probable outcome for nstep in a matrix</span>
+<span class="co"> * algorithms: an = 3*a(n-1)-2*S(n-3)-4</span>
+<span class="co"> * a1 = 3, a2 = 7, a3 = 17,a4 = 41, a5 = 99</span>
+<span class="co"> */</span>
+<span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+<span class="pp">#define MAX 100</span>
+
+<span class="dt">int</span> main(<span class="dt">void</span>) {
+  <span class="dt">long</span> <span class="dt">long</span> <span class="dt">int</span> a[MAX] = {<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">17</span>, <span class="dv">41</span>,<span class="dv">99</span>}, S;
+  <span class="dt">int</span> i, n;
+  printf(<span class="st">&quot;input the steps n:&quot;</span>);
+  scanf(<span class="st">&quot;%d&quot;</span>, &amp;n);
+  S = a[<span class="dv">0</span>];
+
+  <span class="cf">for</span> (i = <span class="dv">4</span>; i &lt; n; i++) {
+    S += a[i-<span class="dv">3</span>];
+    a[i] = <span class="dv">3</span>*a[i-<span class="dv">1</span>] -<span class="dv">2</span>*S - <span class="dv">4</span>;
+  }
+  printf(<span class="st">&quot;n = %d, methods =%lld</span><span class="sc">\n</span><span class="st">&quot;</span>, n, a[i-<span class="dv">1</span>]);
+  <span class="cf">return</span> <span class="dv">0</span>;
+}</code></pre></div>
+<p>结果：n= 5, 99 methods n = 6, 239 methods</p>
+<p>算小数据还可以，就是说n&lt; 40以下可以算，超过40连longlong int都溢出，日子真是没法过了，增长的怎么会这么快啊。 大数据运算真是重头戏啊。</p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>

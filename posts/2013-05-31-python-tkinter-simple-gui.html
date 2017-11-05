@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="description" content="Code, design, systems">
+    <title>blog.iyue.club - CSDN老博文迁移-用python做一个简易的图形界面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+    <link rel="stylesheet" href="../css/core.css" />
+    <link rel="image_src" href="../favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="iyue.club" href="../rss.xml" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="../">Joey's Blog
+        </a>
+      </h1>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="../">Home</a>
+          </li>
+          <li>
+            <a href="../posts.html">Posts</a>
+          </li>
+          <li>
+            <a href="../tags.html">Tags</a>
+          </li>
+          <li>
+            <a href="../about.html">About</a>
+          </li>
+          <li>
+            <a href="../rss.xml">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <article>
+  <header>
+    <h2 class="post-title">CSDN老博文迁移-用python做一个简易的图形界面</h2>
+    <p class="metadata">
+      <span class="date">May 31, 2013</span> - <span class="tags"><a href="../tags/python.html">python</a></span>
+    </p>
+  </header>
+  <p>原文链接见：<a href="http://blog.csdn.net/zazzle/article/details/8998612"><a href="http://blog.csdn.net/zazzle/article/details/8998612" class="uri">http://blog.csdn.net/zazzle/article/details/8998612</a></a></p>
+<p>这里使用Tkinter库，还有很多别的图形库，但是我觉得Tkinter比较简单，我才学几天，但是就有点入门了，一些基本的思想，基本函数的意思也大致弄清了，所以Tkinter还是比较简单易用的。</p>
+<p>别的不多说，先上代码：</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/python</span>
+<span class="co">#-*- coding:utf-8 –*-</span>
+
+<span class="im">from</span> Tkinter <span class="im">import</span> <span class="op">*</span>
+win <span class="op">=</span> Tk()
+<span class="co">#win.title('google search engine optimal')</span>
+win.title(<span class="st">'一个测试程序'</span>)
+<span class="co"># the top level of the window</span>
+<span class="kw">def</span> report(text):
+        <span class="co">#print(v.get())</span>
+    entry2 <span class="op">=</span> Label(root, text <span class="op">=</span> v.get())
+    entry2.grid(row <span class="op">=</span> <span class="dv">1</span>, column <span class="op">=</span> <span class="dv">1</span>)
+
+root <span class="op">=</span> Frame(win)
+root.pack()
+label1 <span class="op">=</span> Label(root, text <span class="op">=</span> <span class="st">'d 取值手动滑动条'</span>, width <span class="op">=</span> <span class="dv">25</span>)
+label1.pack(side <span class="op">=</span> LEFT)
+label1.grid(row <span class="op">=</span> <span class="dv">0</span>, column <span class="op">=</span> <span class="dv">0</span>)
+v <span class="op">=</span> StringVar()
+scl <span class="op">=</span> Scale(root, from_ <span class="op">=</span> <span class="dv">0</span>, to <span class="op">=</span> <span class="dv">1</span>, tickinterval <span class="op">=</span> <span class="fl">0.5</span>, resolution <span class="op">=</span> <span class="fl">0.01</span>, orient <span class="op">=</span> <span class="st">'horizontal'</span>, variable<span class="op">=</span>v, sliderlength <span class="op">=</span> <span class="dv">10</span>, width <span class="op">=</span> <span class="dv">40</span>, length <span class="op">=</span> <span class="dv">200</span>, command<span class="op">=</span>report)
+scl.grid(row <span class="op">=</span> <span class="dv">0</span>, column <span class="op">=</span> <span class="dv">1</span>)
+
+<span class="bu">print</span> (scl.get())
+label2 <span class="op">=</span> Label(root, text <span class="op">=</span> <span class="st">'d当前取值:'</span>, height <span class="op">=</span> <span class="dv">10</span>)
+label2.grid(row <span class="op">=</span> <span class="dv">1</span>, column <span class="op">=</span> <span class="dv">0</span>)
+
+
+label3 <span class="op">=</span> Label(root, text <span class="op">=</span> <span class="st">'PR=d*GPR+10*(1-d)*FPR ：d越大则排序考虑人气越多。'</span>, height <span class="op">=</span> <span class="dv">10</span>)
+label3.grid(row <span class="op">=</span> <span class="dv">2</span>)
+root.mainloop()</code></pre></div>
+<p>效果如下：</p>
+<p><img src="../images/20130531113037092-python-tkinter-1.png" /></p>
+<p>说说我的看法吧， 用Tkinter画图首先要创建一个根挂件，可以用Tk()产生 然后要产生不同类型的小挂件，有标签Label，按钮Button，接口Entry 之类的，具体的查看网上的详细文档。 比如说用widget = Label(None, text = ‘hello’)产生了一个内容为hello的标签之后还要确定把这个标签放在哪个位置，所以就要用到pack() pack有很多选项，比如说要不要随着屏幕缩放expand，要不要填充fill，还可以设置位置anchor。 pack完了之后要维持这个窗口的运行，root.mainloop()或者是widget.mainloop()都行。</p>
+<p>这样产生的窗口只能有一个挂件，如果要把多个挂件放在一个窗口就要用到容器Frame() win = Frame(root) 产生一个叫作win的容器，下面要产生的挂件都是放在这个容器里面的。</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">widget1 <span class="op">=</span> Label(win, text <span class="op">=</span> <span class="st">'widget1'</span>)
+widget1.pack(side <span class="op">=</span> TOP)
+widget2 <span class="op">=</span> Button(win, text <span class="op">=</span> <span class="st">'button'</span>)
+widget2.pack(side <span class="op">=</span> TOP)</code></pre></div>
+<p>就能产生类似下图的效果：</p>
+<p><img src="../images/20130531112728114-python-tkinter-2.png" /></p>
+</article>
+
+    </section>
+
+    <footer>
+      Generated using <a href="http://jaspervdj.be/hakyll/">Hakyll</a>. Source available on <a href="https://github.com/xcaptain/xcaptain.github.io">GitHub</a>.
+    </footer>
+  </body>
+</html>
